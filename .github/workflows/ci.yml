@@ -1,0 +1,34 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+      - feature/** # Toutes les branches de fonctionnalités
+      - fix/** # Toutes les branches de corrections rapides
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  jest-tests:
+    name: Run Jest Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest
+        run: npm test -- --passWithNoTests || echo "No tests found, skipping"

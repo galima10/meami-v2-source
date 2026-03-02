@@ -1,0 +1,74 @@
+name: Build or Update Android
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+    steps:
+      - name: ✅ Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account."
+            exit 1
+          fi
+
+      - name: 🏗 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🔍 Get last commit message
+        id: commit
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
+      - name: 🔍 Preview commit type
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "Last commit message: '$COMMIT_MESSAGE'"
+          if [[ "$COMMIT_MESSAGE" == *"[update]"* ]]; then
+            echo "This commit would trigger an EAS Update (JS + assets only)"
+          elif [[ "$COMMIT_MESSAGE" == *"[build]"* ]]; then
+            echo "This commit would trigger a full EAS Build (APK/IPA)"
+          else
+            echo "This commit would trigger a regular push – no build/update"
+          fi
+
+      - name: 🧱 Setup Node
+        if: contains(github.event.head_commit.message, '[update]') || contains(github.event.head_commit.message, '[build]')
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - name: 🛠 Setup EAS CLI
+        if: contains(github.event.head_commit.message, '[update]') || contains(github.event.head_commit.message, '[build]')
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Clear npm cache
+        if: contains(github.event.head_commit.message, '[update]') || contains(github.event.head_commit.message, '[build]')
+        run: npm cache clean --force
+
+      - name: 📦 Install dependencies
+        if: contains(github.event.head_commit.message, '[update]') || contains(github.event.head_commit.message, '[build]')
+        run: npm install
+
+      - name: 🚀 EAS Update
+        if: contains(github.event.head_commit.message, '[update]')
+        run: |
+          echo "Performing EAS Update (JS + assets only)"
+          eas update --channel production --message "${{ github.event.head_commit.message }}"
+
+      - name: 🚀 EAS Build
+        if: contains(github.event.head_commit.message, '[build]')
+        run: |
+          echo "Performing full EAS Build (APK/IPA)"
+          eas build --non-interactive --platform android --profile production
