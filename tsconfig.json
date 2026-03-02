@@ -5,6 +5,7 @@
     "customConditions": ["react-native-strict-api"],
     "baseUrl": ".",
     "paths": {
+      "@/*": ["./*"],
       "@app/*": ["./app/*", "./app/*/index"],
       "@assets/*": ["./assets/*"],
       "@components/*": ["./components/*"],
