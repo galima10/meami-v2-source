@@ -5,11 +5,14 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "go:android": "expo start --android",
+    "prebuild": "expo prebuild",
     "lint": "expo lint",
-    "clean:android": "rimraf android"
+    "test": "jest --verbose",
+    "android": "expo run:android",
+    "clean:android": "rimraf android",
+    "start:lan": "expo start --host lan",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
