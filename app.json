@@ -1,17 +1,19 @@
 {
   "expo": {
-    "name": "meami-v2-source",
-    "slug": "meami-v2-source",
+    "name": "Meami",
+    "slug": "meamiv2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "meamiv2source",
+    "scheme": "meami",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.meami.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -42,9 +44,26 @@
       "expo-asset",
       "expo-sqlite"
     ],
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/04918abf-e8aa-4a94-a689-1de474bddc6e"
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {
+        "expoRouterAppRoot": "./app"
+      },
+      "eas": {
+        "projectId": "04918abf-e8aa-4a94-a689-1de474bddc6e"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
