@@ -6,11 +6,11 @@ const initialState = {
   manualAdjustements: [] as ManualAdjustement[],
 };
 
-export const manualAdjustementsSlice = createSlice({
+export const manualAdjustementSlice = createSlice({
   name: "manualAdjustements",
   initialState,
   reducers: {},
 });
 
-export const {} = manualAdjustementsSlice.actions;
-export default manualAdjustementsSlice.reducer;
+export const {} = manualAdjustementSlice.actions;
+export default manualAdjustementSlice.reducer;

@@ -6,11 +6,11 @@ const initialState = {
   cookingInfos: [] as CookingInfo[],
 };
 
-export const cookingInfosSlice = createSlice({
+export const cookingInfoSlice = createSlice({
   name: "cookingInfos",
   initialState,
   reducers: {},
 });
 
-export const {} = cookingInfosSlice.actions;
-export default cookingInfosSlice.reducer;
+export const {} = cookingInfoSlice.actions;
+export default cookingInfoSlice.reducer;

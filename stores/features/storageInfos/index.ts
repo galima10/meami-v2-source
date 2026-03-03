@@ -6,11 +6,11 @@ const initialState = {
   storageInfos: [] as StorageInfo[],
 };
 
-export const storageInfosSlice = createSlice({
+export const storageInfoSlice = createSlice({
   name: "storageInfos",
   initialState,
   reducers: {},
 });
 
-export const {} = storageInfosSlice.actions;
-export default storageInfosSlice.reducer;
+export const {} = storageInfoSlice.actions;
+export default storageInfoSlice.reducer;

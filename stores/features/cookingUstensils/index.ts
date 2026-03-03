@@ -6,11 +6,11 @@ const initialState = {
   cookingUstensils: [] as CookingUstensil[],
 };
 
-export const cookingUstensilsSlice = createSlice({
+export const cookingUstensilSlice = createSlice({
   name: "cookingUstensils",
   initialState,
   reducers: {},
 });
 
-export const {} = cookingUstensilsSlice.actions;
-export default cookingUstensilsSlice.reducer;
+export const {} = cookingUstensilSlice.actions;
+export default cookingUstensilSlice.reducer;
