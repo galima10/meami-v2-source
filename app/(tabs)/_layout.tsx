@@ -1,29 +1,35 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Tabs } from "expo-router";
+import React from "react";
 
 export default function TabLayout() {
- 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="menuTab"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Menu",
         }}
       />
       <Tabs.Screen
         name="cartTab"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Courses",
+        }}
+      />
+      <Tabs.Screen
+        name="stockTab"
+        options={{
+          title: "Stock",
+        }}
+      />
+      <Tabs.Screen
+        name="infosTab"
+        options={{
+          title: "Infos",
         }}
       />
     </Tabs>

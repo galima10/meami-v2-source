@@ -1,11 +1,15 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function Splash() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Splash Screen</Text>
-      <Link href="/menuTab/MenuCalendarScreen" />
+      <Pressable onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}>
+        <Text>Test</Text>
+      </Pressable>
     </View>
   );
 }
