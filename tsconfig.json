@@ -16,7 +16,7 @@
       "@stores/*": ["./stores/*"],
       "@app-types/*": ["./types/*"],
       "@utils/*": ["./utils/*"],
-      "@themes/*": ["./themes/*"]
+      "@themes/*": ["./constants/themes/*"]
     }
   },
   "include": [

@@ -23,7 +23,7 @@ module.exports = function (api: any): TransformOptions {
             "@stores": "./stores",
             "@types": "./types",
             "@utils": "./utils",
-            "@themes": "./themes",
+            "@themes": "./constants/themes",
           },
         },
       ],
