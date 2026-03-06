@@ -25,13 +25,13 @@ Une application où l'utilisateur peut :
 - Gérer son stock d'ingrédients, de recettes modèles et de produits non alimentaires
 - Entrer des informations de cuisson et des informations de conservation des ingrédients
 
-=> Faciliter la vie au quotidien en rassemblant en une application ce qui a été planifier de cuisiner, la liste de courses ainsi que des informations pertinentes et utiles
+=> Faciliter la vie au quotidien en rassemblant en une application ce qui a été planifier de cuisiner, la liste de courses ainsi que des informations pertinentes et utiles <br />
 => Élaborer une interface claire et facile d'utilisation regroupant toutes les fonctionnalités essentielles tout en restant attrayant et chaleureux
 
 
 
 ## Structure de l'application
-*4 onglets* : 
+**4 onglets** : 
 - Menu : Pour consulter le menu de la semaine
 - Courses : Pour consulter la liste de courses
 - Stock : Pour consulter le stock d'ingrédients, de recettes modèles et de produits non alimentaires
@@ -40,38 +40,38 @@ Une application où l'utilisateur peut :
 
 
 ## Technologies & Outils utilisées
-*Front-end*
+**Front-end**
 - React Native
 - Expo
 - TypeScript
 
-*State global*
+**State global**
 - React Redux
 
-*Base de données*
+**Base de données**
 - Expo SQLite
 
-*APIs externes*
+**APIs externes**
 - API Unsplash
 
-*Tests unitaires*
+**Tests unitaires**
 - Jest
 
-*Outils*
+**Outils**
 - Github / Github Actions
 - EAS CLI
 
-*MCD/MLD*
+**MCD/MLD**
 - Looping
 
-*Design & UX/UI Design*
+**Design & UX/UI Design**
 - Figma
 - Adobe Illustrator
 
-*Gestion du projet*
+**Gestion du projet**
 - Notion
 
-*Outils en ligne*
+**Outils en ligne**
 - SVGRepo : Pour des icônes SVG libres de droits (PD License et CC0 License)
 - Pexels & Unsplash : Pour des images libres de droits
 
@@ -80,14 +80,14 @@ Une application où l'utilisateur peut :
 ## Historique des versions
 
 ### Version 2.x.x
-[2.0.0] - (xx/xx/2026)
+[2.0.0] - (xx/xx/2026) <br />
 
 ### Version 1.x.x
-[1.4.0] - (12/09/2025)
-[1.3.0] - (05/09/2025)
-[1.2.0] - (29/08/2025)
-[1.1.0] - (23/08/2025)
-[1.0.0] - (20/08/2025)
+[1.4.0] - (12/09/2025) <br />
+[1.3.0] - (05/09/2025) <br />
+[1.2.0] - (29/08/2025) <br />
+[1.1.0] - (23/08/2025) <br />
+[1.0.0] - (20/08/2025) <br />
 
 
 
