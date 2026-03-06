@@ -1,50 +1,96 @@
-# Welcome to your Expo app 👋
+# Meam¡ - Documentation technique
+L'application mobile de planification du menu de la semaine et de la gestion de la liste de courses hebdomadaires !
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
 
-1. Install dependencies
+## Sommaire
+- [Format](#format)
+- [Objectif](#objectif)
+- [Structure de l'application](#structure-de-lapplication)
+- [Technologies & Outils utilisées](#technologies--outils-utilisées)
+- [Historique des versions](#historique-des-versions)
+- [Auteure](#auteure)
 
-   ```bash
-   npm install
-   ```
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
+## Format
+Meam¡ est une application mobile développé uniquement pour Android et déployée via EAS CLI sur expo.dev.
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Objectif
+Une application où l'utilisateur peut :
+- Plannifier par ingrédient tous ses repas sur 7 jours pour le matin, le midi et le soir
+- Générer une liste de courses en fonction du menu de la semaine
+- Gérer son stock d'ingrédients, de recettes modèles et de produits non alimentaires
+- Entrer des informations de cuisson et des informations de conservation des ingrédients
 
-## Get a fresh project
+=> Faciliter la vie au quotidien en rassemblant en une application ce qui a été planifier de cuisiner, la liste de courses ainsi que des informations pertinentes et utiles
+=> Élaborer une interface claire et facile d'utilisation regroupant toutes les fonctionnalités essentielles tout en restant attrayant et chaleureux
 
-When you're ready, run:
 
-```bash
-npm run reset-project
-```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Structure de l'application
+*4 onglets* : 
+- Menu : Pour consulter le menu de la semaine
+- Courses : Pour consulter la liste de courses
+- Stock : Pour consulter le stock d'ingrédients, de recettes modèles et de produits non alimentaires
+- Infos : Pour consulter les informations de cuisson et de conservation
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Technologies & Outils utilisées
+*Front-end*
+- React Native
+- Expo
+- TypeScript
 
-## Join the community
+*State global*
+- React Redux
 
-Join our community of developers creating universal apps.
+*Base de données*
+- Expo SQLite
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+*APIs externes*
+- API Unsplash
+
+*Tests unitaires*
+- Jest
+
+*Outils*
+- Github / Github Actions
+- EAS CLI
+
+*MCD/MLD*
+- Looping
+
+*Design & UX/UI Design*
+- Figma
+- Adobe Illustrator
+
+*Gestion du projet*
+- Notion
+
+*Outils en ligne*
+- SVGRepo : Pour des icônes SVG libres de droits (PD License et CC0 License)
+- Pexels & Unsplash : Pour des images libres de droits
+
+
+
+## Historique des versions
+
+### Version 2.x.x
+[2.0.0] - (xx/xx/2026)
+
+### Version 1.x.x
+[1.4.0] - (12/09/2025)
+[1.3.0] - (05/09/2025)
+[1.2.0] - (29/08/2025)
+[1.1.0] - (23/08/2025)
+[1.0.0] - (20/08/2025)
+
+
+
+## Auteure
+Application conçue et développée par :
+- Magali MAI
