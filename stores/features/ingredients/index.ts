@@ -6,16 +6,13 @@ export interface Ingredient {
   category: string;
   stockQuantity: number;
   unit: string;
-  menuCategories: string[];
+  menuCategories: Array<string>;
+  quantifiable: boolean;
+  storageLocations: Array<string>;
 }
 
-type SelectedId = null | string;
-
 const initialState = {
-  ingredients: {
-    list: [] as Ingredient[],
-    selectedId: null as SelectedId,
-  },
+  ingredients: [] as Ingredient[],
 };
 
 export const ingredientSlice = createSlice({
@@ -23,39 +20,31 @@ export const ingredientSlice = createSlice({
   initialState,
   reducers: {
     setIngredients: (state, action: PayloadAction<Ingredient[]>) => {
-      state.ingredients.list = action.payload;
+      state.ingredients = action.payload;
     },
     ingredientAdded: (state, action: PayloadAction<Ingredient>) => {
-      state.ingredients.list.push(action.payload);
+      state.ingredients.push(action.payload);
     },
     ingredientDeleted: (state, action: PayloadAction<string>) => {
       const ingredientId = action.payload;
-      state.ingredients.list = state.ingredients.list.filter(
+      state.ingredients = state.ingredients.filter(
         (item) => item.id !== ingredientId,
       );
     },
     ingredientUpdated: (state, action: PayloadAction<Ingredient>) => {
       const ingredientId = action.payload.id;
-      state.ingredients.list = state.ingredients.list.map((item) => {
+      state.ingredients = state.ingredients.map((item) => {
         if (item.id == ingredientId) return action.payload;
         else return item;
       });
-    },
-    selectIngredientId: (state, action: PayloadAction<SelectedId>) => {
-      state.ingredients.selectedId = action.payload;
-    },
-    clearIngredientSelectedId: (state) => {
-      state.ingredients.selectedId = null;
     },
   },
 });
 
 export const {
   setIngredients,
-  selectIngredientId,
-  clearIngredientSelectedId,
   ingredientAdded,
   ingredientDeleted,
-  ingredientUpdated
+  ingredientUpdated,
 } = ingredientSlice.actions;
 export default ingredientSlice.reducer;
