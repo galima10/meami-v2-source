@@ -27,7 +27,7 @@ FROM
   LEFT JOIN storage_locations sl ON sl.id_storage_locations = isll.id_storage_locations
 GROUP BY i.id_ingredients;
 */
-  // dispatch ingedientsSlice.list setIngredients
+  // dispatch ingedientsSlice setIngredients
 }
 
 async function selectIngredient(ingredientId: string) {
@@ -96,7 +96,7 @@ WHERE
 
 
 */
-  // dispatch ingredientsSlice.list ingredientAdded newIngredient
+  // dispatch ingredientsSlice ingredientAdded newIngredient
 }
 
 async function updateIngredient(
@@ -184,7 +184,7 @@ WHERE
 
 
 */
-  // dispatch ingredientsSlice.list ingredientUpdated newIngredient
+  // dispatch ingredientsSlice ingredientUpdated newIngredient
 }
 
 async function updateStorageLocation(
@@ -216,7 +216,7 @@ WHERE
 
 
 */
-  // dispatch ingredientsSlice.list ingredientUpdated ingredient où id = ingredientId
+  // dispatch ingredientsSlice ingredientUpdated ingredient où id = ingredientId
 }
 
 async function setQuantifiable(ingredientId: Ingredient, newQuantifiable: boolean) {
@@ -233,12 +233,12 @@ WHERE
   
 
 */
-  // dispatch ingredientsSlice.list ingredientUpdated ingredient où id = ingredientId
+  // dispatch ingredientsSlice ingredientUpdated ingredient où id = ingredientId
 }
 
 async function deleteIngredient(ingredientId: string) {
 // Vérifier si l'ingredientId est bien dans le slice des ingrédients
-  // dispatch ingredientsSlice.list ingredientDeleted
+  // dispatch ingredientsSlice ingredientDeleted
 }
 
 async function updateStockFromMenu() {}

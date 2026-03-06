@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface IngredientCategory {}
+export interface IngredientCategory {
+  id: string;
+  name: string;
+}
 
 const initialState = {
   ingredientCategories: [] as IngredientCategory[],
@@ -9,8 +12,27 @@ const initialState = {
 export const ingredientCategorySlice = createSlice({
   name: "ingredientCategories",
   initialState,
-  reducers: {},
+  reducers: {
+    setIngredientCategories: (
+      state,
+      action: PayloadAction<IngredientCategory[]>,
+    ) => {
+      state.ingredientCategories = action.payload;
+    },
+    ingredientCategoryAdded: (
+      state,
+      action: PayloadAction<IngredientCategory>,
+    ) => {
+      state.ingredientCategories.push(action.payload);
+    },
+    ingredientCategoryDeleted: (state, action: PayloadAction<string>) => {
+      const ingredientCategoryId = action.payload;
+      state.ingredientCategories = state.ingredientCategories.filter(
+        (item) => item.id !== ingredientCategoryId,
+      );
+    },
+  },
 });
 
-export const {} = ingredientCategorySlice.actions;
+export const { setIngredientCategories, ingredientCategoryAdded, ingredientCategoryDeleted } = ingredientCategorySlice.actions;
 export default ingredientCategorySlice.reducer;
