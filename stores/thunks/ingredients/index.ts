@@ -33,7 +33,7 @@ GROUP BY i.id_ingredients;
 }
 
 async function selectIngredient(ingredientId: string) {
-  // dispatch ingredientsSlice.selectedId ingredientIdSelected et clearIngredientIdSelected avant à faire
+  // dispatch ingredientsSlice.selectedId ingredientId ingredientIdSelected et clearIngredientIdSelected avant à faire
 }
 
 async function createIngredient(newIngredient: Ingredient) {

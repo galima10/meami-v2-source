@@ -167,7 +167,7 @@ WHERE
 
 async function selectRecipe(recipeId: string) {
   // => si isMorning = true, ne mettre que les menuCategories du matin sinon ceux du midi/soir
-  // dispatch ingredientsSlice.selectedId ingredientIdSelected et clearIngredientIdSelected avant à faire
+  // dispatch recipesSlice.selectedId recipeId recipeIdSelected et clearRecipeIdSelected avant à faire
 }
 
 async function fetchRecipes() {
