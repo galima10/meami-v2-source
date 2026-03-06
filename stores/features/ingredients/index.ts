@@ -33,8 +33,8 @@ export const ingredientSlice = createSlice({
     },
     ingredientUpdated: (state, action: PayloadAction<Ingredient>) => {
       const ingredientId = action.payload.id;
-      state.ingredients = state.ingredients.map((item) => {
-        if (item.id == ingredientId) return action.payload;
+      state.ingredients = state.ingredients.map(item => {
+        if (item.id === ingredientId) return action.payload;
         else return item;
       });
     },
