@@ -1,23 +1,15 @@
-async function updateStorageLocation() {}
-
-async function setQuantifiable() {}
-
-async function updateIngredient() {}
-
-async function selectIngredient() {
-  // Mett
-}
-
-async function updateStockFromShopping() {}
-
-async function deleteIngredient() {}
-
-async function addIngredient() {}
-
-async function updateStockFromMenu() {}
+import {
+  setIngredients,
+  ingredientAdded,
+  ingredientDeleted,
+  ingredientUpdated,
+  selectIngredientId,
+  clearIngredientSelectedId,
+  Ingredient,
+} from "@stores/features/ingredients";
 
 async function fetchIngredients() {
-/*
+  /*
 SELECT
   i.id_ingredients,
   GROUP_CONCAT(DISTINCT mc.name ORDER BY mc.name) AS menu_categories,
@@ -33,5 +25,36 @@ FROM
   JOIN menu_categories mc ON mc.id_menu_categories = imc.id_menu_categories
 GROUP BY i.id_ingredients;
 */
+  // dispatch ingedientsSlice.list setIngredients
 }
 
+async function selectIngredient(ingredient: Ingredient) {
+  // Mettre en params un ingrédient du type Ingredient
+  // Mettre l'id de l'ingrédient sélectionné dans le slice
+  // faire dispatch clearIngredientSelectedId si il est pas encore sur null
+  // dispatch ingredientsSlice.selectedId selectIngredientId si null
+}
+
+async function createIngredient(ingredient: Ingredient) {
+  // dispatch ingredientsSlice.list ingredientAdded
+}
+
+async function updateIngredient(ingredient: Ingredient) {
+  // dispatch ingredientsSlice.list ingredientUpdated
+}
+
+async function updateStorageLocation(ingredient: Ingredient, arr: Array<string>) {
+  // dispatch ingredientsSlice.list ingredientUpdated
+}
+
+async function setQuantifiable(ingredient: Ingredient, bool: boolean) {
+  // dispatch ingredientsSlice.list ingredientUpdated
+}
+
+async function deleteIngredient(ingredientId: string) {
+  // dispatch ingredientsSlice.list ingredientDeleted
+}
+
+async function updateStockFromMenu() {}
+
+async function updateStockFromShopping() {}
