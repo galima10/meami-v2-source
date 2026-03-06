@@ -3,6 +3,8 @@ import {
   ingredientAdded,
   ingredientDeleted,
   ingredientUpdated,
+  ingredientIdSelected,
+  clearIngredientIdSelected,
   Ingredient,
 } from "@stores/features/ingredients";
 
@@ -31,7 +33,7 @@ GROUP BY i.id_ingredients;
 }
 
 async function selectIngredient(ingredientId: string) {
-  // dispatch ingredientsSlice.selectedId selectIngredientId et clearIngredientSelectedId avant à faire
+  // dispatch ingredientsSlice.selectedId ingredientIdSelected et clearIngredientIdSelected avant à faire
 }
 
 async function createIngredient(newIngredient: Ingredient) {
@@ -147,7 +149,7 @@ FROM
   ingredient_menu_category_links imcl
   JOIN ingredients i ON i.id_ingredients = imcl.id_ingredients
 WHERE
-  i.name = newIngredient.name;
+  i.name = actualIngredientName;
 
 INSERT INTO
   ingredient_menu_category_links (id_ingredients, id_menu_categories)
@@ -168,7 +170,7 @@ FROM
   ingredient_storage_location_links isll
   JOIN ingredients i ON i.id_ingredients = isll.id_ingredients
 WHERE
-  i.name = newIngredient.name;
+  i.name = actualIngredientName;
 
 INSERT INTO
   ingredient_storage_location_links (id_ingredients, id_storage_locations)
@@ -240,6 +242,9 @@ async function deleteIngredient(ingredientId: string) {
 // Vérifier si l'ingredientId est bien dans le slice des ingrédients
   // dispatch ingredientsSlice ingredientDeleted
 }
+
+
+async function setIngredientStockQuantity(ingredientId: string, delta: number) {}
 
 async function updateStockFromMenu() {}
 

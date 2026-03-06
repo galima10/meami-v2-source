@@ -13,6 +13,7 @@ export interface Ingredient {
 
 const initialState = {
   ingredients: [] as Ingredient[],
+  selectedId: null as string | null,
 };
 
 export const ingredientSlice = createSlice({
@@ -33,10 +34,19 @@ export const ingredientSlice = createSlice({
     },
     ingredientUpdated: (state, action: PayloadAction<Ingredient>) => {
       const ingredientId = action.payload.id;
-      state.ingredients = state.ingredients.map(item => {
+      state.ingredients = state.ingredients.map((item) => {
         if (item.id === ingredientId) return action.payload;
         else return item;
       });
+    },
+    ingredientIdSelected: (
+      state,
+      action: PayloadAction<string | null>,
+    ) => {
+      state.selectedId = action.payload;
+    },
+    clearIngredientIdSelected: (state) => {
+      state.selectedId = null;
     },
   },
 });
@@ -46,5 +56,7 @@ export const {
   ingredientAdded,
   ingredientDeleted,
   ingredientUpdated,
+  ingredientIdSelected,
+  clearIngredientIdSelected,
 } = ingredientSlice.actions;
 export default ingredientSlice.reducer;
