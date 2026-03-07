@@ -39,14 +39,26 @@ export const ingredientSlice = createSlice({
         else return item;
       });
     },
-    ingredientIdSelected: (
-      state,
-      action: PayloadAction<string | null>,
-    ) => {
+    ingredientIdSelected: (state, action: PayloadAction<string | null>) => {
       state.selectedId = action.payload;
     },
     clearIngredientIdSelected: (state) => {
       state.selectedId = null;
+    },
+    ingredientStockQuantitySetted: (
+      state,
+      action: PayloadAction<{ ingredientId: string; delta: number }>,
+    ) => {
+      const { ingredientId, delta } = action.payload;
+      state.ingredients = state.ingredients.map((item) => {
+        if (item.id === ingredientId) {
+          return {
+            ...item,
+            stockQuantity:
+              delta !== -1 && delta !== 1 ? delta : item.stockQuantity + delta,
+          };
+        } else return item;
+      });
     },
   },
 });
@@ -58,5 +70,6 @@ export const {
   ingredientUpdated,
   ingredientIdSelected,
   clearIngredientIdSelected,
+  ingredientStockQuantitySetted
 } = ingredientSlice.actions;
 export default ingredientSlice.reducer;

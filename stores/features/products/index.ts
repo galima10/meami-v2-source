@@ -38,6 +38,21 @@ export const productSlice = createSlice({
     clearProductIdSelected: (state) => {
       state.selectedId = null;
     },
+    productStockQuantitySetted: (
+      state,
+      action: PayloadAction<{ ingredientId: string; delta: number }>,
+    ) => {
+      const { ingredientId, delta } = action.payload;
+      state.products = state.products.map((item) => {
+        if (item.id === ingredientId) {
+          return {
+            ...item,
+            stockQuantity:
+              delta !== -1 && delta !== 1 ? delta : item.stockQuantity + delta,
+          };
+        } else return item;
+      });
+    },
   },
 });
 
@@ -48,5 +63,6 @@ export const {
   productUpdated,
   productIdSelected,
   clearProductIdSelected,
+  productStockQuantitySetted
 } = productSlice.actions;
 export default productSlice.reducer;

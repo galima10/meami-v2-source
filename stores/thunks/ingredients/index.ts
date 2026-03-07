@@ -6,6 +6,7 @@ import {
   ingredientIdSelected,
   clearIngredientIdSelected,
   Ingredient,
+  ingredientStockQuantitySetted,
 } from "@stores/features/ingredients";
 
 async function fetchIngredients() {
@@ -193,7 +194,7 @@ async function updateStorageLocation(
   ingredientId: Ingredient,
   newStorageLocations: Array<string>,
 ) {
-// Vérifier si les storageLocations sont valides (bien présents dans les slices correspondants) et l'ingredientId est bien dans le slice des ingrédients
+  // Vérifier si les storageLocations sont valides (bien présents dans les slices correspondants) et l'ingredientId est bien dans le slice des ingrédients
   /*
 
 
@@ -221,8 +222,11 @@ WHERE
   // dispatch ingredientsSlice ingredientUpdated ingredient où id = ingredientId
 }
 
-async function setQuantifiable(ingredientId: Ingredient, newQuantifiable: boolean) {
-// Vérifier si l'ingredientId est bien dans le slice des ingrédients
+async function setQuantifiable(
+  ingredientId: Ingredient,
+  newQuantifiable: boolean,
+) {
+  // Vérifier si l'ingredientId est bien dans le slice des ingrédients
   /*
 
 
@@ -239,12 +243,13 @@ WHERE
 }
 
 async function deleteIngredient(ingredientId: string) {
-// Vérifier si l'ingredientId est bien dans le slice des ingrédients
+  // Vérifier si l'ingredientId est bien dans le slice des ingrédients
   // dispatch ingredientsSlice ingredientDeleted
 }
 
-
-async function setIngredientStockQuantity(ingredientId: string, delta: number) {}
+async function setIngredientStockQuantity(ingredientId: string, delta: number) {
+  // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId delta
+}
 
 async function updateStockFromMenu() {}
 

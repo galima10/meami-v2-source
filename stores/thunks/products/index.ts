@@ -6,6 +6,7 @@ import {
   productUpdated,
   clearProductIdSelected,
   Product,
+  productStockQuantitySetted
 } from "@stores/features/products";
 
 async function deleteProduct(productId: string) {
@@ -75,4 +76,6 @@ ORDER BY
   // dispatch productsSlice setProducts
 }
 
-async function setProductStockQuantity(productId: string, delta: number) {}
+async function setProductStockQuantity(productId: string, delta: number) {
+  // dispatch productsSlice productStockQuantitySetted productId delta
+}
