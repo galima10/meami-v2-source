@@ -2,7 +2,6 @@ import {
   setCookingInfos,
   cookingInfoSetted,
   cookingInfoDeleted,
-  CookingDuration,
   CookingInfo,
 } from "@stores/features/cookingInfos";
 
