@@ -39,8 +39,14 @@ export const cookingInfoSlice = createSlice({
         state.cookingInfos[index] = action.payload;
       }
     },
+    cookingInfoDeleted: (state, action: PayloadAction<string>) => {
+      const ingredientId = action.payload;
+      state.cookingInfos = state.cookingInfos.filter(
+        (item) => item.id !== ingredientId,
+      );
+    },
   },
 });
 
-export const { setCookingInfos } = cookingInfoSlice.actions;
+export const { setCookingInfos, cookingInfoSetted, cookingInfoDeleted } = cookingInfoSlice.actions;
 export default cookingInfoSlice.reducer;

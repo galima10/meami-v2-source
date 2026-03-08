@@ -1,11 +1,28 @@
-import { setCookingInfos, CookingDuration, CookingInfo } from "@stores/features/cookingInfos";
+import {
+  setCookingInfos,
+  cookingInfoSetted,
+  cookingInfoDeleted,
+  CookingDuration,
+  CookingInfo,
+} from "@stores/features/cookingInfos";
 
 async function deleteIngredientToCookingInfos() {}
 
-async function removeCookingInfo() {}
+async function removeCookingInfo(ingredientId: string) {
+  /*
+
+DELETE FROM
+  cooking_infos
+  JOIN ingredients i ON i.id_ingredients = cooking_infos.id_ingredients
+WHERE
+  preparation_type = preparationType.key
+  AND i.id_ingredients = ingredientId;
+
+*/
+}
 
 async function setCookingInfo(newCookingInfo: CookingInfo) {
-/*
+  /*
 
 
 
@@ -52,11 +69,11 @@ WHERE
 
 
 */
-// dispatch 
+  // dispatch cookingInfosSlice cookingInfoSetted newCookingInfo
 }
 
 async function fetchCookingInfos() {
-/*
+  /*
 
 
 SELECT
@@ -79,5 +96,5 @@ ORDER BY
 
 
 */
-// dispatch cookingInfosSlice setCookingInfos
+  // dispatch cookingInfosSlice setCookingInfos
 }
