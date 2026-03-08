@@ -57,17 +57,23 @@ export const shoppingListSlice = createSlice({
       }>,
     ) => {
       const { itemId, type, quantityField, delta } = action.payload;
-      state.shoppingList[type] = state.shoppingList[type].map((item) => {
-        if (item.id === itemId) {
-          const newQuantity =
-            delta !== -1 && delta !== 1 ? delta : item[quantityField] + delta;
+      const index = state.shoppingList[type].findIndex(
+        (item) => item.id === itemId,
+      );
 
-          return {
-            ...item,
-            [quantityField]: Math.max(0, newQuantity),
-          };
-        } else return item;
-      });
+      if (index !== -1) {
+        const newQuantity = Math.max(
+          0,
+          delta !== -1 && delta !== 1
+            ? delta
+            : state.shoppingList[type][index][quantityField] + delta,
+        );
+
+        state.shoppingList[type][index] = {
+          ...state.shoppingList[type][index],
+          [quantityField]: newQuantity,
+        };
+      }
     },
   },
 });

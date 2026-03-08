@@ -27,10 +27,11 @@ export const productSlice = createSlice({
     },
     productUpdated: (state, action: PayloadAction<Product>) => {
       const productId = action.payload.id;
-      state.products = state.products.map((item) => {
-        if (item.id === productId) return action.payload;
-        else return item;
-      });
+      const index = state.products.findIndex((item) => item.id === productId);
+
+      if (index !== -1) {
+        state.products[index] = action.payload;
+      }
     },
     productIdSelected: (state, action: PayloadAction<string | null>) => {
       state.selectedId = action.payload;
@@ -43,15 +44,21 @@ export const productSlice = createSlice({
       action: PayloadAction<{ ingredientId: string; delta: number }>,
     ) => {
       const { ingredientId, delta } = action.payload;
-      state.products = state.products.map((item) => {
-        if (item.id === ingredientId) {
-          return {
-            ...item,
-            stockQuantity:
-              delta !== -1 && delta !== 1 ? delta : item.stockQuantity + delta,
-          };
-        } else return item;
-      });
+      const index = state.products.findIndex(
+        (item) => item.id === ingredientId,
+      );
+
+      if (index !== -1) {
+        const newQuantity =
+          delta !== -1 && delta !== 1
+            ? delta
+            : state.products[index].stockQuantity + delta;
+
+        state.products[index] = {
+          ...state.products[index],
+          stockQuantity: newQuantity,
+        };
+      }
     },
   },
 });
@@ -63,6 +70,6 @@ export const {
   productUpdated,
   productIdSelected,
   clearProductIdSelected,
-  productStockQuantitySetted
+  productStockQuantitySetted,
 } = productSlice.actions;
 export default productSlice.reducer;

@@ -41,10 +41,11 @@ export const recipeSlice = createSlice({
     },
     recipeUpdated: (state, action: PayloadAction<Recipe>) => {
       const recipeId = action.payload.id;
-      state.recipes = state.recipes.map((item) => {
-        if (item.id === recipeId) return action.payload;
-        else return item;
-      });
+      const index = state.recipes.findIndex((item) => item.id === recipeId);
+
+      if (index !== -1) {
+        state.recipes[index] = action.payload;
+      }
     },
     recipeIdSelected: (state, action: PayloadAction<string | null>) => {
       state.selectedRecipeId = action.payload;

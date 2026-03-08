@@ -34,10 +34,13 @@ export const ingredientSlice = createSlice({
     },
     ingredientUpdated: (state, action: PayloadAction<Ingredient>) => {
       const ingredientId = action.payload.id;
-      state.ingredients = state.ingredients.map((item) => {
-        if (item.id === ingredientId) return action.payload;
-        else return item;
-      });
+      const index = state.ingredients.findIndex(
+        (item) => item.id === ingredientId,
+      );
+
+      if (index !== -1) {
+        state.ingredients[index] = action.payload;
+      }
     },
     ingredientIdSelected: (state, action: PayloadAction<string | null>) => {
       state.selectedId = action.payload;
@@ -50,15 +53,21 @@ export const ingredientSlice = createSlice({
       action: PayloadAction<{ ingredientId: string; delta: number }>,
     ) => {
       const { ingredientId, delta } = action.payload;
-      state.ingredients = state.ingredients.map((item) => {
-        if (item.id === ingredientId) {
-          return {
-            ...item,
-            stockQuantity:
-              delta !== -1 && delta !== 1 ? delta : item.stockQuantity + delta,
-          };
-        } else return item;
-      });
+      const index = state.ingredients.findIndex(
+        (item) => item.id === ingredientId,
+      );
+
+      if (index !== -1) {
+        const newQuantity =
+          delta !== -1 && delta !== 1
+            ? delta
+            : state.ingredients[index].stockQuantity + delta;
+
+        state.ingredients[index] = {
+          ...state.ingredients[index],
+          stockQuantity: newQuantity,
+        };
+      }
     },
   },
 });
@@ -70,6 +79,6 @@ export const {
   ingredientUpdated,
   ingredientIdSelected,
   clearIngredientIdSelected,
-  ingredientStockQuantitySetted
+  ingredientStockQuantitySetted,
 } = ingredientSlice.actions;
 export default ingredientSlice.reducer;

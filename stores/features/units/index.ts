@@ -26,10 +26,11 @@ export const unitSlice = createSlice({
     },
     unitUpdated: (state, action: PayloadAction<Unit>) => {
       const unitId = action.payload.id;
-      state.units = state.units.map((item) => {
-        if (item.id === unitId) return action.payload;
-        else return item;
-      });
+      const index = state.units.findIndex((item) => item.id === unitId);
+
+      if (index !== -1) {
+        state.units[index] = action.payload;
+      }
     },
   },
 });

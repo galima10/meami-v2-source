@@ -35,6 +35,7 @@ export interface IngredientMenu {
 
 const initialState = {
   weeklyMenu: {} as WeeklyMenu,
+  menuIndex: {} as { [menuId: string]: { day: string; moment: string } },
 };
 
 /*
@@ -168,24 +169,27 @@ export const weeklyMenuSlice = createSlice({
   reducers: {
     setWeeklyMenu: (state, action: PayloadAction<WeeklyMenu>) => {
       state.weeklyMenu = action.payload;
+
+      state.menuIndex = {};
+      for (const day of Object.keys(action.payload)) {
+        const dayMenu = action.payload[day as keyof WeeklyMenu];
+        for (const moment of ["morning", "noon", "evening"] as const) {
+          const menu = dayMenu[moment];
+          if (menu) {
+            state.menuIndex[menu.id] = { day, moment };
+          }
+        }
+      }
     },
     menuUpdated: (state, action: PayloadAction<Menu>) => {
       const menuId = action.payload.id;
       const updatedMenu = action.payload;
 
-      for (const day of Object.keys(state.weeklyMenu)) {
-        const dayMenu = state.weeklyMenu[day as keyof WeeklyMenu];
-
-        if (dayMenu) {
-          for (const moment of ["morning", "noon", "evening"] as const) {
-            const menu = dayMenu[moment];
-
-            if (menu && menu.id === menuId) {
-              dayMenu[moment] = updatedMenu;
-              return;
-            }
-          }
-        }
+      const menuLocation = state.menuIndex[menuId];
+      if (menuLocation) {
+        const { day, moment } = menuLocation;
+        state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu] =
+          updatedMenu;
       }
     },
     menuDoneToggled: (
@@ -194,42 +198,31 @@ export const weeklyMenuSlice = createSlice({
     ) => {
       const { menuId, done } = action.payload;
 
-      for (const day of Object.keys(state.weeklyMenu)) {
-        const dayMenu = state.weeklyMenu[day as keyof WeeklyMenu];
-
-        if (dayMenu) {
-          for (const moment of ["morning", "noon", "evening"] as const) {
-            const menu = dayMenu[moment];
-
-            if (menu && menu.id === menuId) {
-              dayMenu[moment] = {
-                ...dayMenu[moment],
-                done,
-              };
-              return;
-            }
-          }
+      const menuLocation = state.menuIndex[menuId];
+      if (menuLocation) {
+        const { day, moment } = menuLocation;
+        const menu =
+          state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu];
+        if (menu) {
+          menu.done = done;
         }
       }
     },
     clearMenu: (state, action: PayloadAction<string>) => {
       const menuId = action.payload;
 
-      for (const day of Object.keys(state.weeklyMenu)) {
-        const dayMenu = state.weeklyMenu[day as keyof WeeklyMenu];
+      const menuLocation = state.menuIndex[menuId];
+      if (menuLocation) {
+        const { day, moment } = menuLocation;
+        const menu =
+          state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu];
 
-        if (dayMenu) {
-          for (const moment of ["morning", "noon", "evening"] as const) {
-            const menu = dayMenu[moment];
-
-            if (menu && menu.id === menuId) {
-              dayMenu[moment] = {
-                id: dayMenu[moment].id,
-                done: false,
-                ingredients: {},
-              };
-            }
-          }
+        if (menu) {
+          state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu] = {
+            id: menu.id,
+            done: false,
+            ingredients: {},
+          };
         }
       }
     },
@@ -243,35 +236,31 @@ export const weeklyMenuSlice = createSlice({
     ) => {
       const { ingredientId, menuId, delta } = action.payload;
 
-      for (const day of Object.keys(state.weeklyMenu)) {
-        const dayMenu = state.weeklyMenu[day as keyof WeeklyMenu];
+      const menuLocation = state.menuIndex[menuId];
+      if (menuLocation) {
+        const { day, moment } = menuLocation;
+        const menu =
+          state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu];
 
-        if (dayMenu) {
-          for (const moment of ["morning", "noon", "evening"] as const) {
-            const menu = dayMenu[moment];
+        if (menu) {
+          for (const menuCategory of Object.keys(menu.ingredients)) {
+            const ingredients = menu.ingredients[menuCategory];
 
-            if (menu && menu.id === menuId) {
-              // Parcourir les catégories d'ingrédients
-              for (const menuCategory of Object.keys(menu.ingredients)) {
-                const ingredients = menu.ingredients[menuCategory];
+            const ingredientIndex = ingredients.findIndex(
+              (ingredient: IngredientMenu) => ingredient.id === ingredientId,
+            );
 
-                // Mettre à jour les ingrédients
-                menu.ingredients[menuCategory] = ingredients.map(
-                  (ingredient) =>
-                    ingredient.id === ingredientId
-                      ? {
-                          ...ingredient,
-                          quantity:
-                            ingredient.quantity !== null
-                              ? delta !== -1 && delta !== 1
-                                ? delta
-                                : ingredient.quantity + delta
-                              : ingredient.quantity, // Ne rien faire si `quantity` est null
-                        }
-                      : ingredient,
-                );
-              }
-              return; // Sortir dès que l'ingrédient est mis à jour
+            if (ingredientIndex !== -1) {
+              const ingredient = ingredients[ingredientIndex];
+              ingredients[ingredientIndex] = {
+                ...ingredient,
+                quantity:
+                  ingredient.quantity !== null
+                    ? delta !== -1 && delta !== 1
+                      ? delta
+                      : ingredient.quantity + delta
+                    : ingredient.quantity,
+              };
             }
           }
         }
@@ -280,6 +269,11 @@ export const weeklyMenuSlice = createSlice({
   },
 });
 
-export const { setWeeklyMenu, menuUpdated, menuDoneToggled, clearMenu, ingredientMenuQuantitySetted } =
-  weeklyMenuSlice.actions;
+export const {
+  setWeeklyMenu,
+  menuUpdated,
+  menuDoneToggled,
+  clearMenu,
+  ingredientMenuQuantitySetted,
+} = weeklyMenuSlice.actions;
 export default weeklyMenuSlice.reducer;
