@@ -8,7 +8,7 @@ export interface CookingInfo {
   };
 }
 
-export interface CookingDuration {
+interface CookingDuration {
   id: string;
   ustensilName: string;
   duration: number | null;
