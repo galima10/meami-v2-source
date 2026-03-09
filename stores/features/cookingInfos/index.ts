@@ -48,5 +48,6 @@ export const cookingInfoSlice = createSlice({
   },
 });
 
-export const { setCookingInfos, cookingInfoSetted, cookingInfoDeleted } = cookingInfoSlice.actions;
+export const { setCookingInfos, cookingInfoSetted, cookingInfoDeleted } =
+  cookingInfoSlice.actions;
 export default cookingInfoSlice.reducer;

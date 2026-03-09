@@ -5,34 +5,33 @@ import {
   CookingInfo,
 } from "@stores/features/cookingInfos";
 
-async function deleteIngredientToCookingInfos() {}
-
 async function removeCookingInfo(ingredientId: string) {
-  /*
+/*
+
 
 DELETE FROM
   cooking_infos
   JOIN ingredients i ON i.id_ingredients = cooking_infos.id_ingredients
 WHERE
-  preparation_type = preparationType.key
-  AND i.id_ingredients = ingredientId;
+  i.id_ingredients = newCookingInfo.id;
+
 
 */
+// dispatch cookingInfosSlice cookingInfoDeleted ingredientId
 }
 
 async function setCookingInfo(newCookingInfo: CookingInfo) {
   /*
 
 
-
-=> Boucler sur newCookingInfo.preparationTypes avec un ObjectKeys
-
 DELETE FROM
   cooking_infos
   JOIN ingredients i ON i.id_ingredients = cooking_infos.id_ingredients
 WHERE
-  preparation_type = preparationType.key
-  AND i.id_ingredients = newCookingInfo.id;
+  i.id_ingredients = newCookingInfo.id;
+
+
+=> Boucler sur newCookingInfo.preparationTypes avec un ObjectKeys
 
 INSERT INTO
   cooking_infos (preparation_type, id_ingredients)
@@ -44,8 +43,8 @@ FROM
 WHERE
   i.id_ingredients = newCookingInfo.id;
 
-=> Boucler sur preparationType du type CookingDuration :
 
+  
 INSERT INTO
   cooking_durations (
     duration_in_minutes,
