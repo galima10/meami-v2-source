@@ -251,6 +251,57 @@ async function setIngredientStockQuantity(ingredientId: string, delta: number) {
   // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId delta
 }
 
-async function updateStockFromMenu() {}
+async function updateStock(from: "menu" | "shopping") {
+/*
 
-async function updateStockFromShopping() {}
+
+=> Si from === "menu" :
+
+UPDATE
+  ingredients
+SET
+  stock_quantity = GREATEST(
+    0,
+    stock_quantity - (
+      SELECT
+        COALESCE(SUM(mil.quantity), 0)
+      FROM
+        menu_ingredient_links mil
+        JOIN menus m ON m.id_menus = mil.id_menus
+      WHERE
+        mil.id_ingredients = ingredients.id_ingredients
+        AND m.done = TRUE
+    )
+  )
+WHERE
+  quantifiable = TRUE
+  AND stock_quantity > 0;
+
+
+
+=> Si from === "shopping" :
+
+UPDATE
+  ingredients i
+  JOIN shopping_list_items sli ON sli.id_ingredients = i.id_ingredients
+  JOIN shopping_lists sl ON sl.id_shopping_lists = sli.id_shopping_lists
+SET
+  i.stock_quantity = i.stock_quantity + sli.quantity_buyed
+WHERE
+  sl.id_shopping_lists = (
+    SELECT
+      id_shopping_lists
+    FROM
+      shopping_lists
+    ORDER BY
+      created_at DESC
+    LIMIT
+      1
+  )
+  AND sli.quantity_buyed >= 0;
+
+
+*/
+// fetchIngredients()
+// dispatch setIngredients
+}
