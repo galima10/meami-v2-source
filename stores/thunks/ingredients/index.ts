@@ -11,6 +11,8 @@ import {
 
 async function fetchIngredients() {
   /*
+
+
 SELECT
   i.id_ingredients,
   GROUP_CONCAT(DISTINCT mc.name ORDER BY mc.name) AS menu_categories,
@@ -29,6 +31,8 @@ FROM
   LEFT JOIN ingredient_storage_location_links isll ON isll.id_ingredients = i.id_ingredients
   LEFT JOIN storage_locations sl ON sl.id_storage_locations = isll.id_storage_locations
 GROUP BY i.id_ingredients;
+
+
 */
   // dispatch ingedientsSlice setIngredients
 }
@@ -54,7 +58,7 @@ INSERT INTO
 SELECT
   newIngredient.name,
   newIngredient.quantifiable,
-  GREATEST(0, newIngredient.stockQuantity),
+  MAX(0, newIngredient.stockQuantity),
   ic.id_ingredient_categories,
   (
     SELECT
@@ -112,12 +116,12 @@ async function updateIngredient(
 
 
 UPDATE
-  ingredients i
+  ingredients
 SET
-  i.name = newIngredient.name,
-  i.quantifiable = newIngredient.quantifiable,
-  i.stock_quantity = GREATEST(0, newIngredient.stockQuantity),
-  i.id_ingredient_categories = COALESCE(
+  name = newIngredient.name,
+  quantifiable = newIngredient.quantifiable ? 1 : 0,
+  stock_quantity = MAX(0, newIngredient.stockQuantity),
+  id_ingredient_categories = COALESCE(
     (
       SELECT
         id_ingredient_categories
@@ -127,8 +131,8 @@ SET
         name = newIngredient.category
       LIMIT
         1
-    ), i.id_ingredient_categories
-  ), i.id_units = COALESCE(
+    ), id_ingredient_categories
+  ), id_units = COALESCE(
     (
       SELECT
         id_units
@@ -138,19 +142,25 @@ SET
         name = unit
       LIMIT
         1
-    ), i.id_units
+    ), id_units
   )
 WHERE
-  i.name = actualIngredientName;
+  name = actualIngredientName;
 
 
 
-DELETE imcl
-FROM
-  ingredient_menu_category_links imcl
-  JOIN ingredients i ON i.id_ingredients = imcl.id_ingredients
+DELETE FROM
+  ingredient_menu_category_links
 WHERE
-  i.name = actualIngredientName;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = ingredient_menu_category_links.id_ingredients
+      AND i.name = actualIngredientName
+  );
 
 INSERT INTO
   ingredient_menu_category_links (id_ingredients, id_menu_categories)
@@ -166,12 +176,18 @@ WHERE
 
 
 
-DELETE isll
-FROM
-  ingredient_storage_location_links isll
-  JOIN ingredients i ON i.id_ingredients = isll.id_ingredients
+DELETE FROM
+  ingredient_storage_location_links
 WHERE
-  i.name = actualIngredientName;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = ingredient_storage_location_links.id_ingredients
+      AND i.name = actualIngredientName
+  );
 
 INSERT INTO
   ingredient_storage_location_links (id_ingredients, id_storage_locations)
@@ -198,12 +214,18 @@ async function updateStorageLocation(
   /*
 
 
-DELETE isll
-FROM
-  ingredient_storage_location_links isll
-  JOIN ingredients i ON i.id_ingredients = isll.id_ingredients
+DELETE FROM
+  ingredient_storage_location_links
 WHERE
-  i.id_ingredients = ingredientId;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = ingredient_storage_location_links.id_ingredients
+      AND i.name = actualIngredientName
+  );
 
 INSERT INTO
   ingredient_storage_location_links (id_ingredients, id_storage_locations)
@@ -231,11 +253,11 @@ async function setQuantifiable(
 
 
 UPDATE
-  ingredients i
+  ingredients 
 SET
-  i.quantifiable = newQuantifiable
+  quantifiable = newQuantifiable
 WHERE
-  i.id_ingredients = ingredientId;
+  id_ingredients = ingredientId;
   
 
 */
@@ -252,7 +274,7 @@ async function setIngredientStockQuantity(ingredientId: string, delta: number) {
 }
 
 async function updateStock(from: "menu" | "shopping") {
-/*
+  /*
 
 
 => Si from === "menu" :
@@ -260,7 +282,7 @@ async function updateStock(from: "menu" | "shopping") {
 UPDATE
   ingredients
 SET
-  stock_quantity = GREATEST(
+  stock_quantity = MAX(
     0,
     stock_quantity - (
       SELECT
@@ -270,38 +292,40 @@ SET
         JOIN menus m ON m.id_menus = mil.id_menus
       WHERE
         mil.id_ingredients = ingredients.id_ingredients
-        AND m.done = TRUE
+        AND m.done = 1
     )
   )
 WHERE
-  quantifiable = TRUE
+  quantifiable = 1
   AND stock_quantity > 0;
 
 
 
 => Si from === "shopping" :
 
-UPDATE
-  ingredients i
-  JOIN shopping_list_items sli ON sli.id_ingredients = i.id_ingredients
+UPDATE ingredients
+SET stock_quantity = stock_quantity + COALESCE((
+  SELECT 
+    SUM(sli.quantity_buyed)
+  FROM 
+    shopping_list_items sli
   JOIN shopping_lists sl ON sl.id_shopping_lists = sli.id_shopping_lists
-SET
-  i.stock_quantity = i.stock_quantity + sli.quantity_buyed
-WHERE
-  sl.id_shopping_lists = (
-    SELECT
-      id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
-      1
-  )
-  AND sli.quantity_buyed >= 0;
+  WHERE 
+    sli.id_ingredients = ingredients.id_ingredients
+    AND sl.id_shopping_lists = (
+        SELECT 
+          id_shopping_lists
+        FROM 
+          shopping_lists
+        ORDER BY created_at DESC
+        LIMIT 1
+    )
+    AND sli.quantity_buyed >= 0
+), 0)
+WHERE quantifiable = 1;
 
 
 */
-// fetchIngredients()
-// dispatch setIngredients
+  // fetchIngredients()
+  // dispatch setIngredients
 }
