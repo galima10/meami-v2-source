@@ -19,6 +19,7 @@ module.exports = function (api: any): TransformOptions {
             "@constants": "./constants",
             "@contexts": "./contexts",
             "@hooks": "./hooks",
+            "@database": "./database",
             "@services": "./services",
             "@stores": "./stores",
             "@types": "./types",

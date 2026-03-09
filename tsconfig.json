@@ -11,6 +11,7 @@
       "@constants/*": ["./constants/*"],
       "@contexts/*": ["./contexts/*"],
       "@hooks/*": ["./hooks/*"],
+      "@database/*": ["./database/*"],
       "@services/*": ["./services/*"],
       "@stores/*": ["./stores/*"],
       "@app-types/*": ["./types/*"],
