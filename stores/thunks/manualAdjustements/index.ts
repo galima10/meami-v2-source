@@ -137,13 +137,20 @@ tableCible = "menu_ingredient";
 
 
 UPDATE
-  tableCible tcmc
-  JOIN ingredients i ON i.id_ingredients = tcmc.id_ingredients
-  JOIN units u ON u.id_units = i.id_units
+  tableCible
 SET
-  tcmc.checked = checked
+  checked = checked;
 WHERE
-  i.id_ingredients = ingredientId;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    JOIN units u ON u.id_units = i.id_units
+    WHERE
+      i.id_ingredients = ingredientId
+  );
+
 
 
 */

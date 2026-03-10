@@ -23,11 +23,10 @@ async function deleteUstensil(cookingUstensilId: string) {
 /*
 
 
-DELETE cu
-FROM
-  cooking_ustensils cu
+DELETE FROM
+  cooking_ustensils
 WHERE
-  cu.id_cooking_ustensils = cookingUstensilId;
+  id_cooking_ustensils = cookingUstensilId;
 
 
 */
