@@ -222,11 +222,9 @@ DELETE FROM
   shopping_lists;
 
 INSERT INTO
-  shopping_lists ()
+  shopping_lists DEFAULT
 VALUES
-  ();
-
-
+;
 
 INSERT INTO
   shopping_list_items (
@@ -269,45 +267,53 @@ GROUP BY
 HAVING
   SUM(mil.quantity) > COALESCE(i.stock_quantity, 0);
 
-
-
 WITH last_list AS (
-  SELECT id_shopping_lists
-  FROM shopping_lists
-  ORDER BY created_at DESC
-  LIMIT 1
+  SELECT
+    id_shopping_lists
+  FROM
+    shopping_lists
+  ORDER BY
+    created_at DESC
+  LIMIT
+    1
 )
-
 SELECT
-  i.id_ingredients,
-  i.name AS item_name,
-  sli.quantity_needed,
-  sli.quantity_buyed,
-  u.abbreviation AS unit,
-  ic.name AS category_name,
-  'ingredient' AS item_type
-FROM shopping_list_items sli
-JOIN ingredients i ON i.id_ingredients = sli.id_ingredients
-JOIN units u ON u.id_units = sli.id_units
-JOIN ingredient_categories ic ON ic.id_ingredient_categories = i.id_ingredient_categories
-JOIN last_list ll ON ll.id_shopping_lists = sli.id_shopping_lists
-
-UNION ALL
-
-SELECT
-  p.id_products,
-  p.name AS item_name,
-  sli.quantity_needed,
-  sli.quantity_buyed,
-  NULL AS unit,
-  NULL AS category_name,
-  'product' AS item_type
-FROM shopping_list_items sli
-JOIN products p ON p.id_products = sli.id_products
-JOIN last_list ll ON ll.id_shopping_lists = sli.id_shopping_lists
-
+  *
+FROM
+  (
+    SELECT
+      i.id_ingredients,
+      i.name AS item_name,
+      sli.quantity_needed,
+      sli.quantity_buyed,
+      u.abbreviation AS unit,
+      ic.name AS category_name,
+      'ingredient' AS item_type,
+      (sli.quantity_needed <= sli.quantity_buyed) AS is_done
+    FROM
+      shopping_list_items sli
+      JOIN ingredients i ON i.id_ingredients = sli.id_ingredients
+      JOIN units u ON u.id_units = sli.id_units
+      JOIN ingredient_categories ic ON ic.id_ingredient_categories = i.id_ingredient_categories
+      JOIN last_list ll ON ll.id_shopping_lists = sli.id_shopping_lists
+    UNION
+    ALL
+    SELECT
+      p.id_products,
+      p.name AS item_name,
+      sli.quantity_needed,
+      sli.quantity_buyed,
+      NULL AS unit,
+      NULL AS category_name,
+      'product' AS item_type,
+      (sli.quantity_needed <= sli.quantity_buyed) AS is_done
+    FROM
+      shopping_list_items sli
+      JOIN products p ON p.id_products = sli.id_products
+      JOIN last_list ll ON ll.id_shopping_lists = sli.id_shopping_lists
+  )
 ORDER BY
-  (quantity_needed <= quantity_buyed) ASC,
+  is_done ASC,
   category_name DESC,
   item_type,
   item_name;

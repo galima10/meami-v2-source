@@ -22,12 +22,12 @@ SELECT
   COUNT(mil.id_ingredients) AS usage_count
 FROM
   shopping_lists sl
-  JOIN menus m ON 1 = 1
+  CROSS JOIN menus m
   JOIN menu_ingredient_links mil ON mil.id_menus = m.id_menus
   JOIN ingredients i ON i.id_ingredients = mil.id_ingredients
   JOIN units u ON u.id_units = i.id_units
 WHERE
-  i.quantifiable = FALSE
+  i.quantifiable = 0
   AND u.name <> "Infini"
   AND NOT EXISTS (
     SELECT
@@ -40,7 +40,9 @@ WHERE
   )
 GROUP BY
   sl.id_shopping_lists,
-  i.id_ingredients;
+  i.id_ingredients
+ORDER BY
+  usage_count DESC;
 
 
 
@@ -68,7 +70,7 @@ FROM
   JOIN menu_ingredient_links mil ON mil.id_ingredients = i.id_ingredients
   JOIN units u ON u.id_units = i.id_units
 WHERE
-  i.quantifiable = FALSE
+  i.quantifiable = 0
   AND u.name <> "Infini"
 GROUP BY
   i.id_ingredients
@@ -139,7 +141,7 @@ tableCible = "menu_ingredient";
 UPDATE
   tableCible
 SET
-  checked = checked ? 1 : 0;
+  checked = checked ? 1 : 0
 WHERE
   EXISTS (
     SELECT
@@ -148,7 +150,8 @@ WHERE
       ingredients i
     JOIN units u ON u.id_units = i.id_units
     WHERE
-      i.id_ingredients = ingredientId
+      i.id_ingredients = shopping_list_manual_checks.id_ingredients
+      AND i.id_ingredients = ingredientId
   );
 
 
