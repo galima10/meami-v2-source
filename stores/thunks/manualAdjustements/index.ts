@@ -139,7 +139,7 @@ tableCible = "menu_ingredient";
 UPDATE
   tableCible
 SET
-  checked = checked;
+  checked = checked ? 1 : 0;
 WHERE
   EXISTS (
     SELECT

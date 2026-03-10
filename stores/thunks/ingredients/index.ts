@@ -255,7 +255,7 @@ async function setQuantifiable(
 UPDATE
   ingredients 
 SET
-  quantifiable = newQuantifiable
+  quantifiable = newQuantifiable ? 1 : 0
 WHERE
   id_ingredients = ingredientId;
   

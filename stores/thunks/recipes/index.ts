@@ -106,12 +106,20 @@ WHERE
 
 
 
-DELETE rcl
-FROM
-  recipe_category_links rcl
-  JOIN recipes r ON r.id_recipes = rcl.id_recipes
+DELETE FROM
+  recipe_category_links
 WHERE
-  r.name = actualRecipeName;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      recipes r
+    WHERE
+      r.id_recipes = recipe_category_links.id_recipes
+      AND r.name = actualIngredientName
+  );
+
+
 
 INSERT INTO
   recipe_category_links (id_recipes, id_recipe_categories)
@@ -127,12 +135,18 @@ WHERE
 
 
 
-DELETE ril
-FROM
-  recipe_ingredient_links ril
-  JOIN recipes r ON r.id_recipes = ril.id_recipes
+DELETE FROM
+  recipe_ingredient_links
 WHERE
-  r.name = actualRecipeName;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      recipes r
+    WHERE
+      r.id_recipes = recipe_ingredient_links.id_recipes
+      AND r.name = actualIngredientName
+  );
 
 
   

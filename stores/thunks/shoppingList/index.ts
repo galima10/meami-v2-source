@@ -26,8 +26,8 @@ INSERT INTO
 SELECT
   sl.id_shopping_lists,
   i.id_ingredients,
-  GREATEST(1, newItem.quantityNeeded),
-  GREATEST(0, 0),
+  MAX(1, newItem.quantityNeeded),
+  MAX(0, 0),
   i.quantifiable,
   i.id_units
 FROM
@@ -43,9 +43,10 @@ WHERE
       created_at DESC
     LIMIT
       1
-  ) ON DUPLICATE KEY
-UPDATE
-  quantity_needed = GREATEST(1, quantity_needed + 1);
+  ) 
+  ON CONFLICT(id_shopping_lists, id_ingredients)
+  DO UPDATE SET
+    quantity_needed = MAX(1, quantity_needed + 1);
 
 
 
@@ -61,8 +62,8 @@ INSERT INTO
 SELECT
   sl.id_shopping_lists,
   p.id_products,
-  GREATEST(1, newItem.quantityNeeded),
-  GREATEST(0, 0)
+  MAX(1, newItem.quantityNeeded),
+  MAX(0, 0)
 FROM
   shopping_lists sl
   JOIN products p ON p.id_products = newItem.id
@@ -76,9 +77,10 @@ WHERE
       created_at DESC
     LIMIT
       1
-  ) ON DUPLICATE KEY
-UPDATE
-  quantity_needed = GREATEST(1, quantity_needed + 1);
+  )
+  ON CONFLICT(id_shopping_lists, id_products)
+  DO UPDATE SET
+    quantity_needed = MAX(1, quantity_needed + 1);
 
 
 */
@@ -93,23 +95,35 @@ async function removeItemToShopping(
 
 => Si type === "ingredients" :
 
-DELETE sli
-FROM
-  shopping_list_items sli
-  JOIN ingredients i ON sli.id_ingredients = i.id_ingredients
+DELETE FROM 
+  shopping_list_items
 WHERE
-  i.id_ingredients = itemId;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = shopping_list_items.id_ingredients
+      AND i.id_ingredients = itemId
+  );
 
 
 
 => Si type === "products" :
 
-DELETE sli
-FROM
-  shopping_list_items sli
-  JOIN products p ON sli.id_products = p.id_products
+DELETE FROM 
+  shopping_list_items
 WHERE
-  p.id_products = itemId;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      products p
+    WHERE
+      p.id_products = shopping_list_items.id_products
+      AND p.id_products = itemId
+  );
 
 
 */
@@ -129,92 +143,71 @@ async function setShoppingListItemQuantity(
 
 => Si type === "ingredients" :
 
-UPDATE
-  shopping_list_items sli
-  JOIN ingredients i ON i.id_ingredients = sli.id_ingredients
-SET
-  sli.quantityField = sli.quantityField + delta
-WHERE
-  sli.id_shopping_lists = (
-    SELECT
+UPDATE shopping_list_items
+SET quantityField = quantityField + delta
+WHERE 
+  id_shopping_lists = (
+    SELECT 
       id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
+    FROM shopping_lists
+    ORDER BY created_at DESC
+    LIMIT 
       1
-  )
-  AND i.name = "Ail semoule";
+)
+AND id_ingredients = itemId;
 
 
 
 => Si type === "products" :
 
-UPDATE
-  shopping_list_items sli
-  JOIN products p ON p.id_products = sli.id_products
-SET
-  sli.quantityField = sli.quantityField + delta
-WHERE
-  sli.id_shopping_lists = (
-    SELECT
+UPDATE shopping_list_items
+SET quantityField = quantityField + delta
+WHERE 
+  id_shopping_lists = (
+    SELECT 
       id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
+    FROM shopping_lists
+    ORDER BY created_at DESC
+    LIMIT 
       1
-  )
-  AND p.name = "Rouleau d'essuie-tout";
+)
+AND id_products = itemId;
 
 
-  
 
 => Si quantityField === "quantityNeeded" et delta > 1
 
 => Si type === "ingredients" :
 
-UPDATE
-  shopping_list_items sli
-  JOIN ingredients i ON i.id_ingredients = sli.id_ingredients
-SET
-  sli.quantity_needed = GREATEST(1, delta)
-WHERE
-  sli.id_shopping_lists = (
-    SELECT
+UPDATE shopping_list_items
+SET quantity_needed = MAX(1, delta)
+WHERE 
+  id_shopping_lists = (
+    SELECT 
       id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
+    FROM shopping_lists
+    ORDER BY created_at DESC
+    LIMIT 
       1
-  )
-  AND i.name = "Ail semoule";
+)
+AND id_ingredients = itemId;
 
 
 
 => Si type === "products" :
 
-UPDATE
-  shopping_list_items sli
-  JOIN products p ON p.id_products = sli.id_products
-SET
-  sli.quantity_needed = GREATEST(1, delta)
-WHERE
-  sli.id_shopping_lists = (
-    SELECT
+UPDATE shopping_list_items
+SET quantity_needed = MAX(1, delta)
+WHERE 
+  id_shopping_lists = (
+    SELECT 
       id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
+    FROM shopping_lists
+    ORDER BY created_at DESC
+    LIMIT 
       1
-  )
-  AND p.name = "Rouleau d'essuie-tout";
+)
+AND id_products = itemId;
 
 
 */
@@ -253,11 +246,11 @@ SELECT
   i.id_units
 FROM
   shopping_lists sl
-  JOIN menus m ON 1 = 1
+  CROSS JOIN menus m
   JOIN menu_ingredient_links mil ON mil.id_menus = m.id_menus
   JOIN ingredients i ON i.id_ingredients = mil.id_ingredients
 WHERE
-  i.quantifiable = TRUE
+  i.quantifiable = 1
   AND NOT EXISTS (
     SELECT
       1
@@ -278,6 +271,13 @@ HAVING
 
 
 
+WITH last_list AS (
+  SELECT id_shopping_lists
+  FROM shopping_lists
+  ORDER BY created_at DESC
+  LIMIT 1
+)
+
 SELECT
   i.id_ingredients,
   i.name AS item_name,
@@ -286,24 +286,14 @@ SELECT
   u.abbreviation AS unit,
   ic.name AS category_name,
   'ingredient' AS item_type
-FROM
-  shopping_list_items sli
-  JOIN ingredients i ON i.id_ingredients = sli.id_ingredients
-  JOIN units u ON u.id_units = sli.id_units
-  JOIN ingredient_categories ic ON ic.id_ingredient_categories = i.id_ingredient_categories
-WHERE
-  sli.id_shopping_lists = (
-    SELECT
-      id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
-      1
-  )
-UNION
-ALL
+FROM shopping_list_items sli
+JOIN ingredients i ON i.id_ingredients = sli.id_ingredients
+JOIN units u ON u.id_units = sli.id_units
+JOIN ingredient_categories ic ON ic.id_ingredient_categories = i.id_ingredient_categories
+JOIN last_list ll ON ll.id_shopping_lists = sli.id_shopping_lists
+
+UNION ALL
+
 SELECT
   p.id_products,
   p.name AS item_name,
@@ -312,20 +302,10 @@ SELECT
   NULL AS unit,
   NULL AS category_name,
   'product' AS item_type
-FROM
-  shopping_list_items sli
-  JOIN products p ON p.id_products = sli.id_products
-WHERE
-  sli.id_shopping_lists = (
-    SELECT
-      id_shopping_lists
-    FROM
-      shopping_lists
-    ORDER BY
-      created_at DESC
-    LIMIT
-      1
-  )
+FROM shopping_list_items sli
+JOIN products p ON p.id_products = sli.id_products
+JOIN last_list ll ON ll.id_shopping_lists = sli.id_shopping_lists
+
 ORDER BY
   (quantity_needed <= quantity_buyed) ASC,
   category_name DESC,

@@ -5,83 +5,101 @@ import {
   clearMenu,
   ingredientMenuQuantitySetted,
   Menu,
-  IngredientMenu
+  IngredientMenu,
 } from "@stores/features/weeklyMenu";
 
 async function removeMenu(menuId: string) {
-/*
+  /*
 
 
-DELETE mil
-FROM
-  menu_ingredient_links mil
-  JOIN menus m ON m.id_menus = mil.id_menus
+DELETE FROM
+  menu_ingredient_links
 WHERE
-  m.id_menus = menuId;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      menus m
+    WHERE
+      m.id_menus = menu_ingredient_links.id_menus
+      AND m.id_menus = menuId
+  );
 
 
 */
-// dispatch weeklyMenuSlice clearMenu menuId
+  // dispatch weeklyMenuSlice clearMenu menuId
 }
 
 async function removeIngredientToMenu(ingredientId: string, menu: Menu) {
-/*
+  /*
 
 
-DELETE mil
-FROM
-  menu_ingredient_links mil
-  JOIN menus m ON m.id_menus = mil.id_menus
-  JOIN ingredients i ON i.id_ingredients = mil.id_ingredients
-  JOIN moments mo ON mo.id_moments = m.id_moments
-  JOIN days d ON d.id_days = m.id_days
-WHERE
-  m.id_menus = menuId
-  AND i.id_ingredients = ingredientId;
+DELETE FROM menu_ingredient_links
+WHERE 
+  EXISTS (
+    SELECT 
+      1
+    FROM 
+      menus m
+    JOIN ingredients i ON i.id_ingredients = menu_ingredient_links.id_ingredients
+    WHERE 
+      m.id_menus = menuId
+      AND i.id_ingredients = menu_ingredient_links.id_ingredients
+      AND i.id_ingredients = ingredientId
+  );
 
 
 */
-// select weeklyMenuSlice menu.id et retirer ingredientId dans newMenu
-// dispatch weeklyMenuSlice menuUpdated newMenu
+  // select weeklyMenuSlice menu.id et retirer ingredientId dans newMenu
+  // dispatch weeklyMenuSlice menuUpdated newMenu
 }
 
 async function removeWeeklyMenu() {
-/*
+  /*
 
-DELETE mil
-FROM
-  menu_ingredient_links mil
-  JOIN menus m ON m.id_menus = mil.id_menus;
+DELETE FROM
+  menu_ingredient_links;
+
 
 UPDATE
   menus
 SET
-  done = FALSE;
+  done = 0;
 
 */
-// dispatch weeklyMenuSlice setWeeklyMenu {}
+  // dispatch weeklyMenuSlice setWeeklyMenu {}
 }
 
-async function addIngredientToMenu(newIngredient: IngredientMenu, menuId: string) {
-// const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur newIngredient.unit
-/*
+async function addIngredientToMenu(
+  newIngredient: IngredientMenu,
+  menuId: string,
+) {
+  // const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur newIngredient.unit
+  /*
 
 
-DELETE mil
-FROM
-  menu_ingredient_links mil
-  JOIN menus m ON m.id_menus = mil.id_menus
-  JOIN ingredients i ON i.id_ingredients = mil.id_ingredients
-WHERE
-  m.id_menus = menuId
-  AND i.id_ingredients = newIngredient.id;
+DELETE FROM menu_ingredient_links
+WHERE 
+  EXISTS (
+    SELECT 
+      1
+    FROM 
+      menus m
+    JOIN ingredients i ON i.id_ingredients = menu_ingredient_links.id_ingredients
+    WHERE 
+      m.id_menus = menuId
+      AND i.id_ingredients = menu_ingredient_links.id_ingredients
+      AND i.id_ingredients = newIngredient.id
+  );
+
+
 
 INSERT INTO
   menu_ingredient_links (id_menus, id_ingredients, quantity, id_units)
 SELECT
   DISTINCT m.id_menus,
   i.id_ingredients,
-  GREATEST(1, newIngredient.quantity),
+  MAX(1, newIngredient.quantity),
   u.id_units
 FROM
   menus m
@@ -107,28 +125,28 @@ WHERE
 
 
 */
-// select weeklyMenuSlice menuId et ajouter newIngredient dans newMenu
-// dispatch weeklyMenuSlice menuUpdated newMenu
+  // select weeklyMenuSlice menuId et ajouter newIngredient dans newMenu
+  // dispatch weeklyMenuSlice menuUpdated newMenu
 }
 
 async function setMenuDone(menuId: string, done: boolean) {
-/*
+  /*
 
 
 UPDATE
-  menus m
+  menus
 SET
-  done = done
+  done = done ? 1 : 0
 WHERE
-  m.id_menus = menuId;
+  id_menus = menuId;
 
 
 */
-// dispatch weeklyMenuSlice menuDoneToggled menuId done
+  // dispatch weeklyMenuSlice menuDoneToggled menuId done
 }
 
 async function addRecipeToMenu(recipeId: string, menuId: string) {
-/*
+  /*
 
 
 INSERT INTO
@@ -143,8 +161,6 @@ FROM
   JOIN recipes r ON r.id_recipes = recipeId
   JOIN recipe_ingredient_links ril ON ril.id_recipes = r.id_recipes
   JOIN ingredients i ON i.id_ingredients = ril.id_ingredients
-  JOIN moments mo ON m.id_moments = mo.id_moments
-  JOIN days d ON m.id_days = d.id_days
 WHERE
   m.id_menus = menuId
   AND NOT EXISTS (
@@ -159,9 +175,9 @@ WHERE
 
 
 */
-// select recipesSlice le recette de recipeId et select weeklyMenuSlice menuId pour avoir le menu
-// Fusionner les ingrédients de la recette aux ingrédients du menu si ils n'y sont pas déjà et aux bonnes catégories de menu 
-// dispatch weeklyMenuSlice menuUpdated menu
+  // select recipesSlice le recette de recipeId et select weeklyMenuSlice menuId pour avoir le menu
+  // Fusionner les ingrédients de la recette aux ingrédients du menu si ils n'y sont pas déjà et aux bonnes catégories de menu
+  // dispatch weeklyMenuSlice menuUpdated menu
 }
 
 async function fetchWeeklyMenu() {
@@ -198,7 +214,10 @@ ORDER BY
   // dispatch weeklyMenuSlice setWeeklyMenu
 }
 
-
-async function setIngredientMenuQuantity(ingredientId: string, menuId: string, delta: number) {
+async function setIngredientMenuQuantity(
+  ingredientId: string,
+  menuId: string,
+  delta: number,
+) {
   // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId menuId delta
 }

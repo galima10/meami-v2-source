@@ -9,12 +9,18 @@ async function setStorageInfo(newStorageInfo: StorageInfo) {
 /*
 
 
-DELETE si
-FROM
-  storage_infos si
-  JOIN ingredients i ON i.id_ingredients = si.id_ingredients
+DELETE FROM
+  storage_infos
 WHERE
-  i.id_ingredients = newStorageInfo.id;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = storage_infos.id_ingredients
+      AND i.id_ingredients = newStorageInfo.id
+  );
 
 
 
@@ -50,12 +56,18 @@ async function removeStorageInfo(ingredientId: string) {
 /*
 
 
-DELETE si
-FROM
-  storage_infos si
-  JOIN ingredients i ON i.id_ingredients = si.id_ingredients
+DELETE FROM
+  storage_infos
 WHERE
-  i.id_ingredients = ingredientId;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = storage_infos.id_ingredients
+      AND i.id_ingredients = newStorageInfo.id
+  );
 
 
 */

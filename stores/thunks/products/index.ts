@@ -35,7 +35,7 @@ UPDATE
   products
 SET
   name = newProduct.name,
-  stock_quantity = GREATEST(0, newProduct.stockQuantity)
+  stock_quantity = MAX(0, newProduct.stockQuantity)
 WHERE
   name = actualProductName;
 

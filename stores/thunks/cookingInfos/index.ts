@@ -11,9 +11,16 @@ async function removeCookingInfo(ingredientId: string) {
 
 DELETE FROM
   cooking_infos
-  JOIN ingredients i ON i.id_ingredients = cooking_infos.id_ingredients
 WHERE
-  i.id_ingredients = newCookingInfo.id;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = cooking_infos.id_ingredients
+      AND i.id_ingredients = newCookingInfo.id
+  );
 
 
 */
@@ -26,9 +33,16 @@ async function setCookingInfo(newCookingInfo: CookingInfo) {
 
 DELETE FROM
   cooking_infos
-  JOIN ingredients i ON i.id_ingredients = cooking_infos.id_ingredients
 WHERE
-  i.id_ingredients = newCookingInfo.id;
+  EXISTS (
+    SELECT
+      1
+    FROM
+      ingredients i
+    WHERE
+      i.id_ingredients = cooking_infos.id_ingredients
+      AND i.id_ingredients = newCookingInfo.id
+  );
 
 
 => Boucler sur newCookingInfo.preparationTypes avec un ObjectKeys
