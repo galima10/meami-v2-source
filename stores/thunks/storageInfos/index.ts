@@ -66,7 +66,7 @@ WHERE
       ingredients i
     WHERE
       i.id_ingredients = storage_infos.id_ingredients
-      AND i.id_ingredients = newStorageInfo.id
+      AND i.id_ingredients = ingredientId
   );
 
 

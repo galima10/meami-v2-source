@@ -19,7 +19,7 @@ WHERE
       ingredients i
     WHERE
       i.id_ingredients = cooking_infos.id_ingredients
-      AND i.id_ingredients = newCookingInfo.id
+      AND i.id_ingredients = ingredientId
   );
 
 
