@@ -266,6 +266,16 @@ WHERE
 
 async function deleteIngredient(ingredientId: string) {
   // Vérifier si l'ingredientId est bien dans le slice des ingrédients
+/*
+
+
+DELETE FROM
+  ingredients
+WHERE
+  id_ingredients = ingredientId;
+
+
+*/
   // dispatch ingredientsSlice ingredientDeleted
 }
 
