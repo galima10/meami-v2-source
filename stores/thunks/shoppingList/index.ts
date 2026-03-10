@@ -26,8 +26,8 @@ INSERT INTO
 SELECT
   sl.id_shopping_lists,
   i.id_ingredients,
-  MAX(1, newItem.quantityNeeded),
-  MAX(0, 0),
+  1,
+  0,
   i.quantifiable,
   i.id_units
 FROM
@@ -46,7 +46,7 @@ WHERE
   ) 
   ON CONFLICT(id_shopping_lists, id_ingredients)
   DO UPDATE SET
-    quantity_needed = MAX(1, quantity_needed + 1);
+    quantity_needed = quantity_needed + 1;
 
 
 
@@ -62,8 +62,8 @@ INSERT INTO
 SELECT
   sl.id_shopping_lists,
   p.id_products,
-  MAX(1, newItem.quantityNeeded),
-  MAX(0, 0)
+  1,
+  0
 FROM
   shopping_lists sl
   JOIN products p ON p.id_products = newItem.id
@@ -80,7 +80,7 @@ WHERE
   )
   ON CONFLICT(id_shopping_lists, id_products)
   DO UPDATE SET
-    quantity_needed = MAX(1, quantity_needed + 1);
+    quantity_needed = quantity_needed + 1;
 
 
 */
@@ -180,7 +180,7 @@ AND id_products = itemId;
 => Si type === "ingredients" :
 
 UPDATE shopping_list_items
-SET quantity_needed = MAX(1, delta)
+SET quantity_needed = delta
 WHERE 
   id_shopping_lists = (
     SELECT 
@@ -197,7 +197,7 @@ AND id_ingredients = itemId;
 => Si type === "products" :
 
 UPDATE shopping_list_items
-SET quantity_needed = MAX(1, delta)
+SET quantity_needed = delta
 WHERE 
   id_shopping_lists = (
     SELECT 

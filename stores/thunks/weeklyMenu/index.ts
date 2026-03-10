@@ -99,7 +99,7 @@ INSERT INTO
 SELECT
   DISTINCT m.id_menus,
   i.id_ingredients,
-  MAX(1, newIngredient.quantity),
+  newIngredient.quantity,
   u.id_units
 FROM
   menus m

@@ -58,7 +58,7 @@ INSERT INTO
 SELECT
   newIngredient.name,
   newIngredient.quantifiable,
-  MAX(0, newIngredient.stockQuantity),
+  newIngredient.stockQuantity,
   ic.id_ingredient_categories,
   (
     SELECT
@@ -120,7 +120,7 @@ UPDATE
 SET
   name = newIngredient.name,
   quantifiable = newIngredient.quantifiable ? 1 : 0,
-  stock_quantity = MAX(0, newIngredient.stockQuantity),
+  newIngredient.stockQuantity,
   id_ingredient_categories = COALESCE(
     (
       SELECT
@@ -189,8 +189,8 @@ WHERE
       AND i.name = actualIngredientName
   );
 
-INSERT INTO
-  ingredient_storage_location_links (id_ingredients, id_storage_locations)
+INSERT
+  OR IGNORE INTO ingredient_storage_location_links (id_ingredients, id_storage_locations)
 SELECT
   i.id_ingredients,
   sl.id_storage_locations
@@ -224,7 +224,7 @@ WHERE
       ingredients i
     WHERE
       i.id_ingredients = ingredient_storage_location_links.id_ingredients
-      AND i.name = actualIngredientName
+      AND i.id_ingredients = ingredientId
   );
 
 INSERT INTO
@@ -292,18 +292,15 @@ async function updateStock(from: "menu" | "shopping") {
 UPDATE
   ingredients
 SET
-  stock_quantity = MAX(
-    0,
-    stock_quantity - (
-      SELECT
-        COALESCE(SUM(mil.quantity), 0)
-      FROM
-        menu_ingredient_links mil
-        JOIN menus m ON m.id_menus = mil.id_menus
-      WHERE
-        mil.id_ingredients = ingredients.id_ingredients
-        AND m.done = 1
-    )
+  stock_quantity = stock_quantity - (
+    SELECT
+      COALESCE(SUM(mil.quantity), 0)
+    FROM
+      menu_ingredient_links mil
+      JOIN menus m ON m.id_menus = mil.id_menus
+    WHERE
+      mil.id_ingredients = ingredients.id_ingredients
+      AND m.done = 1
   )
 WHERE
   quantifiable = 1
