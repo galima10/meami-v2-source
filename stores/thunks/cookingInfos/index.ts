@@ -5,7 +5,7 @@ import {
   CookingInfo,
 } from "@stores/features/cookingInfos";
 
-async function removeCookingInfo(ingredientId: string) {
+export async function removeCookingInfo(ingredientId: string) {
 /*
 
 
@@ -27,7 +27,7 @@ WHERE
 // dispatch cookingInfosSlice cookingInfoDeleted ingredientId
 }
 
-async function setCookingInfo(newCookingInfo: CookingInfo) {
+export async function setCookingInfo(newCookingInfo: CookingInfo) {
   /*
 
 
@@ -84,7 +84,7 @@ WHERE
   // dispatch cookingInfosSlice cookingInfoSetted newCookingInfo
 }
 
-async function fetchCookingInfos() {
+export async function fetchCookingInfos() {
   /*
 
 

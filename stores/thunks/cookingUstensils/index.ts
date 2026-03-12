@@ -5,7 +5,7 @@ import {
   CookingUstensil,
 } from "@stores/features/cookingUstensils";
 
-async function createUstensil(newCookingUstensil: CookingUstensil) {
+export async function createUstensil(newCookingUstensil: CookingUstensil) {
 /*
 
 
@@ -19,7 +19,7 @@ VALUES
 // dispatch cookingUstensilAdded newCookingUstensil
 }
 
-async function deleteUstensil(cookingUstensilId: string) {
+export async function deleteUstensil(cookingUstensilId: string) {
 /*
 
 
@@ -33,7 +33,7 @@ WHERE
 // dispatch cookingUstensilDeleted cookingUstensilId
 }
 
-async function fetchCookingUstensils() {
+export async function fetchCookingUstensils() {
   /*
 
 

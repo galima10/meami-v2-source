@@ -8,7 +8,7 @@ import {
   Recipe,
 } from "@stores/features/recipes";
 
-async function deleteRecipe(recipeId: string) {
+export async function deleteRecipe(recipeId: string) {
   /*
 
 
@@ -22,7 +22,7 @@ WHERE
   // dispatch recipesSlice recipeDeleted recipeId
 }
 
-async function createRecipe(newRecipe: Recipe) {
+export async function createRecipe(newRecipe: Recipe) {
   /*
 
 
@@ -89,7 +89,7 @@ WHERE
   // dispatch recipesSlice recipeAdded newRecipe
 }
 
-async function updateRecipe(newRecipe: Recipe, actualRecipeName: string) {
+export async function updateRecipe(newRecipe: Recipe, actualRecipeName: string) {
   /*
 
 
@@ -179,12 +179,12 @@ WHERE
   // dispatch recipesSlice recipeUpdated newRecipe
 }
 
-async function selectRecipe(recipeId: string) {
+export async function selectRecipe(recipeId: string) {
   // => si isMorning = true, ne mettre que les menuCategories du matin sinon ceux du midi/soir
   // dispatch recipesSlice.selectedId recipeId recipeIdSelected et clearRecipeIdSelected avant à faire
 }
 
-async function fetchRecipes() {
+export async function fetchRecipes() {
   /*
 
 

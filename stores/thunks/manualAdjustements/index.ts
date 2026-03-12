@@ -4,7 +4,7 @@ import {
   ManualAdjustementItem,
 } from "@stores/features/manualAdjustements";
 
-async function loadManualChecks(type: "shopping" | "stock") {
+export async function loadManualChecks(type: "shopping" | "stock") {
   /*
 
 
@@ -95,7 +95,7 @@ FROM
   // dispatch manualAdjustementsSlice setManualAdjustements ingredients type
 }
 
-async function removeManualChecks(type: "shopping" | "stock") {
+export async function removeManualChecks(type: "shopping" | "stock") {
   /*
 
 let tableCible;
@@ -118,7 +118,7 @@ DELETE FROM
   // dispatch manualAdjustementsSlice setManualAdjustements [] type
 }
 
-async function setIngredientCheck(
+export async function setIngredientCheck(
   type: "shopping" | "stock",
   ingredientId: string,
   checked: boolean,

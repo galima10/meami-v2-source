@@ -5,7 +5,7 @@ import {
   StorageInfo,
 } from "@stores/features/storageInfos";
 
-async function setStorageInfo(newStorageInfo: StorageInfo) {
+export async function setStorageInfo(newStorageInfo: StorageInfo) {
 /*
 
 
@@ -52,7 +52,7 @@ WHERE
 // dispatch storageInfosSlice storageInfoSetted newStorageInfo
 }
 
-async function removeStorageInfo(ingredientId: string) {
+export async function removeStorageInfo(ingredientId: string) {
 /*
 
 
@@ -74,7 +74,7 @@ WHERE
 // dispatch storageInfosSlice storageInfoDeleted ingredientId
 }
 
-async function fetchStorageInfos() {
+export async function fetchStorageInfos() {
   /*
 
 

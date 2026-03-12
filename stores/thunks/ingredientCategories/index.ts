@@ -5,12 +5,12 @@ import {
   IngredientCategory,
 } from "@stores/features/ingredientCategories";
 
-async function fetchIngredientCategories() {
+export async function fetchIngredientCategories() {
   // SELECT * FROM ingredient_categories;
   // dispatch ingredientCategoriesSlice setIngredientCategories
 }
 
-async function createIngredientCategory(
+export async function createIngredientCategory(
   newIngredientCategory: IngredientCategory,
 ) {
   // Vérifier si la catégorie n'existe pas déjà dans le slice
@@ -27,7 +27,7 @@ VALUES
 // dispatch ingredientCategoriesSlice ingredientCategoryAdded newIngredientCategory
 }
 
-async function deleteIngredientCategory(ingredientCategoryId: string) {
+export async function deleteIngredientCategory(ingredientCategoryId: string) {
   // Vérifier si l'id est bien dans le slice
 /*
 

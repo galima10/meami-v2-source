@@ -6,7 +6,7 @@ import {
   Unit,
 } from "@stores/features/units";
 
-async function updateUnit(newUnit: Unit, actualUnitName: string) {
+export async function updateUnit(newUnit: Unit, actualUnitName: string) {
 /*
 
 
@@ -24,7 +24,7 @@ WHERE
 // dispatch unitsSlice unitUpdated newUnit
 }
 
-async function deleteUnit(unitId: string) {
+export async function deleteUnit(unitId: string) {
 /*
 
 
@@ -39,7 +39,7 @@ WHERE
 // dispatch unitsSlice unitDeleted unitId
 }
 
-async function createUnit(newUnit: Unit) {
+export async function createUnit(newUnit: Unit) {
 /*
 
 
@@ -54,7 +54,7 @@ VALUES
 // dispatch unitsSlice unitAdded newUnit
 }
 
-async function fetchUnits() {
+export async function fetchUnits() {
   /*
 
 

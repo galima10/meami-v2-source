@@ -9,7 +9,7 @@ import {
   ingredientStockQuantitySetted,
 } from "@stores/features/ingredients";
 
-async function fetchIngredients() {
+export async function fetchIngredients() {
   /*
 
 
@@ -37,11 +37,11 @@ GROUP BY i.id_ingredients;
   // dispatch ingedientsSlice setIngredients
 }
 
-async function selectIngredient(ingredientId: string) {
+export async function selectIngredient(ingredientId: string) {
   // dispatch ingredientsSlice.selectedId ingredientId ingredientIdSelected et clearIngredientIdSelected avant à faire
 }
 
-async function createIngredient(newIngredient: Ingredient) {
+export async function createIngredient(newIngredient: Ingredient) {
   // Vérifier si le newIngredient est déjà dans le slice des ingrédients
   // const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur newIngredient.unit
   /*
@@ -106,7 +106,7 @@ WHERE
   // dispatch ingredientsSlice ingredientAdded newIngredient
 }
 
-async function updateIngredient(
+export async function updateIngredient(
   newIngredient: Ingredient,
   actualIngredientName: string,
 ) {
@@ -120,7 +120,7 @@ UPDATE
 SET
   name = newIngredient.name,
   quantifiable = newIngredient.quantifiable ? 1 : 0,
-  newIngredient.stockQuantity,
+  stock_quantity = newIngredient.stockQuantity,
   id_ingredient_categories = COALESCE(
     (
       SELECT
@@ -206,7 +206,7 @@ WHERE
   // dispatch ingredientsSlice ingredientUpdated newIngredient
 }
 
-async function updateStorageLocation(
+export async function updateStorageLocation(
   ingredientId: Ingredient,
   newStorageLocations: Array<string>,
 ) {
@@ -244,7 +244,7 @@ WHERE
   // dispatch ingredientsSlice ingredientUpdated ingredient où id = ingredientId
 }
 
-async function setQuantifiable(
+export async function setQuantifiable(
   ingredientId: Ingredient,
   newQuantifiable: boolean,
 ) {
@@ -264,7 +264,7 @@ WHERE
   // dispatch ingredientsSlice ingredientUpdated ingredient où id = ingredientId
 }
 
-async function deleteIngredient(ingredientId: string) {
+export async function deleteIngredient(ingredientId: string) {
   // Vérifier si l'ingredientId est bien dans le slice des ingrédients
 /*
 
@@ -279,11 +279,11 @@ WHERE
   // dispatch ingredientsSlice ingredientDeleted
 }
 
-async function setIngredientStockQuantity(ingredientId: string, delta: number) {
+export async function setIngredientStockQuantity(ingredientId: string, delta: number) {
   // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId delta
 }
 
-async function updateStock(from: "menu" | "shopping") {
+export async function updateStock(from: "menu" | "shopping") {
   /*
 
 

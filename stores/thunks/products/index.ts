@@ -9,7 +9,7 @@ import {
   productStockQuantitySetted
 } from "@stores/features/products";
 
-async function deleteProduct(productId: string) {
+export async function deleteProduct(productId: string) {
   /*
 
 
@@ -23,11 +23,11 @@ WHERE
   // dispatch productsSlice productDeleted
 }
 
-async function selectProduct(productId: string) {
+export async function selectProduct(productId: string) {
   // dispatch productsSlice.selectedId productId productIdSelected et clearProductIdSelected avant à faire
 }
 
-async function updateProduct(newProduct: Product, actualProductName: string) {
+export async function updateProduct(newProduct: Product, actualProductName: string) {
   /*
 
 
@@ -44,7 +44,7 @@ WHERE
   // dispatch productsSlice productUpdated newProduct
 }
 
-async function createProduct(newProduct: Product) {
+export async function createProduct(newProduct: Product) {
 /*
 
 
@@ -58,7 +58,7 @@ VALUES
 // dispatch productsSlice productAdded newProduct
 }
 
-async function fetchProducts() {
+export async function fetchProducts() {
   /*
 
 
@@ -74,6 +74,6 @@ FROM
   // dispatch productsSlice setProducts
 }
 
-async function setProductStockQuantity(productId: string, delta: number) {
+export async function setProductStockQuantity(productId: string, delta: number) {
   // dispatch productsSlice productStockQuantitySetted productId delta
 }

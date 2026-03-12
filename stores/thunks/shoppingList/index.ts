@@ -6,7 +6,7 @@ import {
   ShoppingListItem,
 } from "@stores/features/shoppingList";
 
-async function addItemToShopping(
+export async function addItemToShopping(
   newItem: ShoppingListItem,
   type: "ingredients" | "products",
 ) {
@@ -87,7 +87,7 @@ WHERE
   // dispatch shoppingListSlice itemAdded newItem et type
 }
 
-async function removeItemToShopping(
+export async function removeItemToShopping(
   itemId: string,
   type: "ingredients" | "products",
 ) {
@@ -130,7 +130,7 @@ WHERE
   // dispatch shoppingListSlice itemRemoved itemId et type
 }
 
-async function setShoppingListItemQuantity(
+export async function setShoppingListItemQuantity(
   itemId: string,
   type: "ingredients" | "products",
   quantityField: "quantityNeeded" | "quantityBuyed",
@@ -216,7 +216,7 @@ AND id_products = itemId;
   // dispatch shoppingListSlice itemQuantitySetted itemId type quantityType delta
 }
 
-async function loadShoppingList() {
+export async function loadShoppingList() {
   /*
 
 

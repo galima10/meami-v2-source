@@ -8,7 +8,7 @@ import {
   IngredientMenu,
 } from "@stores/features/weeklyMenu";
 
-async function removeMenu(menuId: string) {
+export async function removeMenu(menuId: string) {
   /*
 
 
@@ -30,7 +30,7 @@ WHERE
   // dispatch weeklyMenuSlice clearMenu menuId
 }
 
-async function removeIngredientToMenu(ingredientId: string, menu: Menu) {
+export async function removeIngredientToMenu(ingredientId: string, menu: Menu) {
   /*
 
 
@@ -54,7 +54,7 @@ WHERE
   // dispatch weeklyMenuSlice menuUpdated newMenu
 }
 
-async function removeWeeklyMenu() {
+export async function removeWeeklyMenu() {
   /*
 
 DELETE FROM
@@ -70,7 +70,7 @@ SET
   // dispatch weeklyMenuSlice setWeeklyMenu {}
 }
 
-async function setIngredientToMenu(
+export async function setIngredientToMenu(
   newIngredient: IngredientMenu,
   menuId: string,
 ) {
@@ -129,7 +129,7 @@ WHERE
   // dispatch weeklyMenuSlice menuUpdated newMenu
 }
 
-async function setMenuDone(menuId: string, done: boolean) {
+export async function setMenuDone(menuId: string, done: boolean) {
   /*
 
 
@@ -145,7 +145,7 @@ WHERE
   // dispatch weeklyMenuSlice menuDoneToggled menuId done
 }
 
-async function addRecipeToMenu(recipeId: string, menuId: string) {
+export async function addRecipeToMenu(recipeId: string, menuId: string) {
   /*
 
 
@@ -180,7 +180,7 @@ WHERE
   // dispatch weeklyMenuSlice menuUpdated menu
 }
 
-async function fetchWeeklyMenu() {
+export async function fetchWeeklyMenu() {
   /*
 
 
@@ -214,7 +214,7 @@ ORDER BY
   // dispatch weeklyMenuSlice setWeeklyMenu
 }
 
-async function setIngredientMenuQuantity(
+export async function setIngredientMenuQuantity(
   ingredientId: string,
   menuId: string,
   delta: number,
