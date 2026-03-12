@@ -44,7 +44,7 @@ WHERE
   // dispatch productsSlice productUpdated newProduct
 }
 
-async function addProduct(newProduct: Product) {
+async function createProduct(newProduct: Product) {
 /*
 
 
@@ -67,9 +67,7 @@ SELECT
   p.name AS product_name,
   p.stock_quantity
 FROM
-  products p
-ORDER BY
-  p.id_products DESC;
+  products p;
 
 
 */
