@@ -70,7 +70,7 @@ SET
   // dispatch weeklyMenuSlice setWeeklyMenu {}
 }
 
-async function addIngredientToMenu(
+async function setIngredientToMenu(
   newIngredient: IngredientMenu,
   menuId: string,
 ) {
@@ -104,7 +104,7 @@ SELECT
 FROM
   menus m
   JOIN ingredients i ON i.name = newIngredient.id
-  LEFT JOIN units u ON u.abbreviation = unit
+  LEFT JOIN units u ON u.name = unit
   JOIN moments mo ON mo.id_moments = m.id_moments
   JOIN days d ON d.id_days = m.id_days
   JOIN ingredient_menu_category_links imcl ON imcl.id_ingredients = i.id_ingredients

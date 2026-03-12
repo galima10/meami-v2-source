@@ -138,13 +138,15 @@ async function setShoppingListItemQuantity(
 ) {
 /*
 
+bddQuantityField = quantityField === "quantityNeeded" ? "quantity_needed" : "quantity_buyed";
+
 
 => Si delta === 1 ou delta === -1
 
 => Si type === "ingredients" :
 
 UPDATE shopping_list_items
-SET quantityField = quantityField + delta
+SET bddQuantityField = bddQuantityField + delta
 WHERE 
   id_shopping_lists = (
     SELECT 
@@ -161,7 +163,7 @@ AND id_ingredients = itemId;
 => Si type === "products" :
 
 UPDATE shopping_list_items
-SET quantityField = quantityField + delta
+SET bddQuantityField = bddQuantityField + delta
 WHERE 
   id_shopping_lists = (
     SELECT 

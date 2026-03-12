@@ -116,7 +116,7 @@ WHERE
       recipes r
     WHERE
       r.id_recipes = recipe_category_links.id_recipes
-      AND r.name = actualIngredientName
+      AND r.name = newRecipe.name
   );
 
 
@@ -145,7 +145,7 @@ WHERE
       recipes r
     WHERE
       r.id_recipes = recipe_ingredient_links.id_recipes
-      AND r.name = actualIngredientName
+      AND r.name = newRecipe.name
   );
 
 
