@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Unit {
-  id: string;
+  id: number;
   name: string;
   abbreviation: string;
 }
@@ -20,7 +20,7 @@ export const unitSlice = createSlice({
     unitAdded: (state, action: PayloadAction<Unit>) => {
       state.units.push(action.payload);
     },
-    unitDeleted: (state, action: PayloadAction<string>) => {
+    unitDeleted: (state, action: PayloadAction<number>) => {
       const unitId = action.payload;
       state.units = state.units.filter((item) => item.id !== unitId);
     },

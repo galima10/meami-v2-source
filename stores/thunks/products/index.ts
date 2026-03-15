@@ -9,7 +9,7 @@ import {
   productStockQuantitySetted
 } from "@stores/features/products";
 
-export async function deleteProduct(productId: string) {
+export async function deleteProduct(productId: number) {
   /*
 
 
@@ -23,7 +23,7 @@ WHERE
   // dispatch productsSlice productDeleted
 }
 
-export async function selectProduct(productId: string) {
+export async function selectProduct(productId: number) {
   // dispatch productsSlice.selectedId productId productIdSelected et clearProductIdSelected avant à faire
 }
 

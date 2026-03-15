@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CookingUstensil {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -19,7 +19,7 @@ export const cookingUstensilSlice = createSlice({
     cookingUstensilAdded: (state, action: PayloadAction<CookingUstensil>) => {
       state.cookingUstensils.push(action.payload);
     },
-    cookingUstensilDeleted: (state, action: PayloadAction<string>) => {
+    cookingUstensilDeleted: (state, action: PayloadAction<number>) => {
       const cookingUstensilId = action.payload;
       state.cookingUstensils = state.cookingUstensils.filter(
         (item) => item.id !== cookingUstensilId,

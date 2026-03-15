@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Recipe {
-  id: string;
+  id: number;
   name: string;
   recipeType: string;
   duration: number;
@@ -13,7 +13,7 @@ export interface Recipe {
 }
 
 interface IngredientRecipe {
-  id: string;
+  id: number;
   name: string;
   quantity: number;
   unit: string;
@@ -22,7 +22,7 @@ interface IngredientRecipe {
 
 const initialState = {
   recipes: [] as Recipe[],
-  selectedRecipeId: null as string | null,
+  selectedRecipeId: null as number | null,
 };
 
 export const recipeSlice = createSlice({
@@ -35,7 +35,7 @@ export const recipeSlice = createSlice({
     recipeAdded: (state, action: PayloadAction<Recipe>) => {
       state.recipes.push(action.payload);
     },
-    recipeDeleted: (state, action: PayloadAction<string>) => {
+    recipeDeleted: (state, action: PayloadAction<number>) => {
       const recipeId = action.payload;
       state.recipes = state.recipes.filter((item) => item.id !== recipeId);
     },
@@ -47,7 +47,7 @@ export const recipeSlice = createSlice({
         state.recipes[index] = action.payload;
       }
     },
-    recipeIdSelected: (state, action: PayloadAction<string | null>) => {
+    recipeIdSelected: (state, action: PayloadAction<number | null>) => {
       state.selectedRecipeId = action.payload;
     },
     clearRecipeIdSelected: (state) => {

@@ -8,7 +8,7 @@ import {
   Recipe,
 } from "@stores/features/recipes";
 
-export async function deleteRecipe(recipeId: string) {
+export async function deleteRecipe(recipeId: number) {
   /*
 
 
@@ -179,7 +179,7 @@ WHERE
   // dispatch recipesSlice recipeUpdated newRecipe
 }
 
-export async function selectRecipe(recipeId: string) {
+export async function selectRecipe(recipeId: number) {
   // => si isMorning = true, ne mettre que les menuCategories du matin sinon ceux du midi/soir
   // dispatch recipesSlice.selectedId recipeId recipeIdSelected et clearRecipeIdSelected avant à faire
 }

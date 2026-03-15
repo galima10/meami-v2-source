@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CookingInfo {
-  id: string;
+  id: number;
   ingredientName: string;
   preparationTypes: {
     [type: string]: CookingDuration[];
@@ -9,7 +9,7 @@ export interface CookingInfo {
 }
 
 interface CookingDuration {
-  id: string;
+  id: number;
   ustensilName: string;
   duration: number | null;
   temperature: number | null;
@@ -39,7 +39,7 @@ export const cookingInfoSlice = createSlice({
         state.cookingInfos[index] = action.payload;
       }
     },
-    cookingInfoDeleted: (state, action: PayloadAction<string>) => {
+    cookingInfoDeleted: (state, action: PayloadAction<number>) => {
       const ingredientId = action.payload;
       state.cookingInfos = state.cookingInfos.filter(
         (item) => item.id !== ingredientId,

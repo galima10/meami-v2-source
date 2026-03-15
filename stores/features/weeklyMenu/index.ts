@@ -17,7 +17,7 @@ export interface DayMenu {
 }
 
 export interface Menu {
-  id: string;
+  id: number;
   done: boolean;
   ingredients: MenuIngredients;
 }
@@ -27,7 +27,7 @@ export interface MenuIngredients {
 }
 
 export interface IngredientMenu {
-  id: string;
+  id: number;
   name: string;
   quantity: number | null;
   unit: string | null;
@@ -35,133 +35,8 @@ export interface IngredientMenu {
 
 const initialState = {
   weeklyMenu: {} as WeeklyMenu,
-  menuIndex: {} as { [menuId: string]: { day: string; moment: string } },
+  menuIndex: {} as { [menuId: number]: { day: string; moment: string } },
 };
-
-/*
-
-weeklyMenu: {
-  monday: {
-    morning: {
-      id: 1,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-    noon: {
-      id: 2,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-    evening: {
-      id: 3,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-  },
-  tuesday: {
-    morning: {
-      id: 4,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-    noon: {
-      id: 5,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-    evening: {
-      id: 6,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-  },
-  wednesday: {
-    morning: {
-      id: 7,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-    noon: {
-      id: 8,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-    evening: {
-      id: 9,
-      done: false,
-      ingredients: [
-        {
-          id: number,
-          name: string,
-          quantity: number,
-          unit: string,
-        },
-      ],
-    },
-  },
-  thursday:
-  friday:
-  saturday:
-  sunday:
-}
-
-*/
 
 export const weeklyMenuSlice = createSlice({
   name: "weeklyMenu",
@@ -194,7 +69,7 @@ export const weeklyMenuSlice = createSlice({
     },
     menuDoneToggled: (
       state,
-      action: PayloadAction<{ menuId: string; done: boolean }>,
+      action: PayloadAction<{ menuId: number; done: boolean }>,
     ) => {
       const { menuId, done } = action.payload;
 
@@ -208,7 +83,7 @@ export const weeklyMenuSlice = createSlice({
         }
       }
     },
-    clearMenu: (state, action: PayloadAction<string>) => {
+    clearMenu: (state, action: PayloadAction<number>) => {
       const menuId = action.payload;
 
       const menuLocation = state.menuIndex[menuId];
@@ -229,8 +104,8 @@ export const weeklyMenuSlice = createSlice({
     ingredientMenuQuantitySetted: (
       state,
       action: PayloadAction<{
-        ingredientId: string;
-        menuId: string;
+        ingredientId: number;
+        menuId: number;
         delta: number;
       }>,
     ) => {

@@ -19,7 +19,7 @@ VALUES
 // dispatch cookingUstensilAdded newCookingUstensil
 }
 
-export async function deleteUstensil(cookingUstensilId: string) {
+export async function deleteUstensil(cookingUstensilId: number) {
 /*
 
 

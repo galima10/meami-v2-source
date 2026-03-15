@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface StorageInfo {
-  id: string;
+  id: number;
   ingredientName: string;
   storageLocations: {
     [location: string]: StorageDuration[];
@@ -16,7 +16,7 @@ type StorageDurationUnit =
   | "indéfiniment";
 
 interface StorageDuration {
-  id: string;
+  id: number;
   type: "avant ouverture" | "après ouverture";
   duration: number | null;
   unit: StorageDurationUnit;
@@ -46,7 +46,7 @@ export const storageInfoSlice = createSlice({
         state.storageInfos[index] = action.payload;
       }
     },
-    storageInfoDeleted: (state, action: PayloadAction<string>) => {
+    storageInfoDeleted: (state, action: PayloadAction<number>) => {
       const ingredientId = action.payload;
       state.storageInfos = state.storageInfos.filter(
         (item) => item.id !== ingredientId,

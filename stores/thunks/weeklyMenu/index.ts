@@ -8,7 +8,7 @@ import {
   IngredientMenu,
 } from "@stores/features/weeklyMenu";
 
-export async function removeMenu(menuId: string) {
+export async function removeMenu(menuId: number) {
   /*
 
 
@@ -30,7 +30,7 @@ WHERE
   // dispatch weeklyMenuSlice clearMenu menuId
 }
 
-export async function removeIngredientToMenu(ingredientId: string, menu: Menu) {
+export async function removeIngredientToMenu(ingredientId: number, menu: Menu) {
   /*
 
 
@@ -72,7 +72,7 @@ SET
 
 export async function setIngredientToMenu(
   newIngredient: IngredientMenu,
-  menuId: string,
+  menuId: number,
 ) {
   // const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur newIngredient.unit
   /*
@@ -129,7 +129,7 @@ WHERE
   // dispatch weeklyMenuSlice menuUpdated newMenu
 }
 
-export async function setMenuDone(menuId: string, done: boolean) {
+export async function setMenuDone(menuId: number, done: boolean) {
   /*
 
 
@@ -145,7 +145,7 @@ WHERE
   // dispatch weeklyMenuSlice menuDoneToggled menuId done
 }
 
-export async function addRecipeToMenu(recipeId: string, menuId: string) {
+export async function addRecipeToMenu(recipeId: number, menuId: number) {
   /*
 
 

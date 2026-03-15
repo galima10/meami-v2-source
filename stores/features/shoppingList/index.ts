@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface ShoppingListItem {
-  id: string;
+  id: number;
   name: string;
   quantityNeeded: number;
   quantityBuyed: number;
@@ -38,7 +38,7 @@ export const shoppingListSlice = createSlice({
     itemRemoved: (
       state,
       action: PayloadAction<{
-        itemId: string;
+        itemId: number;
         type: "ingredients" | "products";
       }>,
     ) => {
@@ -50,7 +50,7 @@ export const shoppingListSlice = createSlice({
     itemQuantitySetted: (
       state,
       action: PayloadAction<{
-        itemId: string;
+        itemId: number;
         type: "ingredients" | "products";
         quantityField: "quantityNeeded" | "quantityBuyed";
         delta: number;

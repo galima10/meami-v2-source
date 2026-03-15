@@ -5,7 +5,7 @@ import {
   CookingInfo,
 } from "@stores/features/cookingInfos";
 
-export async function removeCookingInfo(ingredientId: string) {
+export async function removeCookingInfo(ingredientId: number) {
 /*
 
 

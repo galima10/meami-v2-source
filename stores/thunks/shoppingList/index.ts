@@ -88,7 +88,7 @@ WHERE
 }
 
 export async function removeItemToShopping(
-  itemId: string,
+  itemId: number,
   type: "ingredients" | "products",
 ) {
   /*
@@ -131,7 +131,7 @@ WHERE
 }
 
 export async function setShoppingListItemQuantity(
-  itemId: string,
+  itemId: number,
   type: "ingredients" | "products",
   quantityField: "quantityNeeded" | "quantityBuyed",
   delta: number,

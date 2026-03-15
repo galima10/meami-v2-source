@@ -32,7 +32,7 @@ VALUES
 // dispatch recipesCategoriesSlice recipeCategoryAdded newRecipeCategory
 }
 
-export async function deleteRecipeCategory(recipeCategoryId: string) {
+export async function deleteRecipeCategory(recipeCategoryId: number) {
   // Vérifier si l'id est bien dans le slice
 /*
 

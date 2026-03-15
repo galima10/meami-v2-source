@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Ingredient {
-  id: string;
+  id: number;
   name: string;
   category: string;
   stockQuantity: number;
@@ -13,7 +13,7 @@ export interface Ingredient {
 
 const initialState = {
   ingredients: [] as Ingredient[],
-  selectedId: null as string | null,
+  selectedId: null as number | null,
 };
 
 export const ingredientSlice = createSlice({
@@ -26,7 +26,7 @@ export const ingredientSlice = createSlice({
     ingredientAdded: (state, action: PayloadAction<Ingredient>) => {
       state.ingredients.push(action.payload);
     },
-    ingredientDeleted: (state, action: PayloadAction<string>) => {
+    ingredientDeleted: (state, action: PayloadAction<number>) => {
       const ingredientId = action.payload;
       state.ingredients = state.ingredients.filter(
         (item) => item.id !== ingredientId,
@@ -42,7 +42,7 @@ export const ingredientSlice = createSlice({
         state.ingredients[index] = action.payload;
       }
     },
-    ingredientIdSelected: (state, action: PayloadAction<string | null>) => {
+    ingredientIdSelected: (state, action: PayloadAction<number | null>) => {
       state.selectedId = action.payload;
     },
     clearIngredientIdSelected: (state) => {
@@ -50,7 +50,7 @@ export const ingredientSlice = createSlice({
     },
     ingredientStockQuantitySetted: (
       state,
-      action: PayloadAction<{ ingredientId: string; delta: number }>,
+      action: PayloadAction<{ ingredientId: number; delta: number }>,
     ) => {
       const { ingredientId, delta } = action.payload;
       const index = state.ingredients.findIndex(

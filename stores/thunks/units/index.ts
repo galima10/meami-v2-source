@@ -24,7 +24,7 @@ WHERE
 // dispatch unitsSlice unitUpdated newUnit
 }
 
-export async function deleteUnit(unitId: string) {
+export async function deleteUnit(unitId: number) {
 /*
 
 

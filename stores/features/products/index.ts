@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   stockQuantity: number;
 }
 
 const initialState = {
   products: [] as Product[],
-  selectedId: null as string | null,
+  selectedId: null as number | null,
 };
 
 export const productSlice = createSlice({
@@ -21,7 +21,7 @@ export const productSlice = createSlice({
     productAdded: (state, action: PayloadAction<Product>) => {
       state.products.push(action.payload);
     },
-    productDeleted: (state, action: PayloadAction<string>) => {
+    productDeleted: (state, action: PayloadAction<number>) => {
       const productId = action.payload;
       state.products = state.products.filter((item) => item.id !== productId);
     },
@@ -33,7 +33,7 @@ export const productSlice = createSlice({
         state.products[index] = action.payload;
       }
     },
-    productIdSelected: (state, action: PayloadAction<string | null>) => {
+    productIdSelected: (state, action: PayloadAction<number | null>) => {
       state.selectedId = action.payload;
     },
     clearProductIdSelected: (state) => {
@@ -41,7 +41,7 @@ export const productSlice = createSlice({
     },
     productStockQuantitySetted: (
       state,
-      action: PayloadAction<{ ingredientId: string; delta: number }>,
+      action: PayloadAction<{ ingredientId: number; delta: number }>,
     ) => {
       const { ingredientId, delta } = action.payload;
       const index = state.products.findIndex(

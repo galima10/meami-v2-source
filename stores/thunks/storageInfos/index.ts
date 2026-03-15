@@ -52,7 +52,7 @@ WHERE
 // dispatch storageInfosSlice storageInfoSetted newStorageInfo
 }
 
-export async function removeStorageInfo(ingredientId: string) {
+export async function removeStorageInfo(ingredientId: number) {
 /*
 
 

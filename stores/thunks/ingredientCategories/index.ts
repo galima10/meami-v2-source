@@ -27,7 +27,7 @@ VALUES
 // dispatch ingredientCategoriesSlice ingredientCategoryAdded newIngredientCategory
 }
 
-export async function deleteIngredientCategory(ingredientCategoryId: string) {
+export async function deleteIngredientCategory(ingredientCategoryId: number) {
   // Vérifier si l'id est bien dans le slice
 /*
 

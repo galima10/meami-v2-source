@@ -120,7 +120,7 @@ DELETE FROM
 
 export async function setIngredientCheck(
   type: "shopping" | "stock",
-  ingredientId: string,
+  ingredientId: number,
   checked: boolean,
 ) {
 /*

@@ -37,7 +37,7 @@ GROUP BY i.id_ingredients;
   // dispatch ingedientsSlice setIngredients
 }
 
-export async function selectIngredient(ingredientId: string) {
+export async function selectIngredient(ingredientId: number) {
   // dispatch ingredientsSlice.selectedId ingredientId ingredientIdSelected et clearIngredientIdSelected avant à faire
 }
 
@@ -207,7 +207,7 @@ WHERE
 }
 
 export async function updateStorageLocation(
-  ingredientId: Ingredient,
+  ingredientId: number,
   newStorageLocations: Array<string>,
 ) {
   // Vérifier si les storageLocations sont valides (bien présents dans les slices correspondants) et l'ingredientId est bien dans le slice des ingrédients
@@ -245,7 +245,7 @@ WHERE
 }
 
 export async function setQuantifiable(
-  ingredientId: Ingredient,
+  ingredientId: number,
   newQuantifiable: boolean,
 ) {
   // Vérifier si l'ingredientId est bien dans le slice des ingrédients
@@ -279,7 +279,7 @@ WHERE
   // dispatch ingredientsSlice ingredientDeleted
 }
 
-export async function setIngredientStockQuantity(ingredientId: string, delta: number) {
+export async function setIngredientStockQuantity(ingredientId: number, delta: number) {
   // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId delta
 }
 

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface RecipeCategory {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -19,7 +19,7 @@ export const recipeCategorySlice = createSlice({
     recipeCategoryAdded: (state, action: PayloadAction<RecipeCategory>) => {
       state.recipeCategories.push(action.payload);
     },
-    recipeCategoryDeleted: (state, action: PayloadAction<string>) => {
+    recipeCategoryDeleted: (state, action: PayloadAction<number>) => {
       const recipeCategoryId = action.payload;
       state.recipeCategories = state.recipeCategories.filter(
         (item) => item.id !== recipeCategoryId,

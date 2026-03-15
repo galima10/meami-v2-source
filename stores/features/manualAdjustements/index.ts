@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { act } from "react";
 
 export interface ManualAdjustementItem {
-  id: string;
+  id: number;
   name: string;
   unit: string;
   usageCount: number;
@@ -32,7 +32,7 @@ export const manualAdjustementSlice = createSlice({
       state,
       action: PayloadAction<{
         type: "shopping" | "stock";
-        ingredientId: string;
+        ingredientId: number;
         checked: boolean;
       }>,
     ) => {
