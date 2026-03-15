@@ -3,7 +3,7 @@ import * as SQLite from "expo-sqlite";
 export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
   await db.withExclusiveTransactionAsync(async () => {
     await db.execAsync(`
-      CREATE TABLE products (
+      CREATE TABLE IF NOT EXISTS products (
         -- primary key
         id_products INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -13,7 +13,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT chk_stock_quantity CHECK (stock_quantity >= 0)
       );
 
-      CREATE TABLE recipes (
+      CREATE TABLE IF NOT EXISTS recipes (
         -- primary key
         id_recipes INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -33,42 +33,42 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         recipe TEXT
       );
 
-      CREATE TABLE cooking_ustensils (
+      CREATE TABLE IF NOT EXISTS cooking_ustensils (
         -- primary key
         id_cooking_ustensils INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
         name TEXT UNIQUE NOT NULL
       );
 
-      CREATE TABLE storage_locations (
+      CREATE TABLE IF NOT EXISTS storage_locations (
         -- primary key
         id_storage_locations INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
         name TEXT UNIQUE NOT NULL
       );
 
-      CREATE TABLE shopping_lists (
+      CREATE TABLE IF NOT EXISTS shopping_lists (
         -- primary key
         id_shopping_lists INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
       );
 
-      CREATE TABLE recipe_categories (
+      CREATE TABLE IF NOT EXISTS recipe_categories (
         -- primary key
         id_recipe_categories INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
         name TEXT UNIQUE NOT NULL
       );
 
-      CREATE TABLE ingredient_categories (
+      CREATE TABLE IF NOT EXISTS ingredient_categories (
         -- primary key
         id_ingredient_categories INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
         name TEXT UNIQUE NOT NULL
       );
 
-      CREATE TABLE days (
+      CREATE TABLE IF NOT EXISTS days (
         -- primary key
         id_days INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -85,20 +85,20 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         )
       );
 
-      CREATE TABLE moments (
+      CREATE TABLE IF NOT EXISTS moments (
         -- primary key
         id_moments INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
         name TEXT UNIQUE NOT NULL CHECK(name IN ('MATIN', 'MIDI', 'SOIR'))
       );
 
-      CREATE TABLE units (
+      CREATE TABLE IF NOT EXISTS units (
         id_units INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE NOT NULL,
         abbreviation TEXT NOT NULL
       );
 
-      CREATE TABLE menu_categories (
+      CREATE TABLE IF NOT EXISTS menu_categories (
         -- primary key
         id_menu_categories INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -116,7 +116,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         )
       );
 
-      CREATE TABLE ingredients (
+      CREATE TABLE IF NOT EXISTS ingredients (
         -- primary key
         id_ingredients INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -132,7 +132,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
           CONSTRAINT FK_Ingredients_Units FOREIGN KEY (id_units) REFERENCES units(id_units) ON DELETE SET NULL ON UPDATE CASCADE
       );
 
-      CREATE TABLE menus (
+      CREATE TABLE IF NOT EXISTS menus (
         -- primary key
         id_menus INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -146,7 +146,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT unique_day_moment UNIQUE (id_days, id_moments)
       );
 
-      CREATE TABLE cooking_infos (
+      CREATE TABLE IF NOT EXISTS cooking_infos (
         -- primary key
         id_cooking_infos INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -156,7 +156,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_CookingInfos_Ingredients FOREIGN KEY (id_ingredients) REFERENCES ingredients (id_ingredients) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE cooking_durations (
+      CREATE TABLE IF NOT EXISTS cooking_durations (
         -- primary key
         id_cooking_durations INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -169,7 +169,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_CookingDurations_CookingUstensils FOREIGN KEY (id_cooking_ustensils) REFERENCES cooking_ustensils (id_cooking_ustensils) ON DELETE SET NULL ON UPDATE CASCADE
       );
 
-      CREATE TABLE storage_infos (
+      CREATE TABLE IF NOT EXISTS storage_infos (
         -- primary key
         id_storage_infos INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -193,7 +193,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_StorageInfos_StorageLocations FOREIGN KEY (id_storage_locations) REFERENCES storage_locations (id_storage_locations) ON DELETE SET NULL ON UPDATE CASCADE
       );
 
-      CREATE TABLE menu_ingredient_manual_checks (
+      CREATE TABLE IF NOT EXISTS menu_ingredient_manual_checks (
         -- primary key
         id_menu_ingredient_manual_checks INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -204,7 +204,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_MenuIngredientManualChecks_Ingredients FOREIGN KEY (id_ingredients) REFERENCES ingredients (id_ingredients) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE shopping_list_items (
+      CREATE TABLE IF NOT EXISTS shopping_list_items (
         -- primary key
         id_shopping_list_items INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -238,7 +238,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT unique_list_ingredient UNIQUE (id_shopping_lists, id_ingredients)
       );
 
-      CREATE TABLE shopping_list_manual_checks (
+      CREATE TABLE IF NOT EXISTS shopping_list_manual_checks (
         -- primary key
         id_shopping_list_manual_checks INTEGER PRIMARY KEY AUTOINCREMENT,
         -- colonnes
@@ -251,7 +251,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_ShoppingListManualChecks_ShoppingLists FOREIGN KEY (id_shopping_lists) REFERENCES shopping_lists (id_shopping_lists) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE ingredient_storage_location_links (
+      CREATE TABLE IF NOT EXISTS ingredient_storage_location_links (
         -- colonnes
         id_ingredients INTEGER NOT NULL,
         id_storage_locations INTEGER NOT NULL,
@@ -262,7 +262,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_IngredientStorageLocationLinks_StorageLocations FOREIGN KEY (id_storage_locations) REFERENCES storage_locations (id_storage_locations) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE menu_ingredient_links (
+      CREATE TABLE IF NOT EXISTS menu_ingredient_links (
         -- colonnes
         id_menus INTEGER NOT NULL,
         id_ingredients INTEGER NOT NULL,
@@ -278,7 +278,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_MenuIngredientLinks_Units FOREIGN KEY (id_units) REFERENCES units (id_units) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE recipe_ingredient_links (
+      CREATE TABLE IF NOT EXISTS recipe_ingredient_links (
         -- colonnes
         id_recipes INTEGER NOT NULL,
         id_ingredients INTEGER NOT NULL,
@@ -292,7 +292,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_RecipeIngredientLinks_Units FOREIGN KEY (id_units) REFERENCES units (id_units) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE recipe_category_links (
+      CREATE TABLE IF NOT EXISTS recipe_category_links (
         -- colonnes
         id_recipes INTEGER NOT NULL,
         id_recipe_categories INTEGER NOT NULL,
@@ -303,7 +303,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_RecipeCategoryLinks_RecipeCategories FOREIGN KEY (id_recipe_categories) REFERENCES recipe_categories (id_recipe_categories) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE menu_category_moments_links (
+      CREATE TABLE IF NOT EXISTS menu_category_moments_links (
         -- colonnes
         id_menu_categories INTEGER NOT NULL,
         id_moments INTEGER NOT NULL,
@@ -313,7 +313,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         CONSTRAINT FK_MenuCategoryMomentsLinks_Moments FOREIGN KEY (id_moments) REFERENCES moments (id_moments) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
-      CREATE TABLE ingredient_menu_category_links (
+      CREATE TABLE IF NOT EXISTS ingredient_menu_category_links (
         -- colonnes
         id_ingredients INTEGER NOT NULL,
         id_menu_categories INTEGER NOT NULL,

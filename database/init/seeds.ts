@@ -12,7 +12,7 @@ export async function seedDatabase(db: SQLite.SQLiteDatabase) {
   if (moments.length === 0) {
     await db.withExclusiveTransactionAsync(async () => {
       const stmt = await db.prepareAsync(
-        "INSERT INTO moments (name) VALUES (?)",
+        "INSERT OR IGNORE INTO moments (name) VALUES (?)",
       );
       try {
         for (const m of momentsSeeds) {
@@ -28,7 +28,7 @@ export async function seedDatabase(db: SQLite.SQLiteDatabase) {
   const days = await db.getAllAsync("SELECT * FROM days");
   if (days.length === 0) {
     await db.withExclusiveTransactionAsync(async () => {
-      const stmt = await db.prepareAsync("INSERT INTO days (name) VALUES (?)");
+      const stmt = await db.prepareAsync("INSERT OR IGNORE INTO days (name) VALUES (?)");
       try {
         for (const d of daysSeeds) {
           await stmt.executeAsync([d.name]);
@@ -44,7 +44,7 @@ export async function seedDatabase(db: SQLite.SQLiteDatabase) {
   if (menus.length === 0) {
     await db.withExclusiveTransactionAsync(async () => {
       await db.runAsync(`
-        INSERT INTO menus (done, id_moments, id_days)
+        INSERT OR IGNORE INTO menus (done, id_moments, id_days)
         SELECT
           0,
           m.id_moments,
@@ -64,7 +64,7 @@ export async function seedDatabase(db: SQLite.SQLiteDatabase) {
   if (menuCategories.length === 0) {
     await db.withExclusiveTransactionAsync(async () => {
       const stmt = await db.prepareAsync(
-        "INSERT INTO menu_categories (name) VALUES (?)",
+        "INSERT OR IGNORE INTO menu_categories (name) VALUES (?)",
       );
       try {
         for (const mc of menuCategoriesSeeds) {
@@ -83,7 +83,7 @@ export async function seedDatabase(db: SQLite.SQLiteDatabase) {
   if (menuCategoryMomentLinks.length === 0) {
     await db.withExclusiveTransactionAsync(async () => {
       await db.runAsync(`
-        INSERT INTO
+        INSERT OR IGNORE INTO
           menu_category_moments_links (id_menu_categories, id_moments)
         SELECT
           mc.id_menu_categories,
@@ -135,7 +135,7 @@ export async function seedDatabase(db: SQLite.SQLiteDatabase) {
   if (storageLocations.length === 0) {
     await db.withExclusiveTransactionAsync(async () => {
       const stmt = await db.prepareAsync(
-        "INSERT INTO storage_locations (name) VALUES (?)",
+        "INSERT OR IGNORE INTO storage_locations (name) VALUES (?)",
       );
       try {
         for (const sl of storageLocationsSeeds) {
