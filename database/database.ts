@@ -1,5 +1,6 @@
 import * as SQLite from "expo-sqlite";
-import { initDatabase, seedDatabase } from "./init";
+import { schemaDatabase } from "./init/schema";
+import { seedDatabase } from "./init/seeds";
 
 let db: SQLite.SQLiteDatabase | null = null;
 
@@ -10,7 +11,7 @@ export async function getDb() {
     await db.execAsync("PRAGMA journal_mode = WAL");
     await db.execAsync("PRAGMA foreign_keys = ON");
 
-    await initDatabase(db);
+    await schemaDatabase(db);
     await seedDatabase(db);
   }
   return db;

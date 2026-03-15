@@ -1,28 +1,7 @@
 import * as SQLite from "expo-sqlite";
 
-export async function initDatabase(db: SQLite.SQLiteDatabase) {
-  await db.withExclusiveTransactionAsync(async () => {
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT
-      );
-      CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        user_id INTEGER
-      );
-    `);
-  });
-}
 
-interface Seeds {
-  name: string;
-  email: string;
-}
-
-const seeds: Seeds[] = [
+const seeds = [
   {
     name: "",
     email: "",

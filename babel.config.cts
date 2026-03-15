@@ -22,7 +22,7 @@ module.exports = function (api: any): TransformOptions {
             "@database": "./database",
             "@services": "./services",
             "@stores": "./stores",
-            "@types": "./types",
+            "@app-types": "./types",
             "@utils": "./utils",
             "@themes": "./constants/themes",
           },
