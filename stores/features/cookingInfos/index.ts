@@ -1,11 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  setCookingInfoThunk,
+  fetchCookingInfosThunk,
+  removeCookingInfoThunk,
+} from "@stores/thunks/cookingInfos";
 
 export interface CookingInfo {
-  id: number;
+  ingredientId: number;
   ingredientName: string;
   preparationTypes: {
-    [type: string]: CookingDuration[];
-  };
+    name: string;
+    cookingDurations: CookingDuration[];
+  }[];
 }
 
 interface CookingDuration {
@@ -15,8 +21,16 @@ interface CookingDuration {
   temperature: number | null;
 }
 
-const initialState = {
-  cookingInfos: [] as CookingInfo[],
+interface InitialState {
+  cookingInfos: CookingInfo[];
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: InitialState = {
+  cookingInfos: [],
+  loading: false,
+  error: null as string | null,
 };
 
 export const cookingInfoSlice = createSlice({
@@ -27,10 +41,10 @@ export const cookingInfoSlice = createSlice({
       state.cookingInfos = action.payload;
     },
     cookingInfoSetted: (state, action: PayloadAction<CookingInfo>) => {
-      const cookingInfoId = action.payload.id;
+      const cookingInfoId = action.payload.ingredientId;
 
       const index = state.cookingInfos.findIndex(
-        (item) => item.id === cookingInfoId,
+        (item) => item.ingredientId === cookingInfoId,
       );
 
       if (index === -1) {
@@ -42,9 +56,64 @@ export const cookingInfoSlice = createSlice({
     cookingInfoDeleted: (state, action: PayloadAction<number>) => {
       const ingredientId = action.payload;
       state.cookingInfos = state.cookingInfos.filter(
-        (item) => item.id !== ingredientId,
+        (item) => item.ingredientId !== ingredientId,
       );
     },
+  },
+  extraReducers: (builder) => {
+    // 1️⃣ fetchCookingInfosThunk
+    builder
+      .addCase(fetchCookingInfosThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCookingInfosThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cookingInfos = action.meta.arg;
+      })
+      .addCase(fetchCookingInfosThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Erreur inconnue";
+      });
+
+    // 2️⃣ setCookingInfoThunk
+    builder
+      .addCase(setCookingInfoThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(setCookingInfoThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.cookingInfos.findIndex(
+          (item) => item.ingredientId === action.meta.arg.ingredientId,
+        );
+        if (index === -1) state.cookingInfos.push(action.meta.arg);
+        else state.cookingInfos[index] = action.meta.arg;
+      })
+      .addCase(setCookingInfoThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Erreur inconnue";
+      });
+
+    // 3️⃣ removeCookingInfoThunk
+    builder
+      .addCase(removeCookingInfoThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeCookingInfoThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cookingInfos = state.cookingInfos.filter(
+          (item) => item.ingredientId !== action.meta.arg, // Utilisation de action.meta.arg
+        );
+      })
+      .addCase(
+        removeCookingInfoThunk.rejected,
+        (state, action: ReturnType<typeof removeCookingInfoThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
   },
 });
 
