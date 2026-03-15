@@ -1,13 +1,32 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { getDb } from "@database/database";
+import { useEffect } from "react";
 
 export default function Splash() {
   const router = useRouter();
 
+  useEffect(() => {
+    async function testSelect() {
+      const db = await getDb();
+
+      // récupère tous les jours
+      const days = await db.getAllAsync<{ id?: number; name: string }>(
+        "SELECT * FROM days",
+      );
+
+      console.log("Days from DB:", days);
+    }
+
+    testSelect();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Splash Screen</Text>
-      <Pressable onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}>
+      <Pressable
+        onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
+      >
         <Text>Test</Text>
       </Pressable>
     </View>
