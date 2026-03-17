@@ -1,9 +1,4 @@
-import {
-  setCookingInfos,
-  cookingInfoSetted,
-  cookingInfoDeleted,
-  CookingInfo,
-} from "@stores/features/cookingInfos";
+import type { CookingInfo } from "@stores/features/cookingInfos";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { formatCookingInfos } from "@utils/formatData/formatCookingInfos";
 

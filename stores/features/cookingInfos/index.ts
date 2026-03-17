@@ -36,32 +36,9 @@ const initialState: InitialState = {
 export const cookingInfoSlice = createSlice({
   name: "cookingInfos",
   initialState,
-  reducers: {
-    setCookingInfos: (state, action: PayloadAction<CookingInfo[]>) => {
-      state.cookingInfos = action.payload;
-    },
-    cookingInfoSetted: (state, action: PayloadAction<CookingInfo>) => {
-      const cookingInfoId = action.payload.ingredientId;
-
-      const index = state.cookingInfos.findIndex(
-        (item) => item.ingredientId === cookingInfoId,
-      );
-
-      if (index === -1) {
-        state.cookingInfos.push(action.payload);
-      } else {
-        state.cookingInfos[index] = action.payload;
-      }
-    },
-    cookingInfoDeleted: (state, action: PayloadAction<number>) => {
-      const ingredientId = action.payload;
-      state.cookingInfos = state.cookingInfos.filter(
-        (item) => item.ingredientId !== ingredientId,
-      );
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    // 1️⃣ fetchCookingInfosThunk
+    // fetchCookingInfosThunk
     builder
       .addCase(fetchCookingInfosThunk.pending, (state) => {
         state.loading = true;
@@ -76,7 +53,7 @@ export const cookingInfoSlice = createSlice({
         state.error = action.error.message ?? "Erreur inconnue";
       });
 
-    // 2️⃣ setCookingInfoThunk
+    // setCookingInfoThunk
     builder
       .addCase(setCookingInfoThunk.pending, (state) => {
         state.loading = true;
@@ -95,7 +72,7 @@ export const cookingInfoSlice = createSlice({
         state.error = action.error.message ?? "Erreur inconnue";
       });
 
-    // 3️⃣ removeCookingInfoThunk
+    // removeCookingInfoThunk
     builder
       .addCase(removeCookingInfoThunk.pending, (state) => {
         state.loading = true;
@@ -117,6 +94,4 @@ export const cookingInfoSlice = createSlice({
   },
 });
 
-export const { setCookingInfos, cookingInfoSetted, cookingInfoDeleted } =
-  cookingInfoSlice.actions;
 export default cookingInfoSlice.reducer;
