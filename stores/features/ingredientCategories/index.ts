@@ -6,7 +6,7 @@ import {
 } from "@stores/thunks/ingredientCategories";
 
 export interface IngredientCategory {
-  id: number;
+  id?: number;
   name: string;
 }
 
@@ -65,7 +65,10 @@ export const ingredientCategorySlice = createSlice({
       })
       .addCase(
         deleteIngredientCategoryThunk.rejected,
-        (state, action: ReturnType<typeof deleteIngredientCategoryThunk.rejected>) => {
+        (
+          state,
+          action: ReturnType<typeof deleteIngredientCategoryThunk.rejected>,
+        ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },

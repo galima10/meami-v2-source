@@ -8,16 +8,24 @@ import {
   DeleteIngredientCategoryService,
 } from "@services/ingredientCategories";
 
-export const fetchIngredientCategoriesThunk = createAsyncThunk<IngredientCategory[], void>("ingredientCategories/fetchIngredientCategoriy", async () => {
+export const fetchIngredientCategoriesThunk = createAsyncThunk<
+  IngredientCategory[],
+  void
+>("ingredientCategories/fetchIngredientCategoriy", async () => {
   const data = await FetchIngredientCategoriesService();
   return formatIngredientCategories(data);
 });
 
-export const createIngredientCategoryThunk = createAsyncThunk<IngredientCategory,IngredientCategory>(
+export const createIngredientCategoryThunk = createAsyncThunk<
+  IngredientCategory,
+  IngredientCategory
+>(
   "ingredientCategories/createIngredientCategory",
   async (newIngredientCategory: IngredientCategory) => {
-    await CreateIngredientCategoryService(newIngredientCategory);
-    return newIngredientCategory;
+    const createdCategory = await CreateIngredientCategoryService(
+      newIngredientCategory,
+    );
+    return createdCategory; // Retourne l'objet avec l'ID généré
   },
 );
 
@@ -40,12 +48,10 @@ export const deleteIngredientCategoryThunk = createAsyncThunk<number, number>(
 //   // Vérifier si la catégorie n'existe pas déjà dans le slice
 //   /*
 
-
 // INSERT INTO
 //   ingredient_categories (name)
 // VALUES
 //   (newIngredientCategory.name);
-  
 
 // */
 //   // dispatch ingredientCategoriesSlice ingredientCategoryAdded newIngredientCategory
@@ -55,12 +61,10 @@ export const deleteIngredientCategoryThunk = createAsyncThunk<number, number>(
 //   // Vérifier si l'id est bien dans le slice
 //   /*
 
-
 // DELETE FROM
 //   ingredient_categories
 // WHERE
 //   id_ingredient_categories = ingredientCategoryId;
-
 
 // */
 //   // dispatch ingredientCategoriesSlice ingredientCategoryDeleted ingredientCategoryId

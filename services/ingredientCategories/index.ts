@@ -9,7 +9,7 @@ export interface IngredientCategoryRaw {
 export async function FetchIngredientCategoriesService() {
   const db = await getDb();
   return db.getAllAsync<IngredientCategoryRaw>(`
-    SELECT *
+    SELECT
       ic.id_ingredient_categories AS ingredient_category_id,
       ic.name AS ingredient_category_name
     FROM ingredient_categories ic;
@@ -17,10 +17,10 @@ export async function FetchIngredientCategoriesService() {
 }
 
 export async function CreateIngredientCategoryService(
-  newIngredientCategory: IngredientCategory,
+  newIngredientCategory: Omit<IngredientCategory, "id">, // Exclure l'id car il est généré automatiquement
 ) {
   const db = await getDb();
-  return db.runAsync(
+  const result = await db.runAsync(
     `
     INSERT INTO
       ingredient_categories (name)
@@ -29,13 +29,15 @@ export async function CreateIngredientCategoryService(
   `,
     [newIngredientCategory.name],
   );
+  const id = result.lastInsertRowId;
+  return { id, name: newIngredientCategory.name };
 }
 
 export async function DeleteIngredientCategoryService(
   ingredientCategoryId: number,
 ) {
   const db = await getDb();
-  return db.runAsync(
+  await db.runAsync(
     `
     DELETE FROM
       ingredient_categories

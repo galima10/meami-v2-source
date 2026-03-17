@@ -6,8 +6,14 @@ import {
   setCookingInfoThunk,
   fetchCookingInfosThunk,
 } from "@stores/thunks/cookingInfos";
+import {
+  createIngredientCategoryThunk,
+  deleteIngredientCategoryThunk,
+  fetchIngredientCategoriesThunk,
+} from "@stores/thunks/ingredientCategories";
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
-import { CookingInfo } from "@stores/features/cookingInfos";
+import type { CookingInfo } from "@stores/features/cookingInfos";
+import type { IngredientCategory } from "@stores/features/ingredientCategories";
 
 const cookingInfo1: CookingInfo = {
   cookingInfoId: 1,
@@ -27,33 +33,44 @@ const cookingInfo1: CookingInfo = {
   ],
 };
 
+const ingredientCategory1: IngredientCategory = {
+  name: "Produit laitiedzd",
+};
+
 export default function Splash() {
   const dispatch = useAppDispatch();
-  const { cookingInfos, loading, error } = useAppSelector(
-    (state) => state.cookingInfo,
+  // const { cookingInfos, loading, error } = useAppSelector(
+  //   (state) => state.cookingInfo,
+  // );
+  const { ingredientCategories, loading, error } = useAppSelector(
+    (state) => state.ingredientCategory,
   );
   const router = useRouter();
 
   async function handleAdd() {
     try {
-      const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
-      // console.log("Thunk resolved:", result);
+      const result = await dispatch(
+        createIngredientCategoryThunk(ingredientCategory1),
+      ).unwrap();
+      console.log("Thunk resolved:", result);
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
   }
-  async function testSelect() {
-    const db = await getDb();
-    const days = await db.getAllAsync<{ id?: number; name: string }>(
-      "SELECT * FROM cooking_infos",
-    );
-    console.log(days);
+
+  async function handleDelete() {
+    try {
+      const result = await dispatch(
+        deleteIngredientCategoryThunk(3),
+      ).unwrap();
+      console.log("Thunk resolved:", result);
+    } catch (err) {
+      console.error("Thunk rejected:", err);
+    }
   }
 
-  // testSelect();
-
   useEffect(() => {
-    dispatch(fetchCookingInfosThunk());
+    dispatch(fetchIngredientCategoriesThunk());
   }, []);
 
   return (
@@ -67,12 +84,12 @@ export default function Splash() {
       </Pressable>
       <Pressable
         // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
-        onPress={() => testSelect()}
+        onPress={() => handleDelete()}
       >
         <Text>Test2</Text>
       </Pressable>
-      {cookingInfos.map((info) => (
-        <Text key={info.cookingInfoId}>{info.ingredientName}</Text>
+      {ingredientCategories.map((ic) => (
+        <Text key={ic.id}>{ic.name} : {ic.id} </Text>
       ))}
     </View>
   );
