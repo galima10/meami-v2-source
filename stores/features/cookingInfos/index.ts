@@ -6,6 +6,7 @@ import {
 } from "@stores/thunks/cookingInfos";
 
 export interface CookingInfo {
+  cookingInfoId: number;
   ingredientId: number;
   ingredientName: string;
   preparationTypes: {
@@ -14,8 +15,7 @@ export interface CookingInfo {
   }[];
 }
 
-interface CookingDuration {
-  id: number;
+export interface CookingDuration {
   ustensilName: string;
   duration: number | null;
   temperature: number | null;
@@ -69,7 +69,7 @@ export const cookingInfoSlice = createSlice({
       })
       .addCase(fetchCookingInfosThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.cookingInfos = action.meta.arg;
+        state.cookingInfos = action.payload;
       })
       .addCase(fetchCookingInfosThunk.rejected, (state, action) => {
         state.loading = false;
@@ -85,10 +85,10 @@ export const cookingInfoSlice = createSlice({
       .addCase(setCookingInfoThunk.fulfilled, (state, action) => {
         state.loading = false;
         const index = state.cookingInfos.findIndex(
-          (item) => item.ingredientId === action.meta.arg.ingredientId,
+          (item) => item.ingredientId === action.payload.ingredientId,
         );
-        if (index === -1) state.cookingInfos.push(action.meta.arg);
-        else state.cookingInfos[index] = action.meta.arg;
+        if (index === -1) state.cookingInfos.push(action.payload);
+        else state.cookingInfos[index] = action.payload;
       })
       .addCase(setCookingInfoThunk.rejected, (state, action) => {
         state.loading = false;
@@ -104,7 +104,7 @@ export const cookingInfoSlice = createSlice({
       .addCase(removeCookingInfoThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.cookingInfos = state.cookingInfos.filter(
-          (item) => item.ingredientId !== action.meta.arg, // Utilisation de action.meta.arg
+          (item) => item.ingredientId !== action.payload,
         );
       })
       .addCase(

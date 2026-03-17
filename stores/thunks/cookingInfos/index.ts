@@ -5,6 +5,7 @@ import {
   CookingInfo,
 } from "@stores/features/cookingInfos";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { formatCookingInfos } from "@utils/formatData/formatCookingInfos";
 
 import {
   setCookingInfoService,
@@ -12,24 +13,27 @@ import {
   fetchCookingInfosService,
 } from "@services/cookingInfos";
 
-export const removeCookingInfoThunk = createAsyncThunk<void, number>(
+export const removeCookingInfoThunk = createAsyncThunk<number, number>(
   "cookingInfos/removeCookingInfo",
   async (ingredientId: number) => {
     await removeCookingInfoService(ingredientId);
+    return ingredientId;
   },
 );
 
-export const setCookingInfoThunk = createAsyncThunk<void, CookingInfo>(
+export const setCookingInfoThunk = createAsyncThunk<CookingInfo, CookingInfo>(
   "cookingInfos/setCookingInfo",
   async (newCookingInfo: CookingInfo) => {
     await setCookingInfoService(newCookingInfo);
+    return newCookingInfo;
   },
 );
 
-export const fetchCookingInfosThunk = createAsyncThunk<void, CookingInfo[]>(
+export const fetchCookingInfosThunk = createAsyncThunk<CookingInfo[], void>(
   "cookingInfos/fetchCookingInfos",
   async () => {
-    await fetchCookingInfosService();
+    const data = await fetchCookingInfosService();
+    return formatCookingInfos(data);
   },
 );
 
