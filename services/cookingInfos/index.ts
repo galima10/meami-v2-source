@@ -1,7 +1,7 @@
 import { getDb } from "@database/database";
 import type { CookingInfo } from "@stores/features/cookingInfos";
 
-export interface CookingInfoRawType {
+export interface CookingInfoRaw {
   cooking_info_id: number;
   ingredient_id: number;
   ingredient_name: string;
@@ -11,9 +11,9 @@ export interface CookingInfoRawType {
   ustensil_name: string;
 }
 
-export async function fetchCookingInfosService() {
+export async function FetchCookingInfosService() {
   const db = await getDb();
-  return db.getAllAsync<CookingInfoRawType>(`
+  return db.getAllAsync<CookingInfoRaw>(`
     SELECT
       ci.id_cooking_infos AS cooking_info_id,
       i.id_ingredients AS ingredient_id,
@@ -34,7 +34,7 @@ export async function fetchCookingInfosService() {
   `);
 }
 
-export async function removeCookingInfoService(ingredientId: number) {
+export async function RemoveCookingInfoService(ingredientId: number) {
   const db = await getDb();
   return db.runAsync(
     `
@@ -55,7 +55,7 @@ export async function removeCookingInfoService(ingredientId: number) {
   );
 }
 
-async function insertCookingInfoService(
+async function InsertCookingInfoService(
   preparationTypeName: string,
   ingredientId: number,
 ) {
@@ -76,7 +76,7 @@ async function insertCookingInfoService(
   );
 }
 
-async function insertCookingDurationService(
+async function InsertCookingDurationService(
   duration: number | null,
   temperature: number | null,
   preparationTypeName: string,
@@ -110,18 +110,18 @@ async function insertCookingDurationService(
   );
 }
 
-export async function setCookingInfoService(newCookingInfo: CookingInfo) {
+export async function SetCookingInfoService(newCookingInfo: CookingInfo) {
   const db = await getDb();
   await db.withExclusiveTransactionAsync(async () => {
-    await removeCookingInfoService(newCookingInfo.ingredientId);
+    await RemoveCookingInfoService(newCookingInfo.ingredientId);
     for (const cookingType of newCookingInfo.preparationTypes) {
-      await insertCookingInfoService(
+      await InsertCookingInfoService(
         cookingType.name,
         newCookingInfo.ingredientId,
       );
 
       for (const cookingDuration of cookingType.cookingDurations) {
-        await insertCookingDurationService(
+        await InsertCookingDurationService(
           cookingDuration.duration,
           cookingDuration.temperature,
           cookingType.name,

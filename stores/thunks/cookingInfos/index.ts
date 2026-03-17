@@ -3,15 +3,15 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { formatCookingInfos } from "@utils/formatData/formatCookingInfos";
 
 import {
-  setCookingInfoService,
-  removeCookingInfoService,
-  fetchCookingInfosService,
+  SetCookingInfoService,
+  RemoveCookingInfoService,
+  FetchCookingInfosService,
 } from "@services/cookingInfos";
 
 export const removeCookingInfoThunk = createAsyncThunk<number, number>(
   "cookingInfos/removeCookingInfo",
   async (ingredientId: number) => {
-    await removeCookingInfoService(ingredientId);
+    await RemoveCookingInfoService(ingredientId);
     return ingredientId;
   },
 );
@@ -19,7 +19,7 @@ export const removeCookingInfoThunk = createAsyncThunk<number, number>(
 export const setCookingInfoThunk = createAsyncThunk<CookingInfo, CookingInfo>(
   "cookingInfos/setCookingInfo",
   async (newCookingInfo: CookingInfo) => {
-    await setCookingInfoService(newCookingInfo);
+    await SetCookingInfoService(newCookingInfo);
     return newCookingInfo;
   },
 );
@@ -27,7 +27,7 @@ export const setCookingInfoThunk = createAsyncThunk<CookingInfo, CookingInfo>(
 export const fetchCookingInfosThunk = createAsyncThunk<CookingInfo[], void>(
   "cookingInfos/fetchCookingInfos",
   async () => {
-    const data = await fetchCookingInfosService();
+    const data = await FetchCookingInfosService();
     return formatCookingInfos(data);
   },
 );

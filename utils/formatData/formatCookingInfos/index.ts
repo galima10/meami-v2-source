@@ -1,10 +1,10 @@
 import { CookingInfo, CookingDuration } from "@stores/features/cookingInfos";
-import { CookingInfoRawType } from "@services/cookingInfos";
+import { CookingInfoRaw } from "@services/cookingInfos";
 
 export function formatCookingInfos(
-  rawData: CookingInfoRawType[],
+  rawData: CookingInfoRaw[],
 ): CookingInfo[] {
-  const grouped = rawData.reduce(
+  const treated = rawData.reduce(
     (acc, item) => {
       const key = item.ingredient_id;
 
@@ -42,7 +42,7 @@ export function formatCookingInfos(
     {} as Record<number, any>,
   );
 
-  return Object.values(grouped).map((ci) => ({
+  return Object.values(treated).map((ci) => ({
     cookingInfoId: ci.cookingInfoId,
     ingredientId: ci.ingredientId,
     ingredientName: ci.ingredientName,
