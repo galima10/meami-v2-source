@@ -2,33 +2,78 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { getDb } from "@database/database";
 import { useEffect } from "react";
+import {
+  setCookingInfoThunk,
+  fetchCookingInfosThunk,
+} from "@stores/thunks/cookingInfos";
+import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
+import { CookingInfo } from "@stores/features/cookingInfos";
+
+const cookingInfo1: CookingInfo = {
+  cookingInfoId: 1,
+  ingredientId: 3,
+  ingredientName: "Poulet",
+  preparationTypes: [
+    {
+      name: "Grillé",
+      cookingDurations: [
+        {
+          ustensilName: "Air fryer",
+          duration: 10,
+          temperature: 180,
+        },
+      ],
+    },
+  ],
+};
 
 export default function Splash() {
+  const dispatch = useAppDispatch();
+  const { cookingInfos, loading, error } = useAppSelector(
+    (state) => state.cookingInfo,
+  );
   const router = useRouter();
 
-  useEffect(() => {
-    async function testSelect() {
-      const db = await getDb();
-
-      // récupère tous les jours
-      const days = await db.getAllAsync<{ id?: number; name: string }>(
-        "SELECT * FROM days",
-      );
-
-      console.log("Days from DB:", days);
+  async function handleAdd() {
+    try {
+      const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
+      // console.log("Thunk resolved:", result);
+    } catch (err) {
+      console.error("Thunk rejected:", err);
     }
+  }
+  async function testSelect() {
+    const db = await getDb();
+    const days = await db.getAllAsync<{ id?: number; name: string }>(
+      "SELECT * FROM cooking_infos",
+    );
+    console.log(days);
+  }
 
-    testSelect();
+  // testSelect();
+
+  useEffect(() => {
+    dispatch(fetchCookingInfosThunk());
   }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Splash Screen</Text>
       <Pressable
-        onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
+        // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
+        onPress={() => handleAdd()}
       >
         <Text>Test</Text>
       </Pressable>
+      <Pressable
+        // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
+        onPress={() => testSelect()}
+      >
+        <Text>Test2</Text>
+      </Pressable>
+      {cookingInfos.map((info) => (
+        <Text key={info.cookingInfoId}>{info.ingredientName}</Text>
+      ))}
     </View>
   );
 }
