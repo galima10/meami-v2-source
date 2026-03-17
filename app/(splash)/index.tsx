@@ -61,7 +61,7 @@ export default function Splash() {
   async function handleDelete() {
     try {
       const result = await dispatch(
-        deleteIngredientCategoryThunk(3),
+        deleteIngredientCategoryThunk(5),
       ).unwrap();
       console.log("Thunk resolved:", result);
     } catch (err) {
