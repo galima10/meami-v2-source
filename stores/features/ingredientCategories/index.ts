@@ -6,7 +6,7 @@ import {
 } from "@stores/thunks/ingredientCategories";
 
 export interface IngredientCategory {
-  id: number;
+  id?: number;
   name: string;
 }
 
