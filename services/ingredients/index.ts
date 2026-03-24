@@ -1,13 +1,13 @@
-export async function dbFetchIngredients() {}
+export async function FetchIngredientsService() {}
 
-export async function dbCreateIngredient() {}
+export async function CreateIngredientService() {}
 
-export async function dbUpdateIngredient() {}
+export async function UpdateIngredientService() {}
 
-export async function dbUpdateStorageLocation() {}
+export async function UpdateStorageLocationService() {}
 
-export async function dbSetQuantifiable() {}
+export async function SetQuantifiableService() {}
 
-export async function dbDeleteIngredient() {}
+export async function DeleteIngredientService() {}
 
-export async function dbUpdateStock() {}
+export async function UpdateStockService() {}
