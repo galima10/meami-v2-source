@@ -11,6 +11,7 @@ import shoppingListReducer from "./features/shoppingList";
 import storageInfoReducer from "./features/storageInfos";
 import unitReducer from "./features/units";
 import weeklyMenuReducer from "./features/weeklyMenu";
+import seedReducer from "./features/seeds";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     storageInfo: storageInfoReducer,
     unit: unitReducer,
     weeklyMenu: weeklyMenuReducer,
+    seed: seedReducer,
   },
 });
 

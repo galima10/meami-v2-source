@@ -3,14 +3,16 @@ import { useRouter } from "expo-router";
 import { getDb } from "@database/database";
 import { useEffect } from "react";
 import {
-  setCookingInfoThunk,
-  fetchCookingInfosThunk,
-} from "@stores/thunks/cookingInfos";
-import {
   createIngredientCategoryThunk,
   deleteIngredientCategoryThunk,
   fetchIngredientCategoriesThunk,
 } from "@stores/thunks/ingredientCategories";
+import {
+  fetchDaysThunk,
+  fetchMenuCategoriesThunk,
+  fetchMomentsThunk,
+  fetchStorageLocationsThunk,
+} from "@stores/thunks/seeds";
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { CookingInfo } from "@stores/features/cookingInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
@@ -42,8 +44,11 @@ export default function Splash() {
   // const { cookingInfos, loading, error } = useAppSelector(
   //   (state) => state.cookingInfo,
   // );
-  const { ingredientCategories, loading, error } = useAppSelector(
+  const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
+  );
+  const { menuCategories, storageLocations, days, moments } = useAppSelector(
+    (state) => state.seed,
   );
   const router = useRouter();
 
@@ -60,9 +65,7 @@ export default function Splash() {
 
   async function handleDelete() {
     try {
-      const result = await dispatch(
-        deleteIngredientCategoryThunk(5),
-      ).unwrap();
+      const result = await dispatch(deleteIngredientCategoryThunk(5)).unwrap();
       console.log("Thunk resolved:", result);
     } catch (err) {
       console.error("Thunk rejected:", err);
@@ -70,7 +73,10 @@ export default function Splash() {
   }
 
   useEffect(() => {
-    dispatch(fetchIngredientCategoriesThunk());
+    dispatch(fetchDaysThunk());
+    dispatch(fetchStorageLocationsThunk());
+    dispatch(fetchMenuCategoriesThunk());
+    dispatch(fetchMomentsThunk());
   }, []);
 
   return (
@@ -88,8 +94,34 @@ export default function Splash() {
       >
         <Text>Test2</Text>
       </Pressable>
-      {ingredientCategories.map((ic) => (
-        <Text key={ic.id}>{ic.name} : {ic.id} </Text>
+      {/* {ingredientCategories.map((ic) => (
+        <Text key={ic.id}>
+          {ic.name} : {ic.id}{" "}
+        </Text>
+      ))} */}
+      <Text>Jours :</Text>
+      {days.map((d) => (
+        <Text key={d.id}>
+          {d.name} : {d.id}{" "}
+        </Text>
+      ))}
+      <Text>Moments :</Text>
+      {moments.map((m) => (
+        <Text key={m.id}>
+          {m.name} : {m.id}{" "}
+        </Text>
+      ))}
+      <Text>Lieux de stockage :</Text>
+      {storageLocations.map((sl) => (
+        <Text key={sl.id}>
+          {sl.name} : {sl.id}{" "}
+        </Text>
+      ))}
+      <Text>Catégories du menu :</Text>
+      {menuCategories.map((mc) => (
+        <Text key={mc.id}>
+          {mc.name} : {mc.id}{" "}
+        </Text>
       ))}
     </View>
   );

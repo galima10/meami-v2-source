@@ -46,7 +46,9 @@ export const cookingInfoSlice = createSlice({
       })
       .addCase(fetchCookingInfosThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.cookingInfos = action.payload;
+        if (state.cookingInfos.length === 0) {
+          state.cookingInfos = action.payload;
+        }
       })
       .addCase(fetchCookingInfosThunk.rejected, (state, action) => {
         state.loading = false;
