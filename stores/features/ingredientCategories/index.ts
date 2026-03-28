@@ -21,6 +21,7 @@ export const ingredientCategorySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // fetchIngredientCategoriesThunk
     builder
       .addCase(fetchIngredientCategoriesThunk.pending, (state) => {
         state.loading = true;
@@ -35,46 +36,67 @@ export const ingredientCategorySlice = createSlice({
           }
         },
       )
-      .addCase(fetchIngredientCategoriesThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        fetchIngredientCategoriesThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof fetchIngredientCategoriesThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
+    // createIngredientCategoryThunk
     builder
       .addCase(createIngredientCategoryThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createIngredientCategoryThunk.fulfilled, (state, action: PayloadAction<IngredientCategory>) => {
-        state.loading = false;
+      .addCase(
+        createIngredientCategoryThunk.fulfilled,
+        (state, action: PayloadAction<IngredientCategory>) => {
+          state.loading = false;
 
-        const exists = state.ingredientCategories.some(
-          (item) =>
-            item.id === action.payload.id || item.name === action.payload.name,
-        );
-        if (!exists) state.ingredientCategories.push(action.payload);
-      })
-      .addCase(createIngredientCategoryThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+          const exists = state.ingredientCategories.some(
+            (item) =>
+              item.id === action.payload.id ||
+              item.name === action.payload.name,
+          );
+          if (!exists) state.ingredientCategories.push(action.payload);
+        },
+      )
+      .addCase(
+        createIngredientCategoryThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof createIngredientCategoryThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
+    // deleteIngredientCategoryThunk
     builder
       .addCase(deleteIngredientCategoryThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteIngredientCategoryThunk.fulfilled, (state, action: PayloadAction<number>) => {
-        state.loading = false;
-        const exists = state.ingredientCategories.some(
-          (item) => item.id === action.payload,
-        );
-        if (exists) {
-          state.ingredientCategories = state.ingredientCategories.filter(
-            (item) => item.id !== action.payload,
+      .addCase(
+        deleteIngredientCategoryThunk.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.loading = false;
+          const exists = state.ingredientCategories.some(
+            (item) => item.id === action.payload,
           );
-        }
-      })
+          if (exists) {
+            state.ingredientCategories = state.ingredientCategories.filter(
+              (item) => item.id !== action.payload,
+            );
+          }
+        },
+      )
       .addCase(
         deleteIngredientCategoryThunk.rejected,
         (

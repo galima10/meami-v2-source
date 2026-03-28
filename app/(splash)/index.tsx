@@ -1,12 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import { getDb } from "@database/database";
 import { useEffect } from "react";
-import {
-  createIngredientCategoryThunk,
-  deleteIngredientCategoryThunk,
-  fetchIngredientCategoriesThunk,
-} from "@stores/thunks/ingredientCategories";
 import {
   fetchDaysThunk,
   fetchMenuCategoriesThunk,
@@ -16,6 +10,19 @@ import {
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { CookingInfo } from "@stores/features/cookingInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
+import type { Unit } from "@stores/features/units";
+
+import {
+  createIngredientCategoryThunk,
+  deleteIngredientCategoryThunk,
+  fetchIngredientCategoriesThunk,
+} from "@stores/thunks/ingredientCategories";
+import {
+  createUnitThunk,
+  fetchUnitsThunk,
+  deleteUnitThunk,
+  updateUnitThunk,
+} from "@stores/thunks/units";
 
 const cookingInfo1: CookingInfo = {
   cookingInfoId: 1,
@@ -39,25 +46,38 @@ const ingredientCategory1: IngredientCategory = {
   name: "Produit laitiedzd",
 };
 
+const unit1: Unit = {
+  name: "Litre",
+  abbreviation: "L",
+};
+
+const newUnit1: Unit & { id: number } = {
+  id: 2,
+  name: "Litree",
+  abbreviation: "Ldsdsdsds",
+};
+
 export default function Splash() {
   const dispatch = useAppDispatch();
   // const { cookingInfos, loading, error } = useAppSelector(
   //   (state) => state.cookingInfo,
   // );
-  const { ingredientCategories } = useAppSelector(
-    (state) => state.ingredientCategory,
-  );
+  // const { ingredientCategories } = useAppSelector(
+  //   (state) => state.ingredientCategory,
+  // );
   const { menuCategories, storageLocations, days, moments } = useAppSelector(
     (state) => state.seed,
   );
+
+  const { units } = useAppSelector((state) => state.unit);
   const router = useRouter();
 
   async function handleAdd() {
     try {
-      const result = await dispatch(
-        createIngredientCategoryThunk(ingredientCategory1),
-      ).unwrap();
-      console.log("Thunk resolved:", result);
+      // const result = await dispatch(
+      //   createIngredientCategoryThunk(ingredientCategory1),
+      // ).unwrap();
+      const result = await dispatch(createUnitThunk(unit1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -65,8 +85,16 @@ export default function Splash() {
 
   async function handleDelete() {
     try {
-      const result = await dispatch(deleteIngredientCategoryThunk(5)).unwrap();
-      console.log("Thunk resolved:", result);
+      // const result = await dispatch(deleteIngredientCategoryThunk(5)).unwrap();
+      const result = await dispatch(deleteUnitThunk(3)).unwrap();
+    } catch (err) {
+      console.error("Thunk rejected:", err);
+    }
+  }
+
+  async function handleUpdate() {
+    try {
+      const result = await dispatch(updateUnitThunk(newUnit1));
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -77,52 +105,51 @@ export default function Splash() {
     dispatch(fetchStorageLocationsThunk());
     dispatch(fetchMenuCategoriesThunk());
     dispatch(fetchMomentsThunk());
+
+    dispatch(fetchUnitsThunk());
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Splash Screen</Text>
       <Pressable
         // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
         onPress={() => handleAdd()}
       >
-        <Text>Test</Text>
+        <Text style={styles.button}>Ajouter</Text>
       </Pressable>
-      <Pressable
-        // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
-        onPress={() => handleDelete()}
-      >
-        <Text>Test2</Text>
+      <Pressable onPress={() => handleDelete()}>
+        <Text style={styles.button}>Supprimer</Text>
       </Pressable>
-      {/* {ingredientCategories.map((ic) => (
-        <Text key={ic.id}>
-          {ic.name} : {ic.id}{" "}
-        </Text>
-      ))} */}
-      <Text>Jours :</Text>
-      {days.map((d) => (
-        <Text key={d.id}>
-          {d.name} : {d.id}{" "}
+      <Pressable onPress={() => handleUpdate()}>
+        <Text style={styles.button}>Modifier</Text>
+      </Pressable>
+      {units.map((u) => (
+        <Text key={u.id}>
+          {u.name} - {u.abbreviation} :: {u.id}{" "}
         </Text>
       ))}
-      <Text>Moments :</Text>
-      {moments.map((m) => (
-        <Text key={m.id}>
-          {m.name} : {m.id}{" "}
-        </Text>
-      ))}
-      <Text>Lieux de stockage :</Text>
-      {storageLocations.map((sl) => (
-        <Text key={sl.id}>
-          {sl.name} : {sl.id}{" "}
-        </Text>
-      ))}
-      <Text>Catégories du menu :</Text>
-      {menuCategories.map((mc) => (
-        <Text key={mc.id}>
-          {mc.name} : {mc.id}{" "}
-        </Text>
-      ))}
+      <View style={styles.infosContainer}>
+        {days.map((d) => (
+          <Text key={d.id} style={styles.littleText}>
+            {d.name} : {d.id}{" "}
+          </Text>
+        ))}
+        {moments.map((m) => (
+          <Text key={m.id} style={styles.littleText}>
+            {m.name} : {m.id}{" "}
+          </Text>
+        ))}
+        {storageLocations.map((sl) => (
+          <Text key={sl.id} style={styles.littleText}>
+            {sl.name} : {sl.id}{" "}
+          </Text>
+        ))}
+        {menuCategories.map((mc) => (
+          <Text key={mc.id} style={styles.littleText}>
+            {mc.name} : {mc.id}{" "}
+          </Text>
+        ))}
+      </View>
     </View>
   );
 }
@@ -133,11 +160,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+    gap: 16,
+  },
+  infosContainer: {
+    position: "absolute",
+    left: 16,
+    top: 24,
   },
   text: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
+  },
+  littleText: {
+    fontSize: 9,
+  },
+  button: {
+    fontSize: 24,
   },
 });
 

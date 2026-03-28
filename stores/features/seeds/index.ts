@@ -53,7 +53,7 @@ export const seedSlice = createSlice({
           state.storageLocations = action.payload;
         }
       })
-      .addCase(fetchStorageLocationsThunk.rejected, (state, action) => {
+      .addCase(fetchStorageLocationsThunk.rejected, (state, action: ReturnType<typeof fetchStorageLocationsThunk.rejected>) => {
         state.loading = false;
         state.error = action.error.message ?? "Erreur inconnue";
       });
@@ -70,7 +70,7 @@ export const seedSlice = createSlice({
           state.menuCategories = action.payload;
         }
       })
-      .addCase(fetchMenuCategoriesThunk.rejected, (state, action) => {
+      .addCase(fetchMenuCategoriesThunk.rejected, (state, action: ReturnType<typeof fetchMenuCategoriesThunk.rejected>) => {
         state.loading = false;
         state.error = action.error.message ?? "Erreur inconnue";
       });
@@ -87,7 +87,7 @@ export const seedSlice = createSlice({
           state.days = action.payload;
         }
       })
-      .addCase(fetchDaysThunk.rejected, (state, action) => {
+      .addCase(fetchDaysThunk.rejected, (state, action: ReturnType<typeof fetchDaysThunk.rejected>) => {
         state.loading = false;
         state.error = action.error.message ?? "Erreur inconnue";
       });
@@ -104,7 +104,7 @@ export const seedSlice = createSlice({
           state.moments = action.payload;
         }
       })
-      .addCase(fetchMomentsThunk.rejected, (state, action) => {
+      .addCase(fetchMomentsThunk.rejected, (state, action: ReturnType<typeof fetchMomentsThunk.rejected>) => {
         state.loading = false;
         state.error = action.error.message ?? "Erreur inconnue";
       });
