@@ -1,7 +1,8 @@
 import { getDb } from "@database/database";
 import type { Unit } from "@stores/features/units";
+import type { WithRequiredId } from "@app-types/NameId";
 
-export async function UpdateUnitService(newUnit: Unit & { id: number }) {
+export async function UpdateUnitService(newUnit: WithRequiredId<Unit>) {
   const db = await getDb();
   await db.runAsync(
     `
@@ -34,7 +35,7 @@ export async function DeleteUnitService(unitId: number) {
   );
 }
 
-export async function CreateUnitService(newUnit: Omit<Unit, "id">) {
+export async function CreateUnitService(newUnit: Unit) {
   const db = await getDb();
   const result = await db.runAsync(
     `
@@ -46,12 +47,12 @@ export async function CreateUnitService(newUnit: Omit<Unit, "id">) {
     [newUnit.name, newUnit.abbreviation],
   );
   const id = result.lastInsertRowId;
-  return { id, name: newUnit.name, abbreviation: newUnit.abbreviation };
+  return { id, ...newUnit };
 }
 
 export async function FetchUnitsService() {
   const db = await getDb();
-  return db.getAllAsync<{ id: number; name: string; abbreviation: string }>(`
+  return db.getAllAsync<WithRequiredId<Unit>>(`
     SELECT
       u.id_units AS id,
       u.name,

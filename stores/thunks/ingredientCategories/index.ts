@@ -7,9 +7,10 @@ import {
   CreateIngredientCategoryService,
   DeleteIngredientCategoryService,
 } from "@services/ingredientCategories";
+import type { WithRequiredId } from "@app-types/NameId";
 
 export const fetchIngredientCategoriesThunk = createAsyncThunk<
-  IngredientCategory[],
+  WithRequiredId<IngredientCategory>[],
   void
 >("ingredientCategories/fetchIngredientCategoriy", async () => {
   const data = await FetchIngredientCategoriesService();
@@ -17,7 +18,7 @@ export const fetchIngredientCategoriesThunk = createAsyncThunk<
 });
 
 export const createIngredientCategoryThunk = createAsyncThunk<
-  IngredientCategory,
+  WithRequiredId<IngredientCategory>,
   IngredientCategory
 >(
   "ingredientCategories/createIngredientCategory",

@@ -5,6 +5,7 @@ import {
   updateUnitThunk,
   deleteUnitThunk,
 } from "@stores/thunks/units";
+import type { WithRequiredId } from "@app-types/NameId";
 
 export interface Unit {
   id?: number;
@@ -13,7 +14,7 @@ export interface Unit {
 }
 
 const initialState = {
-  units: [] as Unit[],
+  units: [] as WithRequiredId<Unit>[],
   loading: false,
   error: null as string | null,
 };
@@ -21,26 +22,7 @@ const initialState = {
 export const unitSlice = createSlice({
   name: "units",
   initialState,
-  reducers: {
-    setUnits: (state, action: PayloadAction<Unit[]>) => {
-      state.units = action.payload;
-    },
-    unitAdded: (state, action: PayloadAction<Unit>) => {
-      state.units.push(action.payload);
-    },
-    unitDeleted: (state, action: PayloadAction<number>) => {
-      const unitId = action.payload;
-      state.units = state.units.filter((item) => item.id !== unitId);
-    },
-    unitUpdated: (state, action: PayloadAction<Unit>) => {
-      const unitId = action.payload.id;
-      const index = state.units.findIndex((item) => item.id === unitId);
-
-      if (index !== -1) {
-        state.units[index] = action.payload;
-      }
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     // fetchUnitsThunk
     builder
@@ -50,7 +32,7 @@ export const unitSlice = createSlice({
       })
       .addCase(
         fetchUnitsThunk.fulfilled,
-        (state, action: PayloadAction<Unit[]>) => {
+        (state, action: PayloadAction<WithRequiredId<Unit>[]>) => {
           state.loading = false;
           if (state.units.length === 0) {
             state.units = action.payload;
@@ -73,7 +55,7 @@ export const unitSlice = createSlice({
       })
       .addCase(
         createUnitThunk.fulfilled,
-        (state, action: PayloadAction<Unit>) => {
+        (state, action: PayloadAction<WithRequiredId<Unit>>) => {
           state.loading = false;
 
           const exists = state.units.some(
@@ -101,7 +83,7 @@ export const unitSlice = createSlice({
       })
       .addCase(
         updateUnitThunk.fulfilled,
-        (state, action: PayloadAction<Unit>) => {
+        (state, action: PayloadAction<WithRequiredId<Unit>>) => {
           state.loading = false;
 
           const unitId = action.payload.id;
@@ -148,6 +130,4 @@ export const unitSlice = createSlice({
   },
 });
 
-export const { setUnits, unitAdded, unitDeleted, unitUpdated } =
-  unitSlice.actions;
 export default unitSlice.reducer;

@@ -4,6 +4,7 @@ import {
   createIngredientCategoryThunk,
   deleteIngredientCategoryThunk,
 } from "@stores/thunks/ingredientCategories";
+import type { WithRequiredId } from "@app-types/NameId";
 
 export interface IngredientCategory {
   id?: number;
@@ -11,7 +12,7 @@ export interface IngredientCategory {
 }
 
 const initialState = {
-  ingredientCategories: [] as IngredientCategory[],
+  ingredientCategories: [] as WithRequiredId<IngredientCategory>[],
   loading: false,
   error: null as string | null,
 };
@@ -29,7 +30,7 @@ export const ingredientCategorySlice = createSlice({
       })
       .addCase(
         fetchIngredientCategoriesThunk.fulfilled,
-        (state, action: PayloadAction<IngredientCategory[]>) => {
+        (state, action: PayloadAction<WithRequiredId<IngredientCategory>[]>) => {
           state.loading = false;
           if (state.ingredientCategories.length === 0) {
             state.ingredientCategories = action.payload;
@@ -55,7 +56,7 @@ export const ingredientCategorySlice = createSlice({
       })
       .addCase(
         createIngredientCategoryThunk.fulfilled,
-        (state, action: PayloadAction<IngredientCategory>) => {
+        (state, action: PayloadAction<WithRequiredId<IngredientCategory>>) => {
           state.loading = false;
 
           const exists = state.ingredientCategories.some(

@@ -159,7 +159,7 @@ WHERE
       ingredients i
     WHERE
       i.id_ingredients = ingredient_menu_category_links.id_ingredients
-      AND i.name = actualIngredientName
+      AND i.id_ingredients = actualIngredientName
   );
 
 INSERT INTO
@@ -186,7 +186,7 @@ WHERE
       ingredients i
     WHERE
       i.id_ingredients = ingredient_storage_location_links.id_ingredients
-      AND i.name = actualIngredientName
+      AND i.id_ingredients = actualIngredientName
   );
 
 INSERT

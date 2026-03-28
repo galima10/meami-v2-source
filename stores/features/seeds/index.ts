@@ -1,3 +1,4 @@
+import type { SeedRow, WithRequiredId } from "@app-types/NameId";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchDaysThunk,
@@ -7,22 +8,10 @@ import {
 } from "@stores/thunks/seeds";
 
 interface SeedsInitialState {
-  storageLocations: {
-    id: number;
-    name: string;
-  }[];
-  menuCategories: {
-    id: number;
-    name: string;
-  }[];
-  days: {
-    id: number;
-    name: string;
-  }[];
-  moments: {
-    id: number;
-    name: string;
-  }[];
+  storageLocations: Array<WithRequiredId<SeedRow>>;
+  menuCategories: Array<WithRequiredId<SeedRow>>;
+  days: Array<WithRequiredId<SeedRow>>;
+  moments: Array<WithRequiredId<SeedRow>>;
   loading: boolean;
   error: string | null;
 }
@@ -53,10 +42,16 @@ export const seedSlice = createSlice({
           state.storageLocations = action.payload;
         }
       })
-      .addCase(fetchStorageLocationsThunk.rejected, (state, action: ReturnType<typeof fetchStorageLocationsThunk.rejected>) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        fetchStorageLocationsThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof fetchStorageLocationsThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
     // fetchMenuCategoriesThunk
     builder
@@ -70,10 +65,16 @@ export const seedSlice = createSlice({
           state.menuCategories = action.payload;
         }
       })
-      .addCase(fetchMenuCategoriesThunk.rejected, (state, action: ReturnType<typeof fetchMenuCategoriesThunk.rejected>) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        fetchMenuCategoriesThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof fetchMenuCategoriesThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
     // fetchDaysThunk
     builder
@@ -87,10 +88,13 @@ export const seedSlice = createSlice({
           state.days = action.payload;
         }
       })
-      .addCase(fetchDaysThunk.rejected, (state, action: ReturnType<typeof fetchDaysThunk.rejected>) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        fetchDaysThunk.rejected,
+        (state, action: ReturnType<typeof fetchDaysThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
     // fetchMomentsThunk
     builder
@@ -104,10 +108,13 @@ export const seedSlice = createSlice({
           state.moments = action.payload;
         }
       })
-      .addCase(fetchMomentsThunk.rejected, (state, action: ReturnType<typeof fetchMomentsThunk.rejected>) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        fetchMomentsThunk.rejected,
+        (state, action: ReturnType<typeof fetchMomentsThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
   },
 });
 

@@ -6,8 +6,9 @@ import {
   DeleteUnitService,
   UpdateUnitService,
 } from "@services/units";
+import type { WithRequiredId } from "@app-types/NameId";
 
-export const fetchUnitsThunk = createAsyncThunk<Unit[], void>(
+export const fetchUnitsThunk = createAsyncThunk<WithRequiredId<Unit>[], void>(
   "units/fetchUnits",
   async () => {
     const data = await FetchUnitsService();
@@ -15,7 +16,7 @@ export const fetchUnitsThunk = createAsyncThunk<Unit[], void>(
   },
 );
 
-export const createUnitThunk = createAsyncThunk<Unit, Unit>(
+export const createUnitThunk = createAsyncThunk<WithRequiredId<Unit>, Unit>(
   "units/createUnit",
   async (newUnit: Unit) => {
     const createdUnit = await CreateUnitService(newUnit);
@@ -31,7 +32,7 @@ export const deleteUnitThunk = createAsyncThunk<number, number>(
   },
 );
 
-export const updateUnitThunk = createAsyncThunk<Unit, Unit & { id: number }>(
+export const updateUnitThunk = createAsyncThunk<WithRequiredId<Unit>, WithRequiredId<Unit>>(
   "units/updateUnit",
   async (newUnit: Unit & { id: number }) => {
     await UpdateUnitService(newUnit);

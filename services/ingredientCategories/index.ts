@@ -17,7 +17,7 @@ export async function FetchIngredientCategoriesService() {
 }
 
 export async function CreateIngredientCategoryService(
-  newIngredientCategory: Omit<IngredientCategory, "id">, // Exclure l'id car il est généré automatiquement
+  newIngredientCategory: IngredientCategory,
 ) {
   const db = await getDb();
   const result = await db.runAsync(
@@ -30,7 +30,7 @@ export async function CreateIngredientCategoryService(
     [newIngredientCategory.name],
   );
   const id = result.lastInsertRowId;
-  return { id, name: newIngredientCategory.name };
+  return { id, ...newIngredientCategory };
 }
 
 export async function DeleteIngredientCategoryService(

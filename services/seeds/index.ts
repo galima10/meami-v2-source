@@ -1,8 +1,9 @@
+import type { SeedRow, WithRequiredId } from "@app-types/NameId";
 import { getDb } from "@database/database";
 
 export async function FetchStorageLocationsService() {
   const db = await getDb();
-  return db.getAllAsync<{ id: number; name: string}>(`
+  return db.getAllAsync<WithRequiredId<SeedRow>>(`
       SELECT
         sl.id_storage_locations AS id,
         sl.name
@@ -12,7 +13,7 @@ export async function FetchStorageLocationsService() {
 
 export async function FetchMenuCategoriesService() {
   const db = await getDb();
-  return db.getAllAsync<{ id: number; name: string}>(`
+  return db.getAllAsync<WithRequiredId<SeedRow>>(`
       SELECT
         mc.id_menu_categories AS id,
         mc.name
@@ -22,7 +23,7 @@ export async function FetchMenuCategoriesService() {
 
 export async function FetchDaysService() {
   const db = await getDb();
-  return db.getAllAsync<{ id: number; name: string}>(`
+  return db.getAllAsync<WithRequiredId<SeedRow>>(`
       SELECT
         d.id_days AS id,
         d.name
@@ -32,7 +33,7 @@ export async function FetchDaysService() {
 
 export async function FetchMomentsService() {
   const db = await getDb();
-  return db.getAllAsync<{ id: number; name: string}>(`
+  return db.getAllAsync<WithRequiredId<SeedRow>>(`
       SELECT
         m.id_moments AS id,
         m.name

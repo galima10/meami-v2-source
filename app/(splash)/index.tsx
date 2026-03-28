@@ -43,18 +43,12 @@ const cookingInfo1: CookingInfo = {
 };
 
 const ingredientCategory1: IngredientCategory = {
-  name: "Produit laitiedzd",
+  name: "Produit laitier",
 };
 
 const unit1: Unit = {
-  name: "Litre",
-  abbreviation: "L",
-};
-
-const newUnit1: Unit & { id: number } = {
-  id: 2,
-  name: "Litree",
-  abbreviation: "Ldsdsdsds",
+  name: "Bouteille",
+  abbreviation: "btle",
 };
 
 export default function Splash() {
@@ -62,9 +56,9 @@ export default function Splash() {
   // const { cookingInfos, loading, error } = useAppSelector(
   //   (state) => state.cookingInfo,
   // );
-  // const { ingredientCategories } = useAppSelector(
-  //   (state) => state.ingredientCategory,
-  // );
+  const { ingredientCategories } = useAppSelector(
+    (state) => state.ingredientCategory,
+  );
   const { menuCategories, storageLocations, days, moments } = useAppSelector(
     (state) => state.seed,
   );
@@ -77,7 +71,7 @@ export default function Splash() {
       // const result = await dispatch(
       //   createIngredientCategoryThunk(ingredientCategory1),
       // ).unwrap();
-      const result = await dispatch(createUnitThunk(unit1)).unwrap();
+      // const result = await dispatch(createUnitThunk(unit1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -93,11 +87,7 @@ export default function Splash() {
   }
 
   async function handleUpdate() {
-    try {
-      const result = await dispatch(updateUnitThunk(newUnit1));
-    } catch (err) {
-      console.error("Thunk rejected:", err);
-    }
+    
   }
 
   useEffect(() => {
@@ -106,6 +96,7 @@ export default function Splash() {
     dispatch(fetchMenuCategoriesThunk());
     dispatch(fetchMomentsThunk());
 
+    dispatch(fetchIngredientCategoriesThunk());
     dispatch(fetchUnitsThunk());
   }, []);
 
@@ -123,6 +114,11 @@ export default function Splash() {
       <Pressable onPress={() => handleUpdate()}>
         <Text style={styles.button}>Modifier</Text>
       </Pressable>
+      {ingredientCategories.map((ic) => (
+        <Text key={ic.id}>
+          {ic.name} :: {ic.id}{" "}
+        </Text>
+      ))}
       {units.map((u) => (
         <Text key={u.id}>
           {u.name} - {u.abbreviation} :: {u.id}{" "}
