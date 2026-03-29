@@ -59,10 +59,7 @@ export const unitSlice = createSlice({
           state.loading = false;
 
           const exists = state.units.some(
-            (item) =>
-              item.id === action.payload.id ||
-              item.name === action.payload.name ||
-              item.abbreviation === action.payload.abbreviation,
+            (item) => item.id === action.payload.id,
           );
           if (!exists) state.units.push(action.payload);
         },

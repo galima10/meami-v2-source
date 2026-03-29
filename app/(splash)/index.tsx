@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { CookingInfo } from "@stores/features/cookingInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
 import type { Unit } from "@stores/features/units";
+import type { Ingredient } from "@stores/features/ingredients";
 
 import {
   createIngredientCategoryThunk,
@@ -23,6 +24,18 @@ import {
   deleteUnitThunk,
   updateUnitThunk,
 } from "@stores/thunks/units";
+
+import {
+  fetchIngredientsThunk,
+  createIngredientThunk,
+  updateIngredientThunk,
+  updateStockThunk,
+  updateStorageLocationsThunk,
+  setQuantifiableThunk,
+  deleteIngredientThunk,
+} from "@stores/thunks/ingredients";
+import { getDb } from "@database/database";
+import { WithRequiredId } from "@app-types/NameId";
 
 const cookingInfo1: CookingInfo = {
   cookingInfoId: 1,
@@ -51,6 +64,29 @@ const unit1: Unit = {
   abbreviation: "btle",
 };
 
+const ingredient1: Ingredient = {
+  name: "Lait",
+  categoryId: 7,
+  stockQuantity: 1,
+  unitId: 4,
+  menuCategoryIds: [1, 8],
+  quantifiable: false,
+  storageLocationIds: [4, 2],
+};
+
+const newIngredient1: WithRequiredId<Ingredient> = {
+  id: 2,
+  name: "Lait",
+  categoryId: 7,
+  stockQuantity: 1,
+  unitId: 4,
+  menuCategoryIds: [1, 8],
+  quantifiable: false,
+  storageLocationIds: [4, 2],
+};
+
+const newStorageLocationsIngredient1 = [1, 3];
+
 export default function Splash() {
   const dispatch = useAppDispatch();
   // const { cookingInfos, loading, error } = useAppSelector(
@@ -62,9 +98,9 @@ export default function Splash() {
   const { menuCategories, storageLocations, days, moments } = useAppSelector(
     (state) => state.seed,
   );
-
   const { units } = useAppSelector((state) => state.unit);
-  const router = useRouter();
+  const { ingredients } = useAppSelector((state) => state.ingredient);
+  // const router = useRouter();
 
   async function handleAdd() {
     try {
@@ -72,6 +108,9 @@ export default function Splash() {
       //   createIngredientCategoryThunk(ingredientCategory1),
       // ).unwrap();
       // const result = await dispatch(createUnitThunk(unit1)).unwrap();
+      const result = await dispatch(
+        createIngredientThunk(ingredient1),
+      ).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -79,15 +118,28 @@ export default function Splash() {
 
   async function handleDelete() {
     try {
-      // const result = await dispatch(deleteIngredientCategoryThunk(5)).unwrap();
-      const result = await dispatch(deleteUnitThunk(3)).unwrap();
+      // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
+      // const result = await dispatch(deleteUnitThunk(3)).unwrap();
+      const result = await dispatch(deleteIngredientThunk(1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
   }
 
   async function handleUpdate() {
-    
+    try {
+      // const result = await dispatch(
+      //   updateIngredientThunk(newIngredient1),
+      // ).unwrap();
+      const result = await dispatch(
+        setQuantifiableThunk({
+          ingredientId: 2,
+          newQuantifiable: true,
+        }),
+      ).unwrap();
+    } catch (err) {
+      console.error("Thunk rejected:", err);
+    }
   }
 
   useEffect(() => {
@@ -98,6 +150,7 @@ export default function Splash() {
 
     dispatch(fetchIngredientCategoriesThunk());
     dispatch(fetchUnitsThunk());
+    dispatch(fetchIngredientsThunk());
   }, []);
 
   return (
@@ -114,16 +167,49 @@ export default function Splash() {
       <Pressable onPress={() => handleUpdate()}>
         <Text style={styles.button}>Modifier</Text>
       </Pressable>
-      {ingredientCategories.map((ic) => (
-        <Text key={ic.id}>
-          {ic.name} :: {ic.id}{" "}
-        </Text>
-      ))}
-      {units.map((u) => (
-        <Text key={u.id}>
-          {u.name} - {u.abbreviation} :: {u.id}{" "}
-        </Text>
-      ))}
+      {ingredients.map((i) => {
+        const ingredientUnit = units.find((u) => u.id === i.unitId);
+        const ingredientCategory = ingredientCategories.find(
+          (ic) => ic.id === i.categoryId,
+        );
+        const ingredientMenuCategories = i.menuCategoryIds
+          ? menuCategories.filter((mc) => i.menuCategoryIds.includes(mc.id))
+          : [];
+        const ingredientStorageLocations = i.storageLocationIds
+          ? storageLocations.filter((sl) =>
+              i.storageLocationIds.includes(sl.id),
+            )
+          : [];
+
+        return (
+          <View key={i.id} style={styles.rowContainer}>
+            <Text>
+              {i.name} - quantifiable: {i.quantifiable ? "true" : "false"} -
+              stock: {i.stockQuantity} :: id: {i.id}
+              {"   "}
+            </Text>
+            <Text>
+              {ingredientCategory?.name}
+              {"   "}
+            </Text>
+            <Text>
+              {ingredientUnit?.name} : ({ingredientUnit?.abbreviation}){"   "}
+            </Text>
+            {ingredientMenuCategories.map((imc) => (
+              <Text key={imc.id}>
+                {imc.name}
+                {"   "}
+              </Text>
+            ))}
+            {ingredientStorageLocations.map((isl) => (
+              <Text key={isl.id}>
+                {isl.name}
+                {"   "}
+              </Text>
+            ))}
+          </View>
+        );
+      })}
       <View style={styles.infosContainer}>
         {days.map((d) => (
           <Text key={d.id} style={styles.littleText}>
@@ -143,6 +229,17 @@ export default function Splash() {
         {menuCategories.map((mc) => (
           <Text key={mc.id} style={styles.littleText}>
             {mc.name} : {mc.id}{" "}
+          </Text>
+        ))}
+        <Text></Text>
+        {ingredientCategories.map((ic) => (
+          <Text key={ic.id} style={styles.littleText}>
+            {ic.name} :: {ic.id}{" "}
+          </Text>
+        ))}
+        {units.map((u) => (
+          <Text key={u.id} style={styles.littleText}>
+            {u.name} - {u.abbreviation} :: {u.id}{" "}
           </Text>
         ))}
       </View>
@@ -173,6 +270,12 @@ const styles = StyleSheet.create({
   },
   button: {
     fontSize: 24,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    width: "100%",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
 });
 

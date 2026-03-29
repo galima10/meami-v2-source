@@ -34,7 +34,7 @@ export const deleteUnitThunk = createAsyncThunk<number, number>(
 
 export const updateUnitThunk = createAsyncThunk<WithRequiredId<Unit>, WithRequiredId<Unit>>(
   "units/updateUnit",
-  async (newUnit: Unit & { id: number }) => {
+  async (newUnit: WithRequiredId<Unit>) => {
     await UpdateUnitService(newUnit);
     return newUnit;
   },

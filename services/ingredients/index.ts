@@ -300,16 +300,16 @@ export async function UpdateIngredientService(
   });
 }
 
-export async function UpdateStorageLocationService(
+export async function UpdateStorageLocationsService(
   ingredientId: number,
-  newStorageLocations: WithRequiredId<SeedRow>[],
+  newStorageLocationIds: number[],
 ) {
   const db = await getDb();
   await db.withExclusiveTransactionAsync(async () => {
     await RemoveStorageLocationsFromIngredientService(ingredientId);
-    for (const storageLocation of newStorageLocations) {
+    for (const storageLocationId of newStorageLocationIds) {
       await AddStorageLocationToIngredientService(
-        storageLocation.id,
+        storageLocationId,
         ingredientId,
       );
     }

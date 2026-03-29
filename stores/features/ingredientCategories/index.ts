@@ -30,10 +30,14 @@ export const ingredientCategorySlice = createSlice({
       })
       .addCase(
         fetchIngredientCategoriesThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<IngredientCategory>[]>) => {
+        (
+          state,
+          action: PayloadAction<WithRequiredId<IngredientCategory>[]>,
+        ) => {
           state.loading = false;
           if (state.ingredientCategories.length === 0) {
             state.ingredientCategories = action.payload;
+            
           }
         },
       )
@@ -60,9 +64,7 @@ export const ingredientCategorySlice = createSlice({
           state.loading = false;
 
           const exists = state.ingredientCategories.some(
-            (item) =>
-              item.id === action.payload.id ||
-              item.name === action.payload.name,
+            (item) => item.id === action.payload.id,
           );
           if (!exists) state.ingredientCategories.push(action.payload);
         },
