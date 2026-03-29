@@ -6,13 +6,13 @@ import type { Unit } from "@stores/features/units";
 
 export interface IngredientRaw {
   ingredient_id: number;
-  menu_categories: number;
-  category_name: string;
+  menu_categorie_ids: string;
+  category_id: number;
   ingredient_name: string;
   quantifiable: number;
   stock_quantity: number;
-  abbreviation: string;
-  storage_locations: string;
+  unit_id: number;
+  storage_location_ids: string;
 }
 
 export async function FetchIngredientsService() {
@@ -20,13 +20,13 @@ export async function FetchIngredientsService() {
   return db.getAllAsync<IngredientRaw>(`
     SELECT
       i.id_ingredients AS ingredient_id,
-      GROUP_CONCAT(DISTINCT mc.name ORDER BY mc.name) AS menu_categories,
-      ic.name AS category_name,
+      GROUP_CONCAT(DISTINCT mc.id_menu_categories) AS menu_categorie_ids,
+      ic.id_ingredient_categories AS category_id,
       i.name AS ingredient_name,
       i.quantifiable,
       i.stock_quantity,
-      u.abbreviation AS abbreviation,
-      GROUP_CONCAT(DISTINCT sl.name ORDER BY sl.name) AS storage_locations
+      u.id_units AS unit_id,
+      GROUP_CONCAT(DISTINCT sl.id_storage_locations) AS storage_location_ids
     FROM
       ingredients i
       JOIN units u ON u.id_units = i.id_units
@@ -43,8 +43,8 @@ async function CreateIngredientInfosService(
   ingredientName: string,
   quantifiable: boolean,
   stockQuantity: number,
-  unit: WithRequiredId<Unit>,
-  category: WithRequiredId<IngredientCategory>,
+  unitId: number,
+  categoryId: number,
 ) {
   const db = await getDb();
   const result = await db.runAsync(
@@ -79,8 +79,8 @@ async function CreateIngredientInfosService(
       $name: ingredientName,
       $quantifiable: quantifiable ? 1 : 0,
       $stockQuantity: stockQuantity,
-      $unitId: unit.id,
-      $categoryId: category.id,
+      $unitId: unitId,
+      $categoryId: categoryId,
     },
   );
   const id = result.lastInsertRowId;
@@ -89,8 +89,8 @@ async function CreateIngredientInfosService(
     name: ingredientName,
     quantifiable: quantifiable,
     stockQuantity: stockQuantity,
-    unit: unit,
-    category: category,
+    unitId: unitId,
+    categoryId: categoryId,
   };
 }
 
@@ -150,18 +150,18 @@ export async function CreateIngredientService(newIngredient: Ingredient) {
       newIngredient.name,
       newIngredient.quantifiable,
       newIngredient.stockQuantity,
-      newIngredient.unit,
-      newIngredient.category,
+      newIngredient.unitId,
+      newIngredient.categoryId,
     );
-    for (const menuCategory of newIngredient.menuCategories) {
+    for (const menuCategoryId of newIngredient.menuCategoryIds) {
       await AddMenuCategoryToIngredientService(
-        menuCategory.id,
+        menuCategoryId,
         createdIngredient.id,
       );
     }
-    for (const storageLocation of newIngredient.storageLocations) {
+    for (const storageLocationId of newIngredient.storageLocationIds) {
       await AddStorageLocationToIngredientService(
-        storageLocation.id,
+        storageLocationId,
         createdIngredient.id,
       );
     }
@@ -280,20 +280,20 @@ export async function UpdateIngredientService(
       newIngredient.name,
       newIngredient.quantifiable,
       newIngredient.stockQuantity,
-      newIngredient.unit.id,
-      newIngredient.category.id,
+      newIngredient.unitId,
+      newIngredient.categoryId,
     );
     await RemoveMenuCategoriesFromIngredientService(newIngredient.id);
-    for (const menuCategory of newIngredient.menuCategories) {
+    for (const menuCategoryId of newIngredient.menuCategoryIds) {
       await AddMenuCategoryToIngredientService(
-        menuCategory.id,
+        menuCategoryId,
         newIngredient.id,
       );
     }
     await RemoveStorageLocationsFromIngredientService(newIngredient.id);
-    for (const storageLocation of newIngredient.storageLocations) {
+    for (const storageLocationId of newIngredient.storageLocationIds) {
       await AddStorageLocationToIngredientService(
-        storageLocation.id,
+        storageLocationId,
         newIngredient.id,
       );
     }

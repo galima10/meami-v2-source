@@ -1,13 +1,23 @@
+import { Ingredient } from "@stores/features/ingredients";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { WithRequiredId } from "@app-types/NameId";
 import {
-  setIngredients,
-  ingredientAdded,
-  ingredientDeleted,
-  ingredientUpdated,
-  ingredientIdSelected,
-  clearIngredientIdSelected,
-  Ingredient,
-  ingredientStockQuantitySetted,
-} from "@stores/features/ingredients";
+  FetchIngredientsService,
+  UpdateIngredientService,
+  UpdateStockService,
+  UpdateStorageLocationService,
+  CreateIngredientService,
+  DeleteIngredientService,
+} from "@services/ingredients";
+import { formatIngredients } from "@utils/formatData/formatIngredients";
+
+export const fetchIngredientsThunk = createAsyncThunk<
+  WithRequiredId<Ingredient>[],
+  void
+>("ingredientCategories/fetchIngredientCategoriy", async () => {
+  const data = await FetchIngredientsService();
+  return formatIngredients(data);
+});
 
 export async function fetchIngredients() {
   /*
@@ -266,7 +276,7 @@ WHERE
 
 export async function deleteIngredient(ingredientId: string) {
   // Vérifier si l'ingredientId est bien dans le slice des ingrédients
-/*
+  /*
 
 
 DELETE FROM
@@ -279,7 +289,10 @@ WHERE
   // dispatch ingredientsSlice ingredientDeleted
 }
 
-export async function setIngredientStockQuantity(ingredientId: number, delta: number) {
+export async function setIngredientStockQuantity(
+  ingredientId: number,
+  delta: number,
+) {
   // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId delta
 }
 

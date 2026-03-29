@@ -1,17 +1,14 @@
-import type { SeedRow, WithRequiredId } from "@app-types/NameId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { IngredientCategory } from "../ingredientCategories";
-import type { Unit } from "../units";
 
 export interface Ingredient {
   id?: number;
   name: string;
-  category: WithRequiredId<IngredientCategory>;
+  categoryId: number;
   stockQuantity: number;
-  unit: WithRequiredId<Unit>;
-  menuCategories: WithRequiredId<SeedRow>[];
+  unitId: number;
+  menuCategoryIds: number[];
   quantifiable: boolean;
-  storageLocations: WithRequiredId<SeedRow>[];
+  storageLocationIds: number[];
 }
 
 const initialState = {
