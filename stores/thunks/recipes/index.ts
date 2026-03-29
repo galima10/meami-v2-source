@@ -1,204 +1,48 @@
+import type { Recipe } from "@stores/features/recipes";
+import type { WithRequiredId } from "@app-types/NameId";
 import {
-  setRecipes,
-  recipeAdded,
-  recipeDeleted,
-  recipeUpdated,
-  recipeIdSelected,
-  clearRecipeIdSelected,
-  Recipe,
-} from "@stores/features/recipes";
+  FetchRecipesService,
+  CreateRecipeService,
+  UpdateRecipeService,
+  DeleteRecipeService,
+} from "@services/recipes";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { formatRecipes } from "@utils/formatData/formatRecipes";
 
-export async function deleteRecipe(recipeId: number) {
-  /*
+export const fetchRecipesThunk = createAsyncThunk<
+  WithRequiredId<Recipe>[],
+  void
+>("recipes/fetchRecipes", async () => {
+  const data = await FetchRecipesService();
+  return formatRecipes(data);
+});
 
+export const createRecipeThunk = createAsyncThunk<
+  WithRequiredId<Recipe>,
+  Recipe
+>("recipes/createRecipe", async (newRecipe: Recipe) => {
+  const createdRecipe = await CreateRecipeService(newRecipe);
+  return createdRecipe;
+});
 
-DELETE FROM
-  recipes
-WHERE
-  id_recipes = recipeId;
+export const deleteRecipeThunk = createAsyncThunk<number, number>(
+  "recipes/deleteRecipe",
+  async (recipeId: number) => {
+    await DeleteRecipeService(recipeId);
+    return recipeId;
+  },
+);
 
-
-*/
-  // dispatch recipesSlice recipeDeleted recipeId
-}
-
-export async function createRecipe(newRecipe: Recipe) {
-  /*
-
-
-INSERT INTO
-  recipes (
-    name,
-    duration_in_minutes,
-    preview_image_url,
-    type,
-    recipe
-  )
-VALUES
-  (
-    newRecipe.name,
-    newRecipe.duration,
-    newRecipe.imagePreview,
-    newRecipe.recipeType,
-    newRecipe.recipe
-  );
+export const updateRecipeThunk = createAsyncThunk<
+  WithRequiredId<Recipe>,
+  WithRequiredId<Recipe>
+>("recipes/updateRecipe", async (newRecipe: WithRequiredId<Recipe>) => {
+  await UpdateRecipeService(newRecipe);
+  return newRecipe;
+});
 
 
-
-INSERT INTO
-  recipe_category_links (id_recipes, id_recipe_categories)
-SELECT
-  r.id_recipes,
-  rc.id_recipe_categories
-FROM
-  recipes r
-  JOIN recipe_categories rc
-WHERE
-  r.name = newRecipe.name
-  AND rc.name IN ("Maison", "Simple"); => concaténer newRecipe.categories
-
-
-
-=> Boucler sur newRecipe.ingredients et si isMorning = true, ne mettre que les menuCategories du matin sinon ceux du midi/soir 
-
-const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur ingredient.unit
-
-INSERT INTO
-  recipe_ingredient_links (id_recipes, id_ingredients, quantity, id_units)
-SELECT
-  r.id_recipes,
-  i.id_ingredients,
-  1,
-  (
-    SELECT
-      id_units
-    FROM
-      units
-    WHERE
-      name = unit
-  )
-FROM
-  recipes r
-  JOIN ingredients i
-WHERE
-  r.name = newRecipe.name
-  AND i.name = ingredient.name;
-
-
-*/
-  // dispatch recipesSlice recipeAdded newRecipe
-}
-
-export async function updateRecipe(newRecipe: Recipe, actualRecipeName: string) {
-  /*
-
-
-UPDATE
-  recipes
-SET
-  name = newRecipe.name,
-  duration_in_minutes = newRecipe.duration,
-  preview_image_url = newRecipe.imagePreview,
-  type = newRecipe.recipeType,
-  recipe = newRecipe.recipe
-WHERE
-  name = actualRecipeName;
-
-
-
-DELETE FROM
-  recipe_category_links
-WHERE
-  EXISTS (
-    SELECT
-      1
-    FROM
-      recipes r
-    WHERE
-      r.id_recipes = recipe_category_links.id_recipes
-      AND r.name = newRecipe.name
-  );
-
-
-
-INSERT INTO
-  recipe_category_links (id_recipes, id_recipe_categories)
-SELECT
-  r.id_recipes,
-  rc.id_recipe_categories
-FROM
-  recipes r
-  JOIN recipe_categories rc
-WHERE
-  r.name = newRecipe.name
-  AND rc.name IN ("Maison", "Simple"); => concaténer newRecipe.categories
-
-
-
-DELETE FROM
-  recipe_ingredient_links
-WHERE
-  EXISTS (
-    SELECT
-      1
-    FROM
-      recipes r
-    WHERE
-      r.id_recipes = recipe_ingredient_links.id_recipes
-      AND r.name = newRecipe.name
-  );
-
-
-  
-=> Boucler sur newRecipe.ingredients et si isMorning = true, ne mettre que les menuCategories du matin sinon ceux du midi/soir 
-
-const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur ingredient.unit
-
-INSERT INTO
-  recipe_ingredient_links (id_recipes, id_ingredients, quantity, id_units)
-SELECT
-  r.id_recipes,
-  i.id_ingredients,
-  1,
-  (
-    SELECT
-      id_units
-    FROM
-      units
-    WHERE
-      name = unit
-  )
-FROM
-  recipes r
-  JOIN ingredients i
-WHERE
-  r.name = newRecipe.name
-  AND i.name = ingredient.name;
-
-*/
-  // dispatch recipesSlice recipeUpdated newRecipe
-}
-
-export async function selectRecipe(recipeId: number) {
+function selectRecipe(recipeId: number) {
   // => si isMorning = true, ne mettre que les menuCategories du matin sinon ceux du midi/soir
   // dispatch recipesSlice.selectedId recipeId recipeIdSelected et clearRecipeIdSelected avant à faire
-}
-
-export async function fetchRecipes() {
-  /*
-
-
-SELECT
-  r.id_recipes,
-  r.name AS recipe_name,
-  r.type AS recipe_type,
-  r.preview_image_url AS image_preview,
-  i.name as ingredients
-FROM
-  recipes r
-  JOIN recipe_ingredient_links ril ON ril.id_recipes = r.id_recipes
-  JOIN ingredients i ON i.id_ingredients = ril.id_ingredients;
-
-
-*/
 }

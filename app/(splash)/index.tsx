@@ -17,7 +17,14 @@ import type { Unit } from "@stores/features/units";
 import type { Ingredient } from "@stores/features/ingredients";
 import type { Product } from "@stores/features/products";
 import type { RecipeCategory } from "@stores/features/recipeCategories";
+import type { Recipe } from "@stores/features/recipes";
 
+import {
+  fetchRecipesThunk,
+  updateRecipeThunk,
+  deleteRecipeThunk,
+  createRecipeThunk,
+} from "@stores/thunks/recipes";
 import {
   fetchRecipeCategoriesThunk,
   deleteRecipeCategoryThunk,
@@ -146,6 +153,41 @@ const newProduct1: WithRequiredId<Product> = {
   stockQuantity: 12,
 };
 
+const recipe1: Recipe = {
+  name: "Fish & Chips de saumon",
+  type: "plat princ.",
+  duration: 45,
+  imagePreview: null,
+  recipe: null,
+  categoryIds: [2],
+  isMorning: false,
+  ingredients: [
+    {
+      id: 3,
+      quantity: 1,
+      unitId: 5,
+    },
+  ],
+};
+
+const newRecipe1: WithRequiredId<Recipe> = {
+  id: 2,
+  name: "Fish & Chips de saumon",
+  type: "plat princ.",
+  duration: 45,
+  imagePreview: "url_fish_and_chips",
+  recipe: "Recette du fish & chips",
+  categoryIds: [2],
+  isMorning: true,
+  ingredients: [
+    {
+      id: 3,
+      quantity: 1,
+      unitId: 5,
+    },
+  ],
+};
+
 const newStorageLocationsIngredient1 = [1, 3];
 
 export default function Splash() {
@@ -155,9 +197,7 @@ export default function Splash() {
   const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
   );
-  const { recipeCategories } = useAppSelector(
-    (state) => state.recipeCategory,
-  );
+  const { recipeCategories } = useAppSelector((state) => state.recipeCategory);
   const { cookingUstensils } = useAppSelector((state) => state.cookingUstensil);
   const { menuCategories, storageLocations, days, moments } = useAppSelector(
     (state) => state.seed,
@@ -165,6 +205,7 @@ export default function Splash() {
   const { units } = useAppSelector((state) => state.unit);
   const { products } = useAppSelector((state) => state.product);
   const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { recipes } = useAppSelector((state) => state.recipe);
   // const router = useRouter();
 
   async function handleAdd() {
@@ -172,15 +213,16 @@ export default function Splash() {
       // const result = await dispatch(
       //   createIngredientCategoryThunk(ingredientCategory2),
       // ).unwrap();
-      const result = await dispatch(
-        createRecipeCategoryThunk(recipeCategory1),
-      ).unwrap();
+      // const result = await dispatch(
+      //   createRecipeCategoryThunk(recipeCategory1),
+      // ).unwrap();
       // const result = await dispatch(
       //   createUstensilThunk(cookingUstensil1),
       // ).unwrap();
       // const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
       // const result = await dispatch(setStorageInfoThunk(storageInfo1)).unwrap();
       // const result = await dispatch(createProductThunk(product1)).unwrap();
+      const result = await dispatch(createRecipeThunk(recipe1)).unwrap();
       // const result = await dispatch(createUnitThunk(unit2)).unwrap();
       // const result = await dispatch(
       //   createIngredientThunk(ingredient2),
@@ -193,13 +235,14 @@ export default function Splash() {
   async function handleDelete() {
     try {
       // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
-      const result = await dispatch(deleteRecipeCategoryThunk(1)).unwrap();
+      // const result = await dispatch(deleteRecipeCategoryThunk(1)).unwrap();
       // const result = await dispatch(deleteUstensilThunk(1)).unwrap();
       // const result = await dispatch(removeCookingInfoThunk(3)).unwrap();
       // const result = await dispatch(removeStorageInfoThunk(3)).unwrap();
       // const result = await dispatch(deleteUnitThunk(3)).unwrap();
       // const result = await dispatch(deleteIngredientThunk(1)).unwrap();
       // const result = await dispatch(deleteProductThunk(2)).unwrap();
+      const result = await dispatch(deleteRecipeThunk(2)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -216,7 +259,8 @@ export default function Splash() {
       //     newQuantifiable: true,
       //   }),
       // ).unwrap();
-      const result = await dispatch(updateProductThunk(newProduct1)).unwrap();
+      // const result = await dispatch(updateProductThunk(newProduct1)).unwrap();
+      const result = await dispatch(updateRecipeThunk(newRecipe1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -236,14 +280,21 @@ export default function Splash() {
     dispatch(fetchUnitsThunk());
     dispatch(fetchProductsThunk());
     dispatch(fetchIngredientsThunk());
+    dispatch(fetchRecipesThunk());
   }, []);
 
   // useEffect(() => {
   //   const debug = async () => {
   //     const db = await getDb();
 
-  //     const test = await db.getAllAsync("SELECT * FROM storage_infos");
-  //     console.log(test);
+  //     const test = await db.getAllAsync(
+  //       "SELECT * FROM recipe_ingredient_links",
+  //     );
+  //     console.log("DB : ", test);
+  //     for (const recipe of recipes) {
+  //       console.log("Slice : ", recipe.ingredients);
+  //     }
+  //     // console.log("Slice : ", recipes);
   //     // const test1 = await db.getAllAsync(
   //     //   "SELECT * FROM ingredients WHERE id_ingredients = 3;",
   //     // );
@@ -260,7 +311,7 @@ export default function Splash() {
   //   };
 
   //   debug();
-  // }, []);
+  // }, [recipes]);
 
   return (
     <View style={styles.container}>
@@ -306,13 +357,13 @@ export default function Splash() {
             </Text>
             {ingredientMenuCategories.map((imc) => (
               <Text key={imc.id}>
-                {imc.name}
+                {imc.name.toLowerCase()}
                 {"   "}
               </Text>
             ))}
             {ingredientStorageLocations.map((isl) => (
               <Text key={isl.id}>
-                {isl.name}
+                {isl.name.toLowerCase()}
                 {"   "}
               </Text>
             ))}
@@ -370,7 +421,7 @@ export default function Splash() {
               return (
                 <View key={`pt-${index}`}>
                   <Text>
-                    {sl.id} :: {location?.name}
+                    {sl.id} :: {location?.name.toLowerCase()}
                     {"   "}
                   </Text>
                   {sl.storageDurations.map((sd, index) => (
@@ -379,6 +430,45 @@ export default function Splash() {
                     </Text>
                   ))}
                 </View>
+              );
+            })}
+          </View>
+        );
+      })}
+      {recipes.map((r) => {
+        const categories = r.categoryIds
+          ? recipeCategories.filter((rc) => r.categoryIds.includes(rc.id))
+          : [];
+        const ingredientsRecipe = r.ingredients
+          .map((ri) => {
+            const ingredient = ingredients.find((i) => i.id === ri.id);
+            if (!ingredient) return null; // filtre les cas où l'ingrédient n'existe pas
+            return {
+              ...ingredient, // infos globales de l'ingrédient (nom, stock, etc.)
+              quantity: ri.quantity, // quantité spécifique à la recette
+              unitId: ri.unitId, // unité spécifique à la recette
+            };
+          })
+          .filter(Boolean) as (Ingredient & {
+          quantity: number;
+          unitId: number;
+        })[];
+        return (
+          <View key={`recipes-${r.id}`}>
+            <Text>
+              id: {r.id} :: {r.name} - {r.type} - {r.duration} min - {r.imagePreview} -{" "}
+              {r.recipe} - isMorning: {r.isMorning ? "true" : "false"} :{" "}
+              {r.id}{" "}
+            </Text>
+            {categories.map((rc, index) => {
+              return <Text key={`category-${index}`}>{rc.name}</Text>;
+            })}
+            {ingredientsRecipe.map((ic, index) => {
+              const ingredientUnit = units.find((u) => u.id === ic.unitId);
+              return (
+                <Text key={`ingredients-${index}`}>
+                  {ic.name} - {ic.quantity} {ingredientUnit?.abbreviation}
+                </Text>
               );
             })}
           </View>

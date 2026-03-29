@@ -6,7 +6,7 @@ export function formatIngredients(
   rawData: IngredientRaw[],
 ): WithRequiredId<Ingredient>[] {
   const treated = rawData.map((data) => {
-    const menuCategoryIds = data.menu_categorie_ids.split(",").map(mc => parseInt(mc));
+    const menuCategoryIds = data.menu_category_ids.split(",").map(mc => parseInt(mc));
     const storageLocationIds = data.storage_location_ids.split(",").map(sl => parseInt(sl));
     return {
       id: data.ingredient_id,

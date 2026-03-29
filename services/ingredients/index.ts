@@ -1,12 +1,10 @@
-import type { WithRequiredId, SeedRow } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/NameId";
 import { getDb } from "@database/database";
-import type { IngredientCategory } from "@stores/features/ingredientCategories";
 import type { Ingredient } from "@stores/features/ingredients";
-import type { Unit } from "@stores/features/units";
 
 export interface IngredientRaw {
   ingredient_id: number;
-  menu_categorie_ids: string;
+  menu_category_ids: string;
   category_id: number;
   ingredient_name: string;
   quantifiable: number;
@@ -20,7 +18,7 @@ export async function FetchIngredientsService() {
   return db.getAllAsync<IngredientRaw>(`
     SELECT
       i.id_ingredients AS ingredient_id,
-      GROUP_CONCAT(DISTINCT mc.id_menu_categories) AS menu_categorie_ids,
+      GROUP_CONCAT(DISTINCT mc.id_menu_categories) AS menu_category_ids,
       ic.id_ingredient_categories AS category_id,
       i.name AS ingredient_name,
       i.quantifiable,
@@ -189,29 +187,8 @@ async function UpdateIngredientInfosService(
       name = $name,
       quantifiable = $quantifiable,
       stock_quantity = MAX(0, $stockQuantity),
-      id_ingredient_categories = COALESCE(
-        (
-          SELECT
-            id_ingredient_categories
-          FROM
-            ingredient_categories
-          WHERE
-            name = $categoryId
-          LIMIT
-            1
-        ), id_ingredient_categories
-      ), id_units = COALESCE(
-        (
-          SELECT
-            id_units
-          FROM
-            units
-          WHERE
-            name = $unitId
-          LIMIT
-            1
-        ), id_units
-      )
+      id_ingredient_categories = $categoryId, 
+      id_units = $unitId
     WHERE
       id_ingredients = $ingredientId;
   `,
