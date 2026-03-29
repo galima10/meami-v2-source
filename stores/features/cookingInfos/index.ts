@@ -23,7 +23,7 @@ export interface CookingDuration {
 }
 
 interface InitialState {
-  cookingInfos: CookingInfo[];
+  cookingInfos: WithRequiredId<CookingInfo>[];
   loading: boolean;
   error: string | null;
 }

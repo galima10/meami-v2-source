@@ -12,7 +12,7 @@ export interface CookingUstensil {
 }
 
 const initialState = {
-  cookingUstensils: [] as CookingUstensil[],
+  cookingUstensils: [] as WithRequiredId<CookingUstensil>[],
   loading: false,
   error: null as string | null,
 };

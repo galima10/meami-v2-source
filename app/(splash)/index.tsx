@@ -9,12 +9,20 @@ import {
 } from "@stores/thunks/seeds";
 import { getDb } from "@database/database";
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
+import type { WithRequiredId } from "@app-types/NameId";
 import type { CookingInfo } from "@stores/features/cookingInfos";
 import type { StorageInfo } from "@stores/features/storageInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
 import type { Unit } from "@stores/features/units";
 import type { Ingredient } from "@stores/features/ingredients";
+import type { Product } from "@stores/features/products";
 
+import {
+  fetchProductsThunk,
+  createProductThunk,
+  deleteProductThunk,
+  updateProductThunk,
+} from "@stores/thunks/products";
 import {
   fetchStorageInfosThunk,
   setStorageInfoThunk,
@@ -122,6 +130,16 @@ const ingredient2: Ingredient = {
   storageLocationIds: [2, 3],
 };
 
+const product1: Product = {
+  name: "Essuie-tout",
+  stockQuantity: 1,
+};
+const newProduct1: WithRequiredId<Product> = {
+  id: 2,
+  name: "Essuie-toutezzzzzzzzz",
+  stockQuantity: 12,
+};
+
 const newStorageLocationsIngredient1 = [1, 3];
 
 export default function Splash() {
@@ -136,6 +154,7 @@ export default function Splash() {
     (state) => state.seed,
   );
   const { units } = useAppSelector((state) => state.unit);
+  const { products } = useAppSelector((state) => state.product);
   const { ingredients } = useAppSelector((state) => state.ingredient);
   // const router = useRouter();
 
@@ -148,7 +167,8 @@ export default function Splash() {
       //   createUstensilThunk(cookingUstensil1),
       // ).unwrap();
       // const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
-      const result = await dispatch(setStorageInfoThunk(storageInfo1)).unwrap();
+      // const result = await dispatch(setStorageInfoThunk(storageInfo1)).unwrap();
+      const result = await dispatch(createProductThunk(product1)).unwrap();
       // const result = await dispatch(createUnitThunk(unit2)).unwrap();
       // const result = await dispatch(
       //   createIngredientThunk(ingredient2),
@@ -163,9 +183,10 @@ export default function Splash() {
       // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
       // const result = await dispatch(deleteUstensilThunk(1)).unwrap();
       // const result = await dispatch(removeCookingInfoThunk(3)).unwrap();
-      const result = await dispatch(removeStorageInfoThunk(3)).unwrap();
+      // const result = await dispatch(removeStorageInfoThunk(3)).unwrap();
       // const result = await dispatch(deleteUnitThunk(3)).unwrap();
       // const result = await dispatch(deleteIngredientThunk(1)).unwrap();
+      const result = await dispatch(deleteProductThunk(2)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -176,12 +197,13 @@ export default function Splash() {
       // const result = await dispatch(
       //   updateIngredientThunk(newIngredient1),
       // ).unwrap();
-      const result = await dispatch(
-        setQuantifiableThunk({
-          ingredientId: 2,
-          newQuantifiable: true,
-        }),
-      ).unwrap();
+      // const result = await dispatch(
+      //   setQuantifiableThunk({
+      //     ingredientId: 2,
+      //     newQuantifiable: true,
+      //   }),
+      // ).unwrap();
+      const result = await dispatch(updateProductThunk(newProduct1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -198,6 +220,7 @@ export default function Splash() {
     dispatch(fetchCookingUstensilsThunk());
     dispatch(fetchIngredientCategoriesThunk());
     dispatch(fetchUnitsThunk());
+    dispatch(fetchProductsThunk());
     dispatch(fetchIngredientsThunk());
   }, []);
 
@@ -382,6 +405,11 @@ export default function Splash() {
         {units.map((u) => (
           <Text key={`units-${u.id}`} style={styles.littleText}>
             {u.name} - {u.abbreviation} :: {u.id}{" "}
+          </Text>
+        ))}
+        {products.map((p) => (
+          <Text key={`products-${p.id}`} style={styles.littleText}>
+            {p.name} - stock: {p.stockQuantity} :: {p.id}{" "}
           </Text>
         ))}
       </View>

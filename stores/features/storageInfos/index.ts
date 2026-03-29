@@ -29,7 +29,7 @@ export interface StorageDuration {
 }
 
 const initialState = {
-  storageInfos: [] as StorageInfo[],
+  storageInfos: [] as WithRequiredId<StorageInfo>[],
   loading: false,
   error: null as string | null,
 };

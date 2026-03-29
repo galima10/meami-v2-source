@@ -60,7 +60,7 @@ async function CreateIngredientInfosService(
     SELECT
       $name,
       $quantifiable,
-      $stockQuantity,
+      MAX(0, $stockQuantity),
       ic.id_ingredient_categories,
       (
         SELECT
@@ -188,7 +188,7 @@ async function UpdateIngredientInfosService(
     SET
       name = $name,
       quantifiable = $quantifiable,
-      stock_quantity = $stockQuantity,
+      stock_quantity = MAX(0, $stockQuantity),
       id_ingredient_categories = COALESCE(
         (
           SELECT
