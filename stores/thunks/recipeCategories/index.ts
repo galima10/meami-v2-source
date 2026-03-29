@@ -1,49 +1,37 @@
+import type { RecipeCategory } from "@stores/features/recipeCategories";
+import type { WithRequiredId } from "@app-types/NameId";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { formatRecipeCategories } from "@utils/formatData/formatRecipeCategories";
 import {
-  recipeCategoryAdded,
-  recipeCategoryDeleted,
-  setRecipeCategories,
-  RecipeCategory,
-} from "@stores/features/recipeCategories";
+  FetchRecipeCategoriesService,
+  DeleteRecipeCategoryService,
+  CreateRecipeCategoryService,
+} from "@services/recipeCategories";
 
-export async function fetchRecipeCategories() {
-/*
+export const fetchRecipeCategoriesThunk = createAsyncThunk<
+  WithRequiredId<RecipeCategory>[],
+  void
+>("recipeCategories/fetchRecipeCategories", async () => {
+  const data = await FetchRecipeCategoriesService();
+  return formatRecipeCategories(data);
+});
 
+export const createRecipeCategoryThunk = createAsyncThunk<
+  WithRequiredId<RecipeCategory>,
+  RecipeCategory
+>(
+  "recipeCategories/createRecipeCategory",
+  async (newRecipeCategory: RecipeCategory) => {
+    const createdRecipeCategory =
+      await CreateRecipeCategoryService(newRecipeCategory);
+    return createdRecipeCategory;
+  },
+);
 
-SELECT * FROM recipe_categories;
-
-
-*/
-
-// dispatch recipeCategoriesSlice setRecipeCategories
-}
-
-export async function createRecipeCategory(newRecipeCategory: RecipeCategory) {
-  // Vérifier si la catégorie n'existe pas déjà dans le slice
-/*
-
-
-INSERT INTO
-  recipe_categories (name)
-VALUES
-  (newRecipeCategory.name);
-
-
-*/
-// dispatch recipesCategoriesSlice recipeCategoryAdded newRecipeCategory
-}
-
-export async function deleteRecipeCategory(recipeCategoryId: number) {
-  // Vérifier si l'id est bien dans le slice
-/*
-
-
-DELETE FROM
-  ingredient_categories
-WHERE
-  id_recipe_categories = recipeCategoryId;
-
-
-*/
-
-// dispatch recipesCategoriesSlice recipeCategoryDeleted
-}
+export const deleteRecipeCategoryThunk = createAsyncThunk<number, number>(
+  "recipeCategories/deleteRecipeCategory",
+  async (recipeCategoryId: number) => {
+    await DeleteRecipeCategoryService(recipeCategoryId);
+    return recipeCategoryId;
+  },
+);

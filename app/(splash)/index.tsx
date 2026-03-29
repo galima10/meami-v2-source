@@ -16,7 +16,13 @@ import type { IngredientCategory } from "@stores/features/ingredientCategories";
 import type { Unit } from "@stores/features/units";
 import type { Ingredient } from "@stores/features/ingredients";
 import type { Product } from "@stores/features/products";
+import type { RecipeCategory } from "@stores/features/recipeCategories";
 
+import {
+  fetchRecipeCategoriesThunk,
+  deleteRecipeCategoryThunk,
+  createRecipeCategoryThunk,
+} from "@stores/thunks/recipeCategories";
 import {
   fetchProductsThunk,
   createProductThunk,
@@ -95,8 +101,8 @@ const storageInfo1: StorageInfo = {
 const ingredientCategory1: IngredientCategory = {
   name: "Produit laitier",
 };
-const ingredientCategory2: IngredientCategory = {
-  name: "Viande",
+const recipeCategory1: RecipeCategory = {
+  name: "Groumande",
 };
 const cookingUstensil1: IngredientCategory = {
   name: "Air fryer",
@@ -149,6 +155,9 @@ export default function Splash() {
   const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
   );
+  const { recipeCategories } = useAppSelector(
+    (state) => state.recipeCategory,
+  );
   const { cookingUstensils } = useAppSelector((state) => state.cookingUstensil);
   const { menuCategories, storageLocations, days, moments } = useAppSelector(
     (state) => state.seed,
@@ -163,12 +172,15 @@ export default function Splash() {
       // const result = await dispatch(
       //   createIngredientCategoryThunk(ingredientCategory2),
       // ).unwrap();
+      const result = await dispatch(
+        createRecipeCategoryThunk(recipeCategory1),
+      ).unwrap();
       // const result = await dispatch(
       //   createUstensilThunk(cookingUstensil1),
       // ).unwrap();
       // const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
       // const result = await dispatch(setStorageInfoThunk(storageInfo1)).unwrap();
-      const result = await dispatch(createProductThunk(product1)).unwrap();
+      // const result = await dispatch(createProductThunk(product1)).unwrap();
       // const result = await dispatch(createUnitThunk(unit2)).unwrap();
       // const result = await dispatch(
       //   createIngredientThunk(ingredient2),
@@ -181,12 +193,13 @@ export default function Splash() {
   async function handleDelete() {
     try {
       // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
+      const result = await dispatch(deleteRecipeCategoryThunk(1)).unwrap();
       // const result = await dispatch(deleteUstensilThunk(1)).unwrap();
       // const result = await dispatch(removeCookingInfoThunk(3)).unwrap();
       // const result = await dispatch(removeStorageInfoThunk(3)).unwrap();
       // const result = await dispatch(deleteUnitThunk(3)).unwrap();
       // const result = await dispatch(deleteIngredientThunk(1)).unwrap();
-      const result = await dispatch(deleteProductThunk(2)).unwrap();
+      // const result = await dispatch(deleteProductThunk(2)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -219,6 +232,7 @@ export default function Splash() {
     dispatch(fetchCookingInfosThunk());
     dispatch(fetchCookingUstensilsThunk());
     dispatch(fetchIngredientCategoriesThunk());
+    dispatch(fetchRecipeCategoriesThunk());
     dispatch(fetchUnitsThunk());
     dispatch(fetchProductsThunk());
     dispatch(fetchIngredientsThunk());
@@ -400,6 +414,11 @@ export default function Splash() {
         {ingredientCategories.map((ic) => (
           <Text key={`ingredientCategories-${ic.id}`} style={styles.littleText}>
             {ic.name} :: {ic.id}{" "}
+          </Text>
+        ))}
+        {recipeCategories.map((rc) => (
+          <Text key={`recipeCategories-${rc.id}`} style={styles.littleText}>
+            {rc.name} :: {rc.id}{" "}
           </Text>
         ))}
         {units.map((u) => (
