@@ -10,10 +10,16 @@ import {
 import { getDb } from "@database/database";
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { CookingInfo } from "@stores/features/cookingInfos";
+import type { StorageInfo } from "@stores/features/storageInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
 import type { Unit } from "@stores/features/units";
 import type { Ingredient } from "@stores/features/ingredients";
 
+import {
+  fetchStorageInfosThunk,
+  setStorageInfoThunk,
+  removeStorageInfoThunk,
+} from "@stores/thunks/storageInfos";
 import {
   createIngredientCategoryThunk,
   deleteIngredientCategoryThunk,
@@ -45,7 +51,6 @@ import {
   removeCookingInfoThunk,
   fetchCookingInfosThunk,
 } from "@stores/thunks/cookingInfos";
-import type { WithRequiredId } from "@app-types/NameId";
 
 const cookingInfo1: CookingInfo = {
   ingredientId: 3,
@@ -57,6 +62,22 @@ const cookingInfo1: CookingInfo = {
           ustensilId: 2,
           duration: 10,
           temperature: 180,
+        },
+      ],
+    },
+  ],
+};
+
+const storageInfo1: StorageInfo = {
+  ingredientId: 3,
+  storageLocations: [
+    {
+      id: 2,
+      storageDurations: [
+        {
+          type: "avant ouverture",
+          duration: null,
+          units: "date de péremption",
         },
       ],
     },
@@ -106,6 +127,7 @@ const newStorageLocationsIngredient1 = [1, 3];
 export default function Splash() {
   const dispatch = useAppDispatch();
   const { cookingInfos } = useAppSelector((state) => state.cookingInfo);
+  const { storageInfos } = useAppSelector((state) => state.storageInfo);
   const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
   );
@@ -125,7 +147,8 @@ export default function Splash() {
       // const result = await dispatch(
       //   createUstensilThunk(cookingUstensil1),
       // ).unwrap();
-      const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
+      // const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
+      const result = await dispatch(setStorageInfoThunk(storageInfo1)).unwrap();
       // const result = await dispatch(createUnitThunk(unit2)).unwrap();
       // const result = await dispatch(
       //   createIngredientThunk(ingredient2),
@@ -139,7 +162,8 @@ export default function Splash() {
     try {
       // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
       // const result = await dispatch(deleteUstensilThunk(1)).unwrap();
-      const result = await dispatch(removeCookingInfoThunk(3)).unwrap();
+      // const result = await dispatch(removeCookingInfoThunk(3)).unwrap();
+      const result = await dispatch(removeStorageInfoThunk(3)).unwrap();
       // const result = await dispatch(deleteUnitThunk(3)).unwrap();
       // const result = await dispatch(deleteIngredientThunk(1)).unwrap();
     } catch (err) {
@@ -169,6 +193,7 @@ export default function Splash() {
     dispatch(fetchMenuCategoriesThunk());
     dispatch(fetchMomentsThunk());
 
+    dispatch(fetchStorageInfosThunk());
     dispatch(fetchCookingInfosThunk());
     dispatch(fetchCookingUstensilsThunk());
     dispatch(fetchIngredientCategoriesThunk());
@@ -180,10 +205,21 @@ export default function Splash() {
   //   const debug = async () => {
   //     const db = await getDb();
 
-  //     const ingredients = await db.getAllAsync("SELECT * FROM cooking_infos");
+  //     const test = await db.getAllAsync("SELECT * FROM storage_infos");
+  //     console.log(test);
+  //     // const test1 = await db.getAllAsync(
+  //     //   "SELECT * FROM ingredients WHERE id_ingredients = 3;",
+  //     // );
+  //     // const test2 = await db.getAllAsync(
+  //     //   "SELECT * FROM storage_locations WHERE id_storage_locations = 2;",
+  //     // );
+  //     // console.log(test1, test2);
 
-  //     console.log("DB ci", ingredients);
-  //     console.log("slice ci", cookingInfos);
+  //     // const schema = await db.getAllAsync("PRAGMA table_info(storage_infos);");
+  //     // console.log(schema);
+
+  //     // console.log("DB si", test);
+  //     // console.log("slice si", storageInfos);
   //   };
 
   //   debug();
@@ -270,12 +306,44 @@ export default function Splash() {
                   );
                   return (
                     <Text key={cd.id}>
-                      {cd.duration} minutes - {cd.temperature}° - {ustensil?.name}
+                      {cd.duration} minutes - {cd.temperature}° -{" "}
+                      {ustensil?.name}
                     </Text>
                   );
                 })}
               </View>
             ))}
+          </View>
+        );
+      })}
+      {storageInfos.map((si) => {
+        const ingredient = ingredients.find((i) => i.id === si.ingredientId);
+        return (
+          <View key={`storageInfo-${si.id}`} style={styles.rowContainer}>
+            <Text>
+              si.id: {si.id}
+              {"   "}{" "}
+            </Text>
+            <Text>
+              {ingredient?.name} :: {si.ingredientId}
+              {"   "}
+            </Text>
+            {si.storageLocations.map((sl, index) => {
+              const location = storageLocations.find((sls) => sls.id === sl.id);
+              return (
+                <View key={`pt-${index}`}>
+                  <Text>
+                    {sl.id} :: {location?.name}
+                    {"   "}
+                  </Text>
+                  {sl.storageDurations.map((sd, index) => (
+                    <Text key={`sd-${index}`}>
+                      {sd.duration} {sd.units} - {sd.type}
+                    </Text>
+                  ))}
+                </View>
+              );
+            })}
           </View>
         );
       })}

@@ -1,5 +1,5 @@
-import { CookingInfo, CookingDuration } from "@stores/features/cookingInfos";
-import { CookingInfoRaw } from "@services/cookingInfos";
+import type { CookingInfo, CookingDuration } from "@stores/features/cookingInfos";
+import type { CookingInfoRaw } from "@services/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
 
 export function formatCookingInfos(
@@ -46,7 +46,6 @@ export function formatCookingInfos(
   return Object.values(treated).map((ci) => ({
     id: ci.cookingInfoId,
     ingredientId: ci.ingredientId,
-    ingredientName: ci.ingredientName,
     preparationTypes: Object.values(ci.preparationTypesMap),
   }));
 }

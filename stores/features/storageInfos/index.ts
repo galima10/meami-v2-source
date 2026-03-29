@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchStorageInfosThunk,
+  setStorageInfoThunk,
+  removeStorageInfoThunk,
+} from "@stores/thunks/storageInfos";
+import { WithRequiredId } from "@app-types/NameId";
 
 export interface StorageInfo {
-  id: number;
-  ingredientName: string;
+  id?: number;
+  ingredientId: number;
   storageLocations: {
-    [location: string]: StorageDuration[];
-  };
+    id: number;
+    storageDurations: StorageDuration[];
+  }[];
 }
 
 type StorageDurationUnit =
@@ -15,46 +22,94 @@ type StorageDurationUnit =
   | "date de péremption"
   | "indéfiniment";
 
-interface StorageDuration {
-  id: number;
+export interface StorageDuration {
   type: "avant ouverture" | "après ouverture";
   duration: number | null;
-  unit: StorageDurationUnit;
+  units: StorageDurationUnit;
 }
 
 const initialState = {
   storageInfos: [] as StorageInfo[],
+  loading: false,
+  error: null as string | null,
 };
 
 export const storageInfoSlice = createSlice({
   name: "storageInfos",
   initialState,
-  reducers: {
-    setStorageInfos: (state, action: PayloadAction<StorageInfo[]>) => {
-      state.storageInfos = action.payload;
-    },
-    storageInfoSetted: (state, action: PayloadAction<StorageInfo>) => {
-      const storageInfoId = action.payload.id;
-
-      const index = state.storageInfos.findIndex(
-        (item) => item.id === storageInfoId,
+  reducers: {},
+  extraReducers: (builder) => {
+    // fetchStorageInfosThunk
+    builder
+      .addCase(fetchStorageInfosThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchStorageInfosThunk.fulfilled,
+        (state, action: PayloadAction<WithRequiredId<StorageInfo>[]>) => {
+          state.loading = false;
+          if (state.storageInfos.length === 0) {
+            state.storageInfos = action.payload;
+          }
+        },
+      )
+      .addCase(
+        fetchStorageInfosThunk.rejected,
+        (state, action: ReturnType<typeof fetchStorageInfosThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
       );
 
-      if (index === -1) {
-        state.storageInfos.push(action.payload);
-      } else {
-        state.storageInfos[index] = action.payload;
-      }
-    },
-    storageInfoDeleted: (state, action: PayloadAction<number>) => {
-      const ingredientId = action.payload;
-      state.storageInfos = state.storageInfos.filter(
-        (item) => item.id !== ingredientId,
+    // setStorageInfoThunk
+    builder
+      .addCase(setStorageInfoThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        setStorageInfoThunk.fulfilled,
+        (state, action: PayloadAction<WithRequiredId<StorageInfo>>) => {
+          state.loading = false;
+          const index = state.storageInfos.findIndex(
+            (item) => item.ingredientId === action.payload.ingredientId,
+          );
+          if (index === -1) state.storageInfos.push(action.payload);
+          else state.storageInfos[index] = action.payload;
+        },
+      )
+      .addCase(
+        setStorageInfoThunk.rejected,
+        (state, action: ReturnType<typeof setStorageInfoThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
       );
-    },
+
+    // removeStorageInfoThunk
+    builder
+      .addCase(removeStorageInfoThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        removeStorageInfoThunk.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.loading = false;
+          state.storageInfos = state.storageInfos.filter(
+            (item) => item.ingredientId !== action.payload,
+          );
+        },
+      )
+      .addCase(
+        removeStorageInfoThunk.rejected,
+        (state, action: ReturnType<typeof removeStorageInfoThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
   },
 });
 
-export const { setStorageInfos, storageInfoSetted, storageInfoDeleted } =
-  storageInfoSlice.actions;
 export default storageInfoSlice.reducer;

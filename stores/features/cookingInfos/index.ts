@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   setCookingInfoThunk,
   fetchCookingInfosThunk,
@@ -45,13 +45,13 @@ export const cookingInfoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCookingInfosThunk.fulfilled, (state, action) => {
+      .addCase(fetchCookingInfosThunk.fulfilled, (state, action: PayloadAction<WithRequiredId<CookingInfo>[]>) => {
         state.loading = false;
         if (state.cookingInfos.length === 0) {
           state.cookingInfos = action.payload;
         }
       })
-      .addCase(fetchCookingInfosThunk.rejected, (state, action) => {
+      .addCase(fetchCookingInfosThunk.rejected, (state, action: ReturnType<typeof fetchCookingInfosThunk.rejected>) => {
         state.loading = false;
         state.error = action.error.message ?? "Erreur inconnue";
       });
@@ -62,7 +62,7 @@ export const cookingInfoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(setCookingInfoThunk.fulfilled, (state, action) => {
+      .addCase(setCookingInfoThunk.fulfilled, (state, action: PayloadAction<WithRequiredId<CookingInfo>>) => {
         state.loading = false;
         const index = state.cookingInfos.findIndex(
           (item) => item.ingredientId === action.payload.ingredientId,
@@ -70,7 +70,7 @@ export const cookingInfoSlice = createSlice({
         if (index === -1) state.cookingInfos.push(action.payload);
         else state.cookingInfos[index] = action.payload;
       })
-      .addCase(setCookingInfoThunk.rejected, (state, action) => {
+      .addCase(setCookingInfoThunk.rejected, (state, action: ReturnType<typeof setCookingInfoThunk.rejected>) => {
         state.loading = false;
         state.error = action.error.message ?? "Erreur inconnue";
       });
@@ -81,7 +81,7 @@ export const cookingInfoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(removeCookingInfoThunk.fulfilled, (state, action) => {
+      .addCase(removeCookingInfoThunk.fulfilled, (state, action: PayloadAction<number>) => {
         state.loading = false;
         state.cookingInfos = state.cookingInfos.filter(
           (item) => item.ingredientId !== action.payload,

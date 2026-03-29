@@ -32,9 +32,9 @@ export async function FetchCookingInfosService() {
       JOIN cooking_durations cd ON cd.id_cooking_infos = ci.id_cooking_infos
       JOIN cooking_ustensils cu ON cu.id_cooking_ustensils = cd.id_cooking_ustensils
     ORDER BY
-      i.name,
+      i.id_ingredients,
       ci.preparation_type,
-      cu.name;
+      cu.id_cooking_ustensils;
   `);
 }
 
