@@ -4,11 +4,10 @@ import type { CookingInfo } from "@stores/features/cookingInfos";
 export interface CookingInfoRaw {
   cooking_info_id: number;
   ingredient_id: number;
-  ingredient_name: string;
   preparation_type: string;
   duration: number;
   temperature: number;
-  ustensil_name: string;
+  ustensil_id: number;
 }
 
 export async function FetchCookingInfosService() {
@@ -17,11 +16,10 @@ export async function FetchCookingInfosService() {
     SELECT
       ci.id_cooking_infos AS cooking_info_id,
       i.id_ingredients AS ingredient_id,
-      i.name AS ingredient_name,
       ci.preparation_type,
       cd.duration_in_minutes AS duration,
       cd.temperature,
-      cu.name AS ustensil_name
+      cu.id_cooking_ustensils AS ustensil_id
     FROM
       ingredients i
       JOIN cooking_infos ci ON ci.id_ingredients = i.id_ingredients
@@ -80,7 +78,7 @@ async function InsertCookingDurationService(
   duration: number | null,
   temperature: number | null,
   preparationTypeName: string,
-  ustensilName: string,
+  ustensilId: number,
   ingredientId: number,
 ) {
   const db = await getDb();
@@ -106,7 +104,7 @@ async function InsertCookingDurationService(
       cu.name = ?
       AND i.id_ingredients = ?;
     `,
-    [duration, temperature, preparationTypeName, ustensilName, ingredientId],
+    [duration, temperature, preparationTypeName, ustensilId, ingredientId],
   );
 }
 
@@ -125,7 +123,7 @@ export async function SetCookingInfoService(newCookingInfo: CookingInfo) {
           cookingDuration.duration,
           cookingDuration.temperature,
           cookingType.name,
-          cookingDuration.ustensilName,
+          cookingDuration.ustensilId,
           newCookingInfo.ingredientId,
         );
       }

@@ -8,7 +8,6 @@ import {
 export interface CookingInfo {
   cookingInfoId: number;
   ingredientId: number;
-  ingredientName: string;
   preparationTypes: {
     name: string;
     cookingDurations: CookingDuration[];
@@ -16,7 +15,7 @@ export interface CookingInfo {
 }
 
 export interface CookingDuration {
-  ustensilName: string;
+  ustensilId: number;
   duration: number | null;
   temperature: number | null;
 }

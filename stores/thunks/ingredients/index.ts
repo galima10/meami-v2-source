@@ -1,6 +1,6 @@
-import { Ingredient } from "@stores/features/ingredients";
+import type { Ingredient } from "@stores/features/ingredients";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { WithRequiredId, SeedRow } from "@app-types/NameId";
+import type { WithRequiredId, SeedRow } from "@app-types/NameId";
 import {
   FetchIngredientsService,
   UpdateIngredientService,

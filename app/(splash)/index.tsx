@@ -7,6 +7,7 @@ import {
   fetchMomentsThunk,
   fetchStorageLocationsThunk,
 } from "@stores/thunks/seeds";
+import { getDb } from "@database/database";
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { CookingInfo } from "@stores/features/cookingInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
@@ -34,29 +35,35 @@ import {
   setQuantifiableThunk,
   deleteIngredientThunk,
 } from "@stores/thunks/ingredients";
-import { getDb } from "@database/database";
-import { WithRequiredId } from "@app-types/NameId";
+import {
+  fetchCookingUstensilsThunk,
+  createUstensilThunk,
+  deleteUstensilThunk,
+} from "@stores/thunks/cookingUstensils";
+import type { WithRequiredId } from "@app-types/NameId";
 
-const cookingInfo1: CookingInfo = {
-  cookingInfoId: 1,
-  ingredientId: 3,
-  ingredientName: "Poulet",
-  preparationTypes: [
-    {
-      name: "Grillé",
-      cookingDurations: [
-        {
-          ustensilName: "Air fryer",
-          duration: 10,
-          temperature: 180,
-        },
-      ],
-    },
-  ],
-};
+// const cookingInfo1: CookingInfo = {
+//   cookingInfoId: 1,
+//   ingredientId: 3,
+//   preparationTypes: [
+//     {
+//       name: "Grillé",
+//       cookingDurations: [
+//         {
+//           ustensilId: 1,
+//           duration: 10,
+//           temperature: 180,
+//         },
+//       ],
+//     },
+//   ],
+// };
 
 const ingredientCategory1: IngredientCategory = {
   name: "Produit laitier",
+};
+const cookingUstensil1: IngredientCategory = {
+  name: "Air fryer",
 };
 
 const unit1: Unit = {
@@ -95,6 +102,7 @@ export default function Splash() {
   const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
   );
+  const { cookingUstensils } = useAppSelector((state) => state.cookingUstensil);
   const { menuCategories, storageLocations, days, moments } = useAppSelector(
     (state) => state.seed,
   );
@@ -107,10 +115,13 @@ export default function Splash() {
       // const result = await dispatch(
       //   createIngredientCategoryThunk(ingredientCategory1),
       // ).unwrap();
-      // const result = await dispatch(createUnitThunk(unit1)).unwrap();
       const result = await dispatch(
-        createIngredientThunk(ingredient1),
+        createUstensilThunk(cookingUstensil1),
       ).unwrap();
+      // const result = await dispatch(createUnitThunk(unit1)).unwrap();
+      // const result = await dispatch(
+      //   createIngredientThunk(ingredient1),
+      // ).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -119,8 +130,9 @@ export default function Splash() {
   async function handleDelete() {
     try {
       // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
+      const result = await dispatch(deleteUstensilThunk(1)).unwrap();
       // const result = await dispatch(deleteUnitThunk(3)).unwrap();
-      const result = await dispatch(deleteIngredientThunk(1)).unwrap();
+      // const result = await dispatch(deleteIngredientThunk(1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -148,10 +160,24 @@ export default function Splash() {
     dispatch(fetchMenuCategoriesThunk());
     dispatch(fetchMomentsThunk());
 
+    dispatch(fetchCookingUstensilsThunk());
     dispatch(fetchIngredientCategoriesThunk());
     dispatch(fetchUnitsThunk());
     dispatch(fetchIngredientsThunk());
   }, []);
+
+  // useEffect(() => {
+  //   const debug = async () => {
+  //     const db = await getDb();
+
+  //     const ingredients = await db.getAllAsync("SELECT * FROM cooking_ustensils");
+
+  //     console.log("DB cu", ingredients);
+  //     console.log("slice cu", cookingUstensils);
+  //   };
+
+  //   debug();
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -212,33 +238,38 @@ export default function Splash() {
       })}
       <View style={styles.infosContainer}>
         {days.map((d) => (
-          <Text key={d.id} style={styles.littleText}>
+          <Text key={`days-${d.id}`} style={styles.littleText}>
             {d.name} : {d.id}{" "}
           </Text>
         ))}
         {moments.map((m) => (
-          <Text key={m.id} style={styles.littleText}>
+          <Text key={`moments-${m.id}`} style={styles.littleText}>
             {m.name} : {m.id}{" "}
           </Text>
         ))}
         {storageLocations.map((sl) => (
-          <Text key={sl.id} style={styles.littleText}>
+          <Text key={`storageLocations-${sl.id}`} style={styles.littleText}>
             {sl.name} : {sl.id}{" "}
           </Text>
         ))}
         {menuCategories.map((mc) => (
-          <Text key={mc.id} style={styles.littleText}>
+          <Text key={`menuCategories-${mc.id}`} style={styles.littleText}>
             {mc.name} : {mc.id}{" "}
           </Text>
         ))}
         <Text></Text>
+        {cookingUstensils.map((cu) => (
+          <Text key={`cookingUstensils-${cu.id}`} style={styles.littleText}>
+            {cu.name} :: {cu.id}{" "}
+          </Text>
+        ))}
         {ingredientCategories.map((ic) => (
-          <Text key={ic.id} style={styles.littleText}>
+          <Text key={`ingredientCategories-${ic.id}`} style={styles.littleText}>
             {ic.name} :: {ic.id}{" "}
           </Text>
         ))}
         {units.map((u) => (
-          <Text key={u.id} style={styles.littleText}>
+          <Text key={`units-${u.id}`} style={styles.littleText}>
             {u.name} - {u.abbreviation} :: {u.id}{" "}
           </Text>
         ))}

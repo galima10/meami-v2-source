@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { WithRequiredId } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/NameId";
 import {
   fetchIngredientsThunk,
   createIngredientThunk,
