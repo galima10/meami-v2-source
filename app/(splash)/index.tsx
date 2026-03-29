@@ -40,27 +40,34 @@ import {
   createUstensilThunk,
   deleteUstensilThunk,
 } from "@stores/thunks/cookingUstensils";
+import {
+  setCookingInfoThunk,
+  removeCookingInfoThunk,
+  fetchCookingInfosThunk,
+} from "@stores/thunks/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
 
-// const cookingInfo1: CookingInfo = {
-//   cookingInfoId: 1,
-//   ingredientId: 3,
-//   preparationTypes: [
-//     {
-//       name: "Grillé",
-//       cookingDurations: [
-//         {
-//           ustensilId: 1,
-//           duration: 10,
-//           temperature: 180,
-//         },
-//       ],
-//     },
-//   ],
-// };
+const cookingInfo1: CookingInfo = {
+  ingredientId: 3,
+  preparationTypes: [
+    {
+      name: "Grillé",
+      cookingDurations: [
+        {
+          ustensilId: 2,
+          duration: 10,
+          temperature: 180,
+        },
+      ],
+    },
+  ],
+};
 
 const ingredientCategory1: IngredientCategory = {
   name: "Produit laitier",
+};
+const ingredientCategory2: IngredientCategory = {
+  name: "Viande",
 };
 const cookingUstensil1: IngredientCategory = {
   name: "Air fryer",
@@ -69,6 +76,10 @@ const cookingUstensil1: IngredientCategory = {
 const unit1: Unit = {
   name: "Bouteille",
   abbreviation: "btle",
+};
+const unit2: Unit = {
+  name: "Portion",
+  abbreviation: "prtn",
 };
 
 const ingredient1: Ingredient = {
@@ -80,25 +91,21 @@ const ingredient1: Ingredient = {
   quantifiable: false,
   storageLocationIds: [4, 2],
 };
-
-const newIngredient1: WithRequiredId<Ingredient> = {
-  id: 2,
-  name: "Lait",
-  categoryId: 7,
+const ingredient2: Ingredient = {
+  name: "Filet de poulet",
+  categoryId: 8,
   stockQuantity: 1,
-  unitId: 4,
-  menuCategoryIds: [1, 8],
-  quantifiable: false,
-  storageLocationIds: [4, 2],
+  unitId: 5,
+  menuCategoryIds: [4],
+  quantifiable: true,
+  storageLocationIds: [2, 3],
 };
 
 const newStorageLocationsIngredient1 = [1, 3];
 
 export default function Splash() {
   const dispatch = useAppDispatch();
-  // const { cookingInfos, loading, error } = useAppSelector(
-  //   (state) => state.cookingInfo,
-  // );
+  const { cookingInfos } = useAppSelector((state) => state.cookingInfo);
   const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
   );
@@ -113,14 +120,15 @@ export default function Splash() {
   async function handleAdd() {
     try {
       // const result = await dispatch(
-      //   createIngredientCategoryThunk(ingredientCategory1),
+      //   createIngredientCategoryThunk(ingredientCategory2),
       // ).unwrap();
-      const result = await dispatch(
-        createUstensilThunk(cookingUstensil1),
-      ).unwrap();
-      // const result = await dispatch(createUnitThunk(unit1)).unwrap();
       // const result = await dispatch(
-      //   createIngredientThunk(ingredient1),
+      //   createUstensilThunk(cookingUstensil1),
+      // ).unwrap();
+      const result = await dispatch(setCookingInfoThunk(cookingInfo1)).unwrap();
+      // const result = await dispatch(createUnitThunk(unit2)).unwrap();
+      // const result = await dispatch(
+      //   createIngredientThunk(ingredient2),
       // ).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
@@ -130,7 +138,8 @@ export default function Splash() {
   async function handleDelete() {
     try {
       // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
-      const result = await dispatch(deleteUstensilThunk(1)).unwrap();
+      // const result = await dispatch(deleteUstensilThunk(1)).unwrap();
+      const result = await dispatch(removeCookingInfoThunk(3)).unwrap();
       // const result = await dispatch(deleteUnitThunk(3)).unwrap();
       // const result = await dispatch(deleteIngredientThunk(1)).unwrap();
     } catch (err) {
@@ -160,6 +169,7 @@ export default function Splash() {
     dispatch(fetchMenuCategoriesThunk());
     dispatch(fetchMomentsThunk());
 
+    dispatch(fetchCookingInfosThunk());
     dispatch(fetchCookingUstensilsThunk());
     dispatch(fetchIngredientCategoriesThunk());
     dispatch(fetchUnitsThunk());
@@ -170,10 +180,10 @@ export default function Splash() {
   //   const debug = async () => {
   //     const db = await getDb();
 
-  //     const ingredients = await db.getAllAsync("SELECT * FROM cooking_ustensils");
+  //     const ingredients = await db.getAllAsync("SELECT * FROM cooking_infos");
 
-  //     console.log("DB cu", ingredients);
-  //     console.log("slice cu", cookingUstensils);
+  //     console.log("DB ci", ingredients);
+  //     console.log("slice ci", cookingInfos);
   //   };
 
   //   debug();
@@ -208,7 +218,7 @@ export default function Splash() {
           : [];
 
         return (
-          <View key={i.id} style={styles.rowContainer}>
+          <View key={`ingredients-${i.id}`} style={styles.rowContainer}>
             <Text>
               {i.name} - quantifiable: {i.quantifiable ? "true" : "false"} -
               stock: {i.stockQuantity} :: id: {i.id}
@@ -232,6 +242,39 @@ export default function Splash() {
                 {isl.name}
                 {"   "}
               </Text>
+            ))}
+          </View>
+        );
+      })}
+      {cookingInfos.map((ci) => {
+        const ingredient = ingredients.find((i) => i.id === ci.ingredientId);
+        return (
+          <View key={`cookingInfo-${ci.id}`} style={styles.rowContainer}>
+            <Text>
+              ci.id: {ci.id}
+              {"   "}{" "}
+            </Text>
+            <Text>
+              {ingredient?.name} :: {ci.ingredientId}
+              {"   "}
+            </Text>
+            {ci.preparationTypes.map((pt, index) => (
+              <View key={`pt-${index}`}>
+                <Text>
+                  {pt.name}
+                  {"   "}
+                </Text>
+                {pt.cookingDurations.map((cd) => {
+                  const ustensil = cookingUstensils.find(
+                    (cu) => cu.id === cd.ustensilId,
+                  );
+                  return (
+                    <Text key={cd.id}>
+                      {cd.duration} minutes - {cd.temperature}° - {ustensil?.name}
+                    </Text>
+                  );
+                })}
+              </View>
             ))}
           </View>
         );

@@ -1,10 +1,15 @@
 import { getDb } from "@database/database";
-import type { CookingInfo } from "@stores/features/cookingInfos";
+import type {
+  CookingInfo,
+  CookingDuration,
+} from "@stores/features/cookingInfos";
+import type { WithRequiredId } from "@app-types/NameId";
 
 export interface CookingInfoRaw {
   cooking_info_id: number;
   ingredient_id: number;
   preparation_type: string;
+  cooking_duration_id: number;
   duration: number;
   temperature: number;
   ustensil_id: number;
@@ -17,6 +22,7 @@ export async function FetchCookingInfosService() {
       ci.id_cooking_infos AS cooking_info_id,
       i.id_ingredients AS ingredient_id,
       ci.preparation_type,
+      cd.id_cooking_durations AS cooking_duration_id,
       cd.duration_in_minutes AS duration,
       cd.temperature,
       cu.id_cooking_ustensils AS ustensil_id
@@ -53,82 +59,102 @@ export async function RemoveCookingInfoService(ingredientId: number) {
   );
 }
 
-async function InsertCookingInfoService(
+async function CreateCookingInfoService(
   preparationTypeName: string,
   ingredientId: number,
 ) {
   const db = await getDb();
-  return db.runAsync(
+  const result = await db.runAsync(
     `
-    INSERT INTO
-      cooking_infos (preparation_type, id_ingredients)
-    SELECT
-      ?,
-      i.id_ingredients
-    FROM
-      ingredients i
-    WHERE
-      i.id_ingredients = ?;
+    INSERT INTO cooking_infos (preparation_type, id_ingredients)
+    VALUES (?, ?)
     `,
     [preparationTypeName, ingredientId],
   );
+
+  return {
+    id: result.lastInsertRowId,
+    ingredientId,
+  };
 }
 
-async function InsertCookingDurationService(
+async function CreateCookingDurationService(
   duration: number | null,
   temperature: number | null,
-  preparationTypeName: string,
   ustensilId: number,
-  ingredientId: number,
+  cookingInfoId: number,
 ) {
   const db = await getDb();
-  return db.runAsync(
+  const result = await db.runAsync(
     `
-    INSERT INTO
-      cooking_durations (
-        duration_in_minutes,
-        temperature,
-        id_cooking_ustensils,
-        id_cooking_infos
-      )
-    SELECT
-      ?,
-      ?,
-      cu.id_cooking_ustensils,
-      ci.id_cooking_infos
-    FROM
-      cooking_ustensils cu
-      JOIN cooking_infos ci ON ci.preparation_type = ?
-      JOIN ingredients i ON i.id_ingredients = ci.id_ingredients
-    WHERE
-      cu.name = ?
-      AND i.id_ingredients = ?;
+    INSERT INTO cooking_durations (
+      duration_in_minutes,
+      temperature,
+      id_cooking_ustensils,
+      id_cooking_infos
+    ) VALUES (?, ?, ?, ?)
     `,
-    [duration, temperature, preparationTypeName, ustensilId, ingredientId],
+    [duration, temperature, ustensilId, cookingInfoId],
   );
+
+  return {
+    id: result.lastInsertRowId,
+    ustensilId,
+    duration,
+    temperature,
+  };
 }
 
 export async function SetCookingInfoService(newCookingInfo: CookingInfo) {
   const db = await getDb();
+
+  const cookingInfoResult: WithRequiredId<CookingInfo> = {
+    id: 0, // sera remplacé par le premier id créé
+    ingredientId: newCookingInfo.ingredientId,
+    preparationTypes: [],
+  };
+
   await db.withExclusiveTransactionAsync(async () => {
     await RemoveCookingInfoService(newCookingInfo.ingredientId);
-    for (const cookingType of newCookingInfo.preparationTypes) {
-      await InsertCookingInfoService(
+
+    for (const [
+      index,
+      cookingType,
+    ] of newCookingInfo.preparationTypes.entries()) {
+      const createdCookingInfo = await CreateCookingInfoService(
         cookingType.name,
         newCookingInfo.ingredientId,
       );
 
+      // On met le premier id comme ID global du CookingInfo
+      if (index === 0) {
+        cookingInfoResult.id = createdCookingInfo.id!;
+      }
+
+      const preparationTypeResult = {
+        name: cookingType.name,
+        cookingDurations: [] as CookingDuration[],
+      };
+
       for (const cookingDuration of cookingType.cookingDurations) {
-        await InsertCookingDurationService(
+        const createdDuration = await CreateCookingDurationService(
           cookingDuration.duration,
           cookingDuration.temperature,
-          cookingType.name,
           cookingDuration.ustensilId,
-          newCookingInfo.ingredientId,
+          createdCookingInfo.id,
         );
+
+        preparationTypeResult.cookingDurations.push({
+          id: createdDuration.id,
+          ustensilId: createdDuration.ustensilId,
+          duration: createdDuration.duration,
+          temperature: createdDuration.temperature,
+        });
       }
+
+      cookingInfoResult.preparationTypes.push(preparationTypeResult);
     }
   });
+
+  return cookingInfoResult;
 }
-
-

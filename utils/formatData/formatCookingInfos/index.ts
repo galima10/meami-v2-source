@@ -1,9 +1,10 @@
 import { CookingInfo, CookingDuration } from "@stores/features/cookingInfos";
 import { CookingInfoRaw } from "@services/cookingInfos";
+import type { WithRequiredId } from "@app-types/NameId";
 
 export function formatCookingInfos(
   rawData: CookingInfoRaw[],
-): CookingInfo[] {
+): WithRequiredId<CookingInfo>[] {
   const treated = rawData.reduce(
     (acc, item) => {
       const key = item.ingredient_id;
@@ -12,10 +13,9 @@ export function formatCookingInfos(
         acc[key] = {
           cookingInfoId: item.cooking_info_id,
           ingredientId: item.ingredient_id,
-          ingredientName: item.ingredient_name,
           preparationTypesMap: {} as Record<
             string,
-            { name: string; cookingDurations: CookingDuration[] }
+            { name: string; cookingDurations: WithRequiredId<CookingDuration>[] }
           >,
         };
       }
@@ -32,7 +32,8 @@ export function formatCookingInfos(
       cookingInfo.preparationTypesMap[
         item.preparation_type
       ].cookingDurations.push({
-        ustensilName: item.ustensil_name,
+        id: item.cooking_duration_id,
+        ustensilId: item.ustensil_id,
         duration: item.duration ?? null,
         temperature: item.temperature ?? null,
       });
@@ -43,7 +44,7 @@ export function formatCookingInfos(
   );
 
   return Object.values(treated).map((ci) => ({
-    cookingInfoId: ci.cookingInfoId,
+    id: ci.cookingInfoId,
     ingredientId: ci.ingredientId,
     ingredientName: ci.ingredientName,
     preparationTypes: Object.values(ci.preparationTypesMap),

@@ -4,9 +4,10 @@ import {
   fetchCookingInfosThunk,
   removeCookingInfoThunk,
 } from "@stores/thunks/cookingInfos";
+import type { WithRequiredId } from "@app-types/NameId";
 
 export interface CookingInfo {
-  cookingInfoId: number;
+  id?: number;
   ingredientId: number;
   preparationTypes: {
     name: string;
@@ -15,6 +16,7 @@ export interface CookingInfo {
 }
 
 export interface CookingDuration {
+  id?: number;
   ustensilId: number;
   duration: number | null;
   temperature: number | null;
