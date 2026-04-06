@@ -20,7 +20,7 @@ const initialState = {
 export const recipeCategorySlice = createSlice({
   name: "recipeCategories",
   initialState,
-  reducers: {},
+  reducers: { resetRecipeCategories: () => initialState },
   extraReducers: (builder) => {
     // fetchRecipeCategoriesThunk
     builder
@@ -67,7 +67,10 @@ export const recipeCategorySlice = createSlice({
       )
       .addCase(
         createRecipeCategoryThunk.rejected,
-        (state, action: ReturnType<typeof createRecipeCategoryThunk.rejected>,) => {
+        (
+          state,
+          action: ReturnType<typeof createRecipeCategoryThunk.rejected>,
+        ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },
@@ -106,4 +109,5 @@ export const recipeCategorySlice = createSlice({
   },
 });
 
+export const { resetRecipeCategories } = recipeCategorySlice.actions;
 export default recipeCategorySlice.reducer;

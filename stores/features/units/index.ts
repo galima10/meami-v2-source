@@ -22,7 +22,7 @@ const initialState = {
 export const unitSlice = createSlice({
   name: "units",
   initialState,
-  reducers: {},
+  reducers: { resetUnits: () => initialState },
   extraReducers: (builder) => {
     // fetchUnitsThunk
     builder
@@ -127,4 +127,5 @@ export const unitSlice = createSlice({
   },
 });
 
+export const { resetUnits } = unitSlice.actions;
 export default unitSlice.reducer;

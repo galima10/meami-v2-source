@@ -37,7 +37,7 @@ const initialState = {
 export const storageInfoSlice = createSlice({
   name: "storageInfos",
   initialState,
-  reducers: {},
+  reducers: { resetStorageInfos: () => initialState },
   extraReducers: (builder) => {
     // fetchStorageInfosThunk
     builder
@@ -112,4 +112,5 @@ export const storageInfoSlice = createSlice({
   },
 });
 
+export const { resetStorageInfos } = storageInfoSlice.actions;
 export default storageInfoSlice.reducer;

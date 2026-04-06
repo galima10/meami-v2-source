@@ -20,7 +20,9 @@ const initialState = {
 export const ingredientCategorySlice = createSlice({
   name: "ingredientCategories",
   initialState,
-  reducers: {},
+  reducers: {
+    resetIngredientCategories: () => initialState,
+  },
   extraReducers: (builder) => {
     // fetchIngredientCategoriesThunk
     builder
@@ -37,7 +39,6 @@ export const ingredientCategorySlice = createSlice({
           state.loading = false;
           if (state.ingredientCategories.length === 0) {
             state.ingredientCategories = action.payload;
-            
           }
         },
       )
@@ -113,4 +114,5 @@ export const ingredientCategorySlice = createSlice({
   },
 });
 
+export const { resetIngredientCategories } = ingredientCategorySlice.actions;
 export default ingredientCategorySlice.reducer;

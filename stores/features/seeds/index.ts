@@ -23,7 +23,7 @@ const initialState: SeedsInitialState = {
 export const seedSlice = createSlice({
   name: "seeds",
   initialState,
-  reducers: {},
+  reducers: { resetSeeds: () => initialState },
   extraReducers: (builder) => {
     // fetchInitialDataThunk
     builder
@@ -64,4 +64,5 @@ export const seedSlice = createSlice({
   },
 });
 
+export const { resetSeeds } = seedSlice.actions;
 export default seedSlice.reducer;

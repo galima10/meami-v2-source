@@ -24,6 +24,7 @@ export const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
+    resetProducts: () => initialState,
     productIdSelected: (state, action: PayloadAction<number | null>) => {
       state.selectedId = action.payload;
     },
@@ -162,5 +163,6 @@ export const {
   productIdSelected,
   clearProductIdSelected,
   productStockQuantitySetted,
+  resetProducts,
 } = productSlice.actions;
 export default productSlice.reducer;

@@ -18,6 +18,7 @@ export const manualAdjustementSlice = createSlice({
   name: "manualAdjustements",
   initialState,
   reducers: {
+    resetManualAdjustements: () => initialState,
     setManualAdjustements: (
       state,
       action: PayloadAction<{
@@ -46,5 +47,6 @@ export const manualAdjustementSlice = createSlice({
   },
 });
 
-export const { setManualAdjustements, ingredientCheckToggled } = manualAdjustementSlice.actions;
+export const { setManualAdjustements, ingredientCheckToggled, resetManualAdjustements } =
+  manualAdjustementSlice.actions;
 export default manualAdjustementSlice.reducer;

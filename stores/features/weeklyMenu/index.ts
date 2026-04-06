@@ -43,60 +43,7 @@ export const weeklyMenuSlice = createSlice({
   name: "weeklyMenu",
   initialState,
   reducers: {
-    // setWeeklyMenu: (state, action: PayloadAction<WeeklyMenu>) => {
-    //   state.weeklyMenu = action.payload;
-    //   state.menuIndex = {};
-    //   for (const day of Object.keys(action.payload)) {
-    //     const dayMenu = action.payload[day as keyof WeeklyMenu];
-    //     for (const moment of ["morning", "noon", "evening"] as const) {
-    //       const menu = dayMenu[moment];
-    //       if (menu) {
-    //         state.menuIndex[menu.id] = { day, moment };
-    //       }
-    //     }
-    //   }
-    // },
-    // menuUpdated: (state, action: PayloadAction<Menu>) => {
-    //   const menuId = action.payload.id;
-    //   const updatedMenu = action.payload;
-    //   const menuLocation = state.menuIndex[menuId];
-    //   if (menuLocation) {
-    //     const { day, moment } = menuLocation;
-    //     state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu] =
-    //       updatedMenu;
-    //   }
-    // },
-    // menuDoneToggled: (
-    //   state,
-    //   action: PayloadAction<{ menuId: number; done: boolean }>,
-    // ) => {
-    //   const { menuId, done } = action.payload;
-    //   const menuLocation = state.menuIndex[menuId];
-    //   if (menuLocation) {
-    //     const { day, moment } = menuLocation;
-    //     const menu =
-    //       state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu];
-    //     if (menu) {
-    //       menu.done = done;
-    //     }
-    //   }
-    // },
-    // clearMenu: (state, action: PayloadAction<number>) => {
-    //   const menuId = action.payload;
-    //   const menuLocation = state.menuIndex[menuId];
-    //   if (menuLocation) {
-    //     const { day, moment } = menuLocation;
-    //     const menu =
-    //       state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu];
-    //     if (menu) {
-    //       state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu] = {
-    //         id: menu.id,
-    //         done: false,
-    //         ingredients: {},
-    //       };
-    //     }
-    //   }
-    // },
+    resetWeeklyMenu: () => initialState,
     // ingredientMenuQuantitySetted: (
     //   state,
     //   action: PayloadAction<{
@@ -393,4 +340,5 @@ export const weeklyMenuSlice = createSlice({
   },
 });
 
+export const { resetWeeklyMenu } = weeklyMenuSlice.actions;
 export default weeklyMenuSlice.reducer;

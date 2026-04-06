@@ -20,7 +20,9 @@ const initialState = {
 export const cookingUstensilSlice = createSlice({
   name: "cookingUstensils",
   initialState,
-  reducers: {},
+  reducers: {
+    resetCookingUstensils: () => initialState,
+  },
   extraReducers: (builder) => {
     // fetchCookingUstensilsThunk
     builder
@@ -103,4 +105,5 @@ export const cookingUstensilSlice = createSlice({
   },
 });
 
+export const { resetCookingUstensils } = cookingUstensilSlice.actions;
 export default cookingUstensilSlice.reducer;

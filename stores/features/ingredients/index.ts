@@ -32,6 +32,7 @@ export const ingredientSlice = createSlice({
   name: "ingredients",
   initialState,
   reducers: {
+    resetIngredients: () => initialState,
     selectIngredientId: (state, action: PayloadAction<number | null>) => {
       state.selectedId = action.payload;
     },
@@ -73,7 +74,6 @@ export const ingredientSlice = createSlice({
           state.loading = false;
           if (state.ingredients.length === 0) {
             state.ingredients = action.payload;
-   
           }
         },
       )
@@ -274,8 +274,6 @@ export const ingredientSlice = createSlice({
   },
 });
 
-export const {
-  selectIngredientId,
-  clearIngredientIdSelected
-} = ingredientSlice.actions;
+export const { selectIngredientId, clearIngredientIdSelected, resetIngredients } =
+  ingredientSlice.actions;
 export default ingredientSlice.reducer;

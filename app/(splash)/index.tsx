@@ -274,9 +274,6 @@ export default function Splash() {
     dispatch(fetchIngredientsThunk());
     dispatch(fetchRecipesThunk());
   }, []);
-  useEffect(() => {
-    console.log("weeklyMenu", weeklyMenu);
-  }, [weeklyMenu]);
 
   // useEffect(() => {
   //   const debug = async () => {

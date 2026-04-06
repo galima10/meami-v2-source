@@ -37,7 +37,9 @@ const initialState: InitialState = {
 export const cookingInfoSlice = createSlice({
   name: "cookingInfos",
   initialState,
-  reducers: {},
+  reducers: {
+    resetCookingInfos: () => initialState,
+  },
   extraReducers: (builder) => {
     // fetchCookingInfosThunk
     builder
@@ -45,16 +47,22 @@ export const cookingInfoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCookingInfosThunk.fulfilled, (state, action: PayloadAction<WithRequiredId<CookingInfo>[]>) => {
-        state.loading = false;
-        if (state.cookingInfos.length === 0) {
-          state.cookingInfos = action.payload;
-        }
-      })
-      .addCase(fetchCookingInfosThunk.rejected, (state, action: ReturnType<typeof fetchCookingInfosThunk.rejected>) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        fetchCookingInfosThunk.fulfilled,
+        (state, action: PayloadAction<WithRequiredId<CookingInfo>[]>) => {
+          state.loading = false;
+          if (state.cookingInfos.length === 0) {
+            state.cookingInfos = action.payload;
+          }
+        },
+      )
+      .addCase(
+        fetchCookingInfosThunk.rejected,
+        (state, action: ReturnType<typeof fetchCookingInfosThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
     // setCookingInfoThunk
     builder
@@ -62,18 +70,24 @@ export const cookingInfoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(setCookingInfoThunk.fulfilled, (state, action: PayloadAction<WithRequiredId<CookingInfo>>) => {
-        state.loading = false;
-        const index = state.cookingInfos.findIndex(
-          (item) => item.ingredientId === action.payload.ingredientId,
-        );
-        if (index === -1) state.cookingInfos.push(action.payload);
-        else state.cookingInfos[index] = action.payload;
-      })
-      .addCase(setCookingInfoThunk.rejected, (state, action: ReturnType<typeof setCookingInfoThunk.rejected>) => {
-        state.loading = false;
-        state.error = action.error.message ?? "Erreur inconnue";
-      });
+      .addCase(
+        setCookingInfoThunk.fulfilled,
+        (state, action: PayloadAction<WithRequiredId<CookingInfo>>) => {
+          state.loading = false;
+          const index = state.cookingInfos.findIndex(
+            (item) => item.ingredientId === action.payload.ingredientId,
+          );
+          if (index === -1) state.cookingInfos.push(action.payload);
+          else state.cookingInfos[index] = action.payload;
+        },
+      )
+      .addCase(
+        setCookingInfoThunk.rejected,
+        (state, action: ReturnType<typeof setCookingInfoThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
     // removeCookingInfoThunk
     builder
@@ -81,12 +95,15 @@ export const cookingInfoSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(removeCookingInfoThunk.fulfilled, (state, action: PayloadAction<number>) => {
-        state.loading = false;
-        state.cookingInfos = state.cookingInfos.filter(
-          (item) => item.ingredientId !== action.payload,
-        );
-      })
+      .addCase(
+        removeCookingInfoThunk.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.loading = false;
+          state.cookingInfos = state.cookingInfos.filter(
+            (item) => item.ingredientId !== action.payload,
+          );
+        },
+      )
       .addCase(
         removeCookingInfoThunk.rejected,
         (state, action: ReturnType<typeof removeCookingInfoThunk.rejected>) => {
@@ -97,4 +114,5 @@ export const cookingInfoSlice = createSlice({
   },
 });
 
+export const { resetCookingInfos } = cookingInfoSlice.actions;
 export default cookingInfoSlice.reducer;

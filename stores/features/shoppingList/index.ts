@@ -22,6 +22,7 @@ export const shoppingListSlice = createSlice({
   name: "shoppingList",
   initialState,
   reducers: {
+    resetShoppingList: () => initialState,
     setShoppingList: (state, action: PayloadAction<ShoppingList>) => {
       state.shoppingList = action.payload;
     },
@@ -78,6 +79,11 @@ export const shoppingListSlice = createSlice({
   },
 });
 
-export const { setShoppingList, itemAdded, itemRemoved, itemQuantitySetted } =
-  shoppingListSlice.actions;
+export const {
+  setShoppingList,
+  itemAdded,
+  itemRemoved,
+  itemQuantitySetted,
+  resetShoppingList,
+} = shoppingListSlice.actions;
 export default shoppingListSlice.reducer;

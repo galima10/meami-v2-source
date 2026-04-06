@@ -44,6 +44,7 @@ export const recipeSlice = createSlice({
   name: "recipes",
   initialState,
   reducers: {
+    resetRecipes: () => initialState,
     recipeIdSelected: (state, action: PayloadAction<number | null>) => {
       state.selectedRecipeId = action.payload;
     },
@@ -157,5 +158,6 @@ export const recipeSlice = createSlice({
   },
 });
 
-export const { recipeIdSelected, clearRecipeIdSelected } = recipeSlice.actions;
+export const { recipeIdSelected, clearRecipeIdSelected, resetRecipes } =
+  recipeSlice.actions;
 export default recipeSlice.reducer;
