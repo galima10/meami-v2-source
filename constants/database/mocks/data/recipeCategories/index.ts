@@ -21,4 +21,8 @@ export const mockRecipeCategories: RecipeCategory[] = [
     // ID : 5
     name: "Gourmande",
   },
+  {
+    // ID : 6
+    name: "Maison",
+  },
 ];

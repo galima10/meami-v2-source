@@ -631,4 +631,18 @@ export const mockIngredients: Ingredient[] = [
     // NULL
     storageLocationIds: [],
   },
+  {
+    // ID : 46
+    name: "Fromage à raclette",
+    // Produit laitier: 15
+    categoryId: 15,
+    stockQuantity: 0,
+    // Boîte: 8
+    unitId: 8,
+    // ACCOMPAGNEMENT REPAS: 6
+    menuCategoryIds: [6],
+    quantifiable: false,
+    // NULL
+    storageLocationIds: [],
+  },
 ];

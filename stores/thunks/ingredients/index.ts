@@ -26,7 +26,6 @@ export const createIngredientThunk = createAsyncThunk<
 >("ingredients/createIngredient", async (newIngredient) => {
   console.log("newIngredient", newIngredient);
   const createdIngredient = await CreateIngredientService(newIngredient);
-  console.log("createdIngredient", createdIngredient);
   return createdIngredient;
 });
 
