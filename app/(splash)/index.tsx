@@ -363,7 +363,7 @@ export default function Splash() {
           </View>
         );
       })}
-      {recipes.map((r) => {
+      {/* {recipes.map((r) => {
         const categories = r.categoryIds
           ? recipeCategories.filter((rc) => r.categoryIds.includes(rc.id))
           : [];
@@ -403,7 +403,7 @@ export default function Splash() {
             })}
           </View>
         );
-      })}
+      })} */}
     </View>
   );
 }
