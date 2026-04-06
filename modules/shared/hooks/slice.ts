@@ -2,20 +2,18 @@ import { resetCookingInfos } from "@stores/features/cookingInfos";
 import { resetCookingUstensils } from "@stores/features/cookingUstensils";
 import { resetIngredientCategories } from "@stores/features/ingredientCategories";
 import { resetIngredients } from "@stores/features/ingredients";
+import { resetManualAdjustements } from "@stores/features/manualAdjustements";
 import { resetProducts } from "@stores/features/products";
 import { resetRecipeCategories } from "@stores/features/recipeCategories";
 import { resetRecipes } from "@stores/features/recipes";
 import { resetSeeds } from "@stores/features/seeds";
-import { resetManualAdjustements } from "@stores/features/manualAdjustements";
 import { resetShoppingList } from "@stores/features/shoppingList";
 import { resetStorageInfos } from "@stores/features/storageInfos";
 import { resetUnits } from "@stores/features/units";
 import { resetWeeklyMenu } from "@stores/features/weeklyMenu";
-import { useAppDispatch } from "./redux";
+import { AppDispatch } from "@stores/index";
 
-export const resetReduxStore = () => {
-  const dispatch = useAppDispatch();
-
+export const resetReduxStore = (dispatch: AppDispatch) => {
   dispatch(resetCookingInfos());
   dispatch(resetCookingUstensils());
   dispatch(resetIngredientCategories());

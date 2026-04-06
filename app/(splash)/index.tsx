@@ -1,71 +1,47 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useRouter } from "expo-router";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { WithRequiredId } from "@app-types/NameId";
 import type { CookingInfo } from "@stores/features/cookingInfos";
-import type { StorageInfo } from "@stores/features/storageInfos";
 import type { IngredientCategory } from "@stores/features/ingredientCategories";
-import type { Unit } from "@stores/features/units";
 import type { Ingredient } from "@stores/features/ingredients";
 import type { Product } from "@stores/features/products";
 import type { RecipeCategory } from "@stores/features/recipeCategories";
 import type { Recipe } from "@stores/features/recipes";
-import { getDb } from "@database/database";
+import type { StorageInfo } from "@stores/features/storageInfos";
+import type { Unit } from "@stores/features/units";
+import { useAppDispatch, useAppSelector } from "modules/shared/hooks/redux";
+import { useEffect } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import {
-  fetchRecipesThunk,
-  updateRecipeThunk,
-  deleteRecipeThunk,
-  createRecipeThunk,
-} from "@stores/thunks/recipes";
-import {
-  fetchRecipeCategoriesThunk,
-  deleteRecipeCategoryThunk,
-  createRecipeCategoryThunk,
-} from "@stores/thunks/recipeCategories";
-import {
-  fetchProductsThunk,
-  createProductThunk,
-  deleteProductThunk,
-  updateProductThunk,
-} from "@stores/thunks/products";
-import {
-  fetchStorageInfosThunk,
-  setStorageInfoThunk,
-  removeStorageInfoThunk,
-} from "@stores/thunks/storageInfos";
-import {
-  createIngredientCategoryThunk,
-  deleteIngredientCategoryThunk,
-  fetchIngredientCategoriesThunk,
+  fetchIngredientCategoriesThunk
 } from "@stores/thunks/ingredientCategories";
 import {
-  createUnitThunk,
-  fetchUnitsThunk,
-  deleteUnitThunk,
-  updateUnitThunk,
+  fetchProductsThunk
+} from "@stores/thunks/products";
+import {
+  fetchRecipeCategoriesThunk
+} from "@stores/thunks/recipeCategories";
+import {
+  createRecipeThunk,
+  deleteRecipeThunk,
+  fetchRecipesThunk,
+  updateRecipeThunk,
+} from "@stores/thunks/recipes";
+import {
+  fetchStorageInfosThunk
+} from "@stores/thunks/storageInfos";
+import {
+  fetchUnitsThunk
 } from "@stores/thunks/units";
 
 import {
-  fetchIngredientsThunk,
-  createIngredientThunk,
-  updateIngredientThunk,
-  updateStockThunk,
-  updateStorageLocationsThunk,
-  setQuantifiableThunk,
-  deleteIngredientThunk,
-} from "@stores/thunks/ingredients";
+  fetchCookingInfosThunk
+} from "@stores/thunks/cookingInfos";
 import {
-  fetchCookingUstensilsThunk,
-  createUstensilThunk,
-  deleteUstensilThunk,
+  fetchCookingUstensilsThunk
 } from "@stores/thunks/cookingUstensils";
 import {
-  setCookingInfoThunk,
-  removeCookingInfoThunk,
-  fetchCookingInfosThunk,
-} from "@stores/thunks/cookingInfos";
+  fetchIngredientsThunk
+} from "@stores/thunks/ingredients";
 
 const cookingInfo1: CookingInfo = {
   ingredientId: 3,
