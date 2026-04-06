@@ -234,39 +234,11 @@ export default function Splash() {
     dispatch(fetchIngredientsThunk());
     dispatch(fetchRecipesThunk());
   }, []);
-  useEffect(() => {
-    console.log(menuCategories);
-  }, [menuCategories]);
-
   // useEffect(() => {
-  //   const debug = async () => {
-  //     const db = await getDb();
+  //   console.log(ingredients);
+  // }, [ingredients]);
 
-  //     // const test = await db.getAllAsync(
-  //     //   "SELECT * FROM menus",
-  //     // );
-  //     // console.log("DB : ", test);
-  //     for (const recipe of recipes) {
-  //       console.log("Slice : ", recipe.ingredients);
-  //     }
-  //     // console.log("Slice : ", recipes);
-  //     // const test1 = await db.getAllAsync(
-  //     //   "SELECT * FROM ingredients WHERE id_ingredients = 3;",
-  //     // );
-  //     // const test2 = await db.getAllAsync(
-  //     //   "SELECT * FROM storage_locations WHERE id_storage_locations = 2;",
-  //     // );
-  //     // console.log(test1, test2);
-
-  //     // const schema = await db.getAllAsync("PRAGMA table_info(storage_infos);");
-  //     // console.log(schema);
-
-  //     // console.log("DB si", test);
-  //     // console.log("slice si", storageInfos);
-  //   };
-
-  //   debug();
-  // }, []);
+  
 
   return (
     <View style={styles.container}>
@@ -282,7 +254,7 @@ export default function Splash() {
       <Pressable onPress={() => handleUpdate()}>
         <Text style={styles.button}>Modifier</Text>
       </Pressable>
-      {ingredients.map((i) => {
+      {/* {ingredients.map((i) => {
         const ingredientUnit = units.find((u) => u.id === i.unitId);
         const ingredientCategory = ingredientCategories.find(
           (ic) => ic.id === i.categoryId,
@@ -293,7 +265,7 @@ export default function Splash() {
         console.log("ingredientMenuCategories", i.menuCategoryIds);
         const ingredientStorageLocations = i.storageLocationIds
           ? storageLocations.filter((sl) =>
-              i.storageLocationIds.includes(sl.id),
+              i.storageLocationIds?.includes(sl.id),
             )
           : [];
 
@@ -325,7 +297,7 @@ export default function Splash() {
             ))}
           </View>
         );
-      })}
+      })} */}
       {cookingInfos.map((ci) => {
         const ingredient = ingredients.find((i) => i.id === ci.ingredientId);
         return (

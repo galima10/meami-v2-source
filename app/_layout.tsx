@@ -11,6 +11,19 @@ import HiddenResetButton from "@modules/shared/components/atoms/HiddenResetButto
 function InitData() {
   const dispatch = useAppDispatch();
 
+  // useEffect(() => {
+  //   const debug = async () => {
+  //     const db = await getDb();
+
+  //     const test = await db.getAllAsync(
+  //       "SELECT * FROM ingredients",
+  //     );
+  //     // console.log("DB : ", test);
+  //   };
+
+  //   debug();
+  // }, []);
+
   useEffect(() => {
     async function initDBAndFetch() {
       await getDb();

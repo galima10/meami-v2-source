@@ -18,7 +18,7 @@ export interface Ingredient {
   unitId: number;
   menuCategoryIds: number[];
   quantifiable: boolean;
-  storageLocationIds: number[];
+  storageLocationIds: number[] | null;
 }
 
 const initialState = {
