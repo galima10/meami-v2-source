@@ -19,7 +19,7 @@ export interface Recipe {
   ingredients: RecipeIngredient[];
 }
 
-type RecipeType =
+export type RecipeType =
   | "petit-déj."
   | "plat princ."
   | "légumes"

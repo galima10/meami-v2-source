@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { resetReduxStore } from "@modules/shared/hooks/slice";
+import { resetReduxStore, insertMockData } from "@modules/shared/hooks/slice";
 import { resetDb } from "@database/database";
 import { useAppDispatch } from "@modules/shared/hooks/redux";
 import { fetchInitialDataThunk } from "@stores/thunks/seeds";
@@ -11,9 +11,15 @@ export default function HiddenResetButton() {
     try {
       await resetDb();
       resetReduxStore(dispatch);
-      dispatch(fetchInitialDataThunk());
-      dispatch(fetchAllMenusThunk());
-      console.log("✅ Database and Redux store reset!");
+      await dispatch(fetchInitialDataThunk());
+      await dispatch(fetchAllMenusThunk());
+      await insertMockData(dispatch);
+      console.log(
+      `
+      -------------------------------
+      Database and Redux store reset!
+      -------------------------------
+      `);
     } catch (err) {
       console.error("Failed to reset DB/store", err);
     }

@@ -11,37 +11,21 @@ import { useAppDispatch, useAppSelector } from "modules/shared/hooks/redux";
 import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import {
-  fetchIngredientCategoriesThunk
-} from "@stores/thunks/ingredientCategories";
-import {
-  fetchProductsThunk
-} from "@stores/thunks/products";
-import {
-  fetchRecipeCategoriesThunk
-} from "@stores/thunks/recipeCategories";
+import { fetchIngredientCategoriesThunk } from "@stores/thunks/ingredientCategories";
+import { fetchProductsThunk } from "@stores/thunks/products";
+import { fetchRecipeCategoriesThunk } from "@stores/thunks/recipeCategories";
 import {
   createRecipeThunk,
   deleteRecipeThunk,
   fetchRecipesThunk,
   updateRecipeThunk,
 } from "@stores/thunks/recipes";
-import {
-  fetchStorageInfosThunk
-} from "@stores/thunks/storageInfos";
-import {
-  fetchUnitsThunk
-} from "@stores/thunks/units";
+import { fetchStorageInfosThunk } from "@stores/thunks/storageInfos";
+import { fetchUnitsThunk } from "@stores/thunks/units";
 
-import {
-  fetchCookingInfosThunk
-} from "@stores/thunks/cookingInfos";
-import {
-  fetchCookingUstensilsThunk
-} from "@stores/thunks/cookingUstensils";
-import {
-  fetchIngredientsThunk
-} from "@stores/thunks/ingredients";
+import { fetchCookingInfosThunk } from "@stores/thunks/cookingInfos";
+import { fetchCookingUstensilsThunk } from "@stores/thunks/cookingUstensils";
+import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
 
 const cookingInfo1: CookingInfo = {
   ingredientId: 3,
@@ -250,6 +234,9 @@ export default function Splash() {
     dispatch(fetchIngredientsThunk());
     dispatch(fetchRecipesThunk());
   }, []);
+  useEffect(() => {
+    console.log(menuCategories);
+  }, [menuCategories]);
 
   // useEffect(() => {
   //   const debug = async () => {
@@ -303,6 +290,7 @@ export default function Splash() {
         const ingredientMenuCategories = i.menuCategoryIds
           ? menuCategories.filter((mc) => i.menuCategoryIds.includes(mc.id))
           : [];
+        console.log("ingredientMenuCategories", i.menuCategoryIds);
         const ingredientStorageLocations = i.storageLocationIds
           ? storageLocations.filter((sl) =>
               i.storageLocationIds.includes(sl.id),
@@ -444,54 +432,6 @@ export default function Splash() {
           </View>
         );
       })}
-      <View style={styles.infosContainer}>
-        {days.map((d) => (
-          <Text key={`days-${d.id}`} style={styles.littleText}>
-            {d.name} : {d.id}{" "}
-          </Text>
-        ))}
-        {moments.map((m) => (
-          <Text key={`moments-${m.id}`} style={styles.littleText}>
-            {m.name} : {m.id}{" "}
-          </Text>
-        ))}
-        {storageLocations.map((sl) => (
-          <Text key={`storageLocations-${sl.id}`} style={styles.littleText}>
-            {sl.name} : {sl.id}{" "}
-          </Text>
-        ))}
-        {menuCategories.map((mc) => (
-          <Text key={`menuCategories-${mc.id}`} style={styles.littleText}>
-            {mc.name} : {mc.id}{" "}
-          </Text>
-        ))}
-        <Text></Text>
-        {cookingUstensils.map((cu) => (
-          <Text key={`cookingUstensils-${cu.id}`} style={styles.littleText}>
-            {cu.name} :: {cu.id}{" "}
-          </Text>
-        ))}
-        {ingredientCategories.map((ic) => (
-          <Text key={`ingredientCategories-${ic.id}`} style={styles.littleText}>
-            {ic.name} :: {ic.id}{" "}
-          </Text>
-        ))}
-        {recipeCategories.map((rc) => (
-          <Text key={`recipeCategories-${rc.id}`} style={styles.littleText}>
-            {rc.name} :: {rc.id}{" "}
-          </Text>
-        ))}
-        {units.map((u) => (
-          <Text key={`units-${u.id}`} style={styles.littleText}>
-            {u.name} - {u.abbreviation} :: {u.id}{" "}
-          </Text>
-        ))}
-        {products.map((p) => (
-          <Text key={`products-${p.id}`} style={styles.littleText}>
-            {p.name} - stock: {p.stockQuantity} :: {p.id}{" "}
-          </Text>
-        ))}
-      </View>
     </View>
   );
 }

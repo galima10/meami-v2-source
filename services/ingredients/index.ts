@@ -140,11 +140,9 @@ async function AddStorageLocationToIngredientService(
 
 export async function CreateIngredientService(newIngredient: Ingredient) {
   const db = await getDb();
-  let createdIngredient: Awaited<
-    ReturnType<typeof CreateIngredientInfosService>
-  > | null = null;
+  let createdIngredient: Ingredient | null = null;
   await db.withExclusiveTransactionAsync(async () => {
-    createdIngredient = await CreateIngredientInfosService(
+    const baseIngredient = await CreateIngredientInfosService(
       newIngredient.name,
       newIngredient.quantifiable,
       newIngredient.stockQuantity,
@@ -154,15 +152,20 @@ export async function CreateIngredientService(newIngredient: Ingredient) {
     for (const menuCategoryId of newIngredient.menuCategoryIds) {
       await AddMenuCategoryToIngredientService(
         menuCategoryId,
-        createdIngredient.id,
+        baseIngredient.id,
       );
     }
     for (const storageLocationId of newIngredient.storageLocationIds) {
       await AddStorageLocationToIngredientService(
         storageLocationId,
-        createdIngredient.id,
+        baseIngredient.id,
       );
     }
+    createdIngredient = {
+      ...baseIngredient,
+      menuCategoryIds: [...newIngredient.menuCategoryIds],
+      storageLocationIds: [...newIngredient.storageLocationIds],
+    };
   });
   if (!createdIngredient) {
     throw new Error("Ingredient creation failed");

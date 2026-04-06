@@ -1,6 +1,6 @@
 import type { WithRequiredId } from "@app-types/NameId";
 import { getDb } from "@database/database";
-import type { Recipe, RecipeIngredient } from "@stores/features/recipes";
+import type { Recipe, RecipeType } from "@stores/features/recipes";
 
 export interface RecipeRaw {
   recipe_id: number;
@@ -64,7 +64,7 @@ async function CreateRecipeInfosService(
   duration: number,
   imagePreview: string | null,
   isMorning: boolean,
-  type: string,
+  type: RecipeType,
   recipe: string | null,
 ) {
   const db = await getDb();
@@ -155,11 +155,9 @@ async function AddIngredientToRecipe(
 
 export async function CreateRecipeService(newRecipe: Recipe) {
   const db = await getDb();
-  let createdRecipe: Awaited<
-    ReturnType<typeof CreateRecipeInfosService>
-  > | null = null;
+  let createdRecipe: Recipe | null = null;
   await db.withExclusiveTransactionAsync(async () => {
-    createdRecipe = await CreateRecipeInfosService(
+    const baseRecipe = await CreateRecipeInfosService(
       newRecipe.name,
       newRecipe.duration,
       newRecipe.imagePreview,
@@ -169,16 +167,21 @@ export async function CreateRecipeService(newRecipe: Recipe) {
     );
 
     for (const categoryId of newRecipe.categoryIds) {
-      await AddCategoryToRecipe(categoryId, createdRecipe.id);
+      await AddCategoryToRecipe(categoryId, baseRecipe.id);
     }
     for (const ingredient of newRecipe.ingredients) {
       await AddIngredientToRecipe(
         ingredient.ingredientId,
         ingredient.quantity,
         ingredient.unitId,
-        createdRecipe.id,
+        baseRecipe.id,
       );
     }
+    createdRecipe = {
+      ...baseRecipe,
+      categoryIds: [...newRecipe.categoryIds],
+      ingredients: [...newRecipe.ingredients],
+    };
   });
   if (!createdRecipe) {
     throw new Error("Recipe creation failed");

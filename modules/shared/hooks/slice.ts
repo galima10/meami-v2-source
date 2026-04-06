@@ -28,3 +28,36 @@ export const resetReduxStore = (dispatch: AppDispatch) => {
   dispatch(resetUnits());
   dispatch(resetWeeklyMenu());
 };
+
+import { mockUnits } from "@constants/database/mocks/data/units";
+import { createUnitThunk } from "@stores/thunks/units";
+
+import { mockIngredientCategories } from "@constants/database/mocks/data/ingredientsCategories";
+import { createIngredientCategoryThunk } from "@stores/thunks/ingredientCategories";
+
+import { mockRecipeCategories } from "@constants/database/mocks/data/recipeCategories";
+import { createRecipeCategoryThunk } from "@stores/thunks/recipeCategories";
+
+import { mockCookingUstensils } from "@constants/database/mocks/data/cookingUstensils";
+import { createUstensilThunk } from "@stores/thunks/cookingUstensils";
+
+import { mockIngredients } from "@constants/database/mocks/data/ingredients";
+import { createIngredientThunk } from "@stores/thunks/ingredients";
+
+export const insertMockData = async (dispatch: AppDispatch) => {
+  for (const unit of mockUnits) {
+    await dispatch(createUnitThunk(unit)).unwrap();
+  }
+  for (const ingredientCategory of mockIngredientCategories) {
+    await dispatch(createIngredientCategoryThunk(ingredientCategory)).unwrap();
+  }
+  for (const recipeCategory of mockRecipeCategories) {
+    await dispatch(createRecipeCategoryThunk(recipeCategory)).unwrap();
+  }
+  for (const cookingUstensil of mockCookingUstensils) {
+    await dispatch(createUstensilThunk(cookingUstensil)).unwrap();
+  }
+  for (const ingredient of mockIngredients) {
+    await dispatch(createIngredientThunk(ingredient)).unwrap();
+  }
+};
