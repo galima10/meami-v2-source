@@ -18,7 +18,7 @@ export const fetchUnitsThunk = createAsyncThunk<WithRequiredId<Unit>[], void>(
 
 export const createUnitThunk = createAsyncThunk<WithRequiredId<Unit>, Unit>(
   "units/createUnit",
-  async (newUnit: Unit) => {
+  async (newUnit) => {
     const createdUnit = await CreateUnitService(newUnit);
     return createdUnit;
   },
@@ -26,7 +26,7 @@ export const createUnitThunk = createAsyncThunk<WithRequiredId<Unit>, Unit>(
 
 export const deleteUnitThunk = createAsyncThunk<number, number>(
   "units/deleteUnit",
-  async (unitId: number) => {
+  async (unitId) => {
     await DeleteUnitService(unitId);
     return unitId;
   },
@@ -34,7 +34,7 @@ export const deleteUnitThunk = createAsyncThunk<number, number>(
 
 export const updateUnitThunk = createAsyncThunk<WithRequiredId<Unit>, WithRequiredId<Unit>>(
   "units/updateUnit",
-  async (newUnit: WithRequiredId<Unit>) => {
+  async (newUnit) => {
     await UpdateUnitService(newUnit);
     return newUnit;
   },

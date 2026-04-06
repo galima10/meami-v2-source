@@ -20,14 +20,14 @@ export const fetchRecipesThunk = createAsyncThunk<
 export const createRecipeThunk = createAsyncThunk<
   WithRequiredId<Recipe>,
   Recipe
->("recipes/createRecipe", async (newRecipe: Recipe) => {
+>("recipes/createRecipe", async (newRecipe) => {
   const createdRecipe = await CreateRecipeService(newRecipe);
   return createdRecipe;
 });
 
 export const deleteRecipeThunk = createAsyncThunk<number, number>(
   "recipes/deleteRecipe",
-  async (recipeId: number) => {
+  async (recipeId) => {
     await DeleteRecipeService(recipeId);
     return recipeId;
   },
@@ -36,7 +36,7 @@ export const deleteRecipeThunk = createAsyncThunk<number, number>(
 export const updateRecipeThunk = createAsyncThunk<
   WithRequiredId<Recipe>,
   WithRequiredId<Recipe>
->("recipes/updateRecipe", async (newRecipe: WithRequiredId<Recipe>) => {
+>("recipes/updateRecipe", async (newRecipe) => {
   await UpdateRecipeService(newRecipe);
   return newRecipe;
 });

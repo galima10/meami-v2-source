@@ -21,7 +21,7 @@ export const createUstensilThunk = createAsyncThunk<
   CookingUstensil
 >(
   "cookingUstensils/createUstensil",
-  async (newCookingUstensil: CookingUstensil) => {
+  async (newCookingUstensil) => {
     const createdCookingUstensil =
       await CreateUstensilService(newCookingUstensil);
     return createdCookingUstensil;
@@ -30,7 +30,7 @@ export const createUstensilThunk = createAsyncThunk<
 
 export const deleteUstensilThunk = createAsyncThunk<number, number>(
   "cookingUstensils/deleteUstensil",
-  async (cookingUstensilId: number) => {
+  async (cookingUstensilId) => {
     await DeleteUstensilService(cookingUstensilId);
     return cookingUstensilId;
   },

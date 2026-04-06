@@ -1,220 +1,144 @@
-import {
-  setWeeklyMenu,
-  menuUpdated,
-  menuDoneToggled,
-  clearMenu,
-  ingredientMenuQuantitySetted,
-  Menu,
+import type {
   IngredientMenu,
+  WeeklyMenu,
+  MenuIngredients,
+  WeeklyMenuIngredients,
 } from "@stores/features/weeklyMenu";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  FetchWeeklyMenuService,
+  FetchAllMenusService,
+  SetMenuDoneService,
+  AddIngredientToMenuService,
+  AddRecipeToMenuService,
+  RemoveIngredientToMenuService,
+  RemoveMenuService,
+  RemoveWeeklyMenuService,
+} from "@services/weeklyMenu";
+import {
+  formatWeeklyMenu,
+  formatAllMenus,
+} from "@utils/formatData/formatWeeklyMenu";
+import { findElementById } from "@utils/findElementById";
+import type { RootState } from "@stores/index";
+import type { Recipe } from "@stores/features/recipes";
 
-export async function removeMenu(menuId: number) {
-  /*
-
-
-DELETE FROM
-  menu_ingredient_links
-WHERE
-  EXISTS (
-    SELECT
-      1
-    FROM
-      menus m
-    WHERE
-      m.id_menus = menu_ingredient_links.id_menus
-      AND m.id_menus = menuId
-  );
-
-
-*/
-  // dispatch weeklyMenuSlice clearMenu menuId
+interface IngredientInsert extends IngredientMenu {
+  menuCategoryId: number;
 }
 
-export async function removeIngredientToMenu(ingredientId: number, menu: Menu) {
-  /*
+export const fetchAllMenusThunk = createAsyncThunk<WeeklyMenu, void>(
+  "weeklyMenu/fetchAllMenus",
+  async () => {
+    const data = await FetchAllMenusService();
+    // console.log("data", data);
+    return formatAllMenus(data);
+  },
+);
 
+export const fetchWeeklyMenuThunk = createAsyncThunk<
+  WeeklyMenuIngredients,
+  void
+>("weeklyMenu/fetchWeeklyMenu", async () => {
+  const data = await FetchWeeklyMenuService();
+  return formatWeeklyMenu(data);
+});
 
-DELETE FROM menu_ingredient_links
-WHERE 
-  EXISTS (
-    SELECT 
-      1
-    FROM 
-      menus m
-    JOIN ingredients i ON i.id_ingredients = menu_ingredient_links.id_ingredients
-    WHERE 
-      m.id_menus = menuId
-      AND i.id_ingredients = menu_ingredient_links.id_ingredients
-      AND i.id_ingredients = ingredientId
-  );
+export const addIngredientToMenuThunk = createAsyncThunk<
+  { ingredientsToInsert: MenuIngredients; menuId: number },
+  {
+    newIngredient: IngredientInsert;
+    menuId: number;
+  }
+>("weeklyMenu/addIngredientToMenu", async ({ newIngredient, menuId }) => {
+  const ingredientsToInsert = {
+    [newIngredient.menuCategoryId]: [
+      {
+        ingredientId: newIngredient.ingredientId,
+        quantity: newIngredient.quantity ?? null,
+        unitId: newIngredient.unitId ?? null,
+      },
+    ],
+  };
+  await AddIngredientToMenuService(newIngredient, menuId);
+  return {
+    ingredientsToInsert,
+    menuId,
+  };
+});
 
+export const addRecipeToMenuThunk = createAsyncThunk<
+  { ingredientsToInsert: MenuIngredients; menuId: number },
+  { recipeId: number; menuId: number },
+  { state: RootState }
+>("weeklyMenu/addRecipeToMenu", async ({ recipeId, menuId }, { getState }) => {
+  const state = getState();
+  const recipe: Recipe = findElementById(recipeId, state.recipe.recipes);
 
-*/
-  // select weeklyMenuSlice menu.id et retirer ingredientId dans newMenu
-  // dispatch weeklyMenuSlice menuUpdated newMenu
-}
+  const ingredientsToInsert: MenuIngredients = {};
 
-export async function removeWeeklyMenu() {
-  /*
+  for (const recipeIng of recipe.ingredients) {
+    const menuCategoryId = recipeIng.menuCategoryId;
+    if (!ingredientsToInsert[menuCategoryId])
+      ingredientsToInsert[menuCategoryId] = [];
 
-DELETE FROM
-  menu_ingredient_links;
+    ingredientsToInsert[menuCategoryId].push({
+      ingredientId: recipeIng.ingredientId,
+      quantity: recipeIng.quantity ?? null,
+      unitId: recipeIng.unitId ?? null,
+    });
+  }
 
+  await AddRecipeToMenuService(recipeId, menuId);
 
-UPDATE
-  menus
-SET
-  done = 0;
+  return { ingredientsToInsert, menuId };
+});
 
-*/
-  // dispatch weeklyMenuSlice setWeeklyMenu {}
-}
+export const setMenuDoneThunk = createAsyncThunk<
+  {
+    menuId: number;
+    done: boolean;
+  },
+  {
+    menuId: number;
+    done: boolean;
+  }
+>("weeklyMenu/setMenuDone", async ({ menuId, done }) => {
+  await SetMenuDoneService(menuId, done);
+  return { menuId, done };
+});
 
-export async function setIngredientToMenu(
-  newIngredient: IngredientMenu,
-  menuId: number,
-) {
-  // const unit = utilser une fonction pure qui récupère l'unité entière en fonction de l'abbréviation sur newIngredient.unit
-  /*
+export const removeIngredientToMenuThunk = createAsyncThunk<
+  {
+    ingredientId: number;
+    menuId: number;
+  },
+  {
+    ingredientId: number;
+    menuId: number;
+  }
+>("weeklyMenu/removeIngredientToMenu", async ({ ingredientId, menuId }) => {
+  await RemoveIngredientToMenuService(ingredientId, menuId);
+  return { ingredientId, menuId };
+});
 
+export const removeMenuThunk = createAsyncThunk<number, number>(
+  "weeklyMenu/removeMenu",
+  async (menuId) => {
+    await RemoveMenuService(menuId);
+    return menuId;
+  },
+);
 
-DELETE FROM menu_ingredient_links
-WHERE 
-  EXISTS (
-    SELECT 
-      1
-    FROM 
-      menus m
-    JOIN ingredients i ON i.id_ingredients = menu_ingredient_links.id_ingredients
-    WHERE 
-      m.id_menus = menuId
-      AND i.id_ingredients = menu_ingredient_links.id_ingredients
-      AND i.id_ingredients = newIngredient.id
-  );
+export const removeWeeklyMenuThunk = createAsyncThunk<{}, void>(
+  "weeklyMenu/removeWeeklyMenu",
+  async () => {
+    await RemoveWeeklyMenuService();
+    return {};
+  },
+);
 
-
-
-INSERT INTO
-  menu_ingredient_links (id_menus, id_ingredients, quantity, id_units)
-SELECT
-  DISTINCT m.id_menus,
-  i.id_ingredients,
-  newIngredient.quantity,
-  u.id_units
-FROM
-  menus m
-  JOIN ingredients i ON i.name = newIngredient.id
-  LEFT JOIN units u ON u.name = unit
-  JOIN moments mo ON mo.id_moments = m.id_moments
-  JOIN days d ON d.id_days = m.id_days
-  JOIN ingredient_menu_category_links imcl ON imcl.id_ingredients = i.id_ingredients
-  JOIN menu_categories mc ON mc.id_menu_categories = imcl.id_menu_categories
-  JOIN menu_category_moments_links mcml ON mcml.id_menu_categories = mc.id_menu_categories
-  AND mcml.id_moments = m.id_moments
-WHERE
-  m.id_menus = menuId
-  AND NOT EXISTS (
-    SELECT
-      1
-    FROM
-      menu_ingredient_links mil
-    WHERE
-      mil.id_menus = m.id_menus
-      AND mil.id_ingredients = i.id_ingredients
-  );
-
-
-*/
-  // select weeklyMenuSlice menuId et ajouter newIngredient dans newMenu
-  // dispatch weeklyMenuSlice menuUpdated newMenu
-}
-
-export async function setMenuDone(menuId: number, done: boolean) {
-  /*
-
-
-UPDATE
-  menus
-SET
-  done = done ? 1 : 0
-WHERE
-  id_menus = menuId;
-
-
-*/
-  // dispatch weeklyMenuSlice menuDoneToggled menuId done
-}
-
-export async function addRecipeToMenu(recipeId: number, menuId: number) {
-  /*
-
-
-INSERT INTO
-  menu_ingredient_links (id_menus, id_ingredients, quantity, id_units)
-SELECT
-  m.id_menus,
-  i.id_ingredients,
-  ril.quantity,
-  ril.id_units
-FROM
-  menus m
-  JOIN recipes r ON r.id_recipes = recipeId
-  JOIN recipe_ingredient_links ril ON ril.id_recipes = r.id_recipes
-  JOIN ingredients i ON i.id_ingredients = ril.id_ingredients
-WHERE
-  m.id_menus = menuId
-  AND NOT EXISTS (
-    SELECT
-      1
-    FROM
-      menu_ingredient_links mil
-    WHERE
-      mil.id_menus = m.id_menus
-      AND mil.id_ingredients = i.id_ingredients
-  );
-
-
-*/
-  // select recipesSlice le recette de recipeId et select weeklyMenuSlice menuId pour avoir le menu
-  // Fusionner les ingrédients de la recette aux ingrédients du menu si ils n'y sont pas déjà et aux bonnes catégories de menu
-  // dispatch weeklyMenuSlice menuUpdated menu
-}
-
-export async function fetchWeeklyMenu() {
-  /*
-
-
-SELECT
-  d.name AS day_name,
-  mo.name AS moment_name,
-  m.done,
-  mc.name AS menu_category_name,
-  i.name AS ingredient_name,
-  mil.quantity,
-  u.abbreviation AS unit
-FROM
-  menus m
-  JOIN days d ON d.id_days = m.id_days
-  JOIN moments mo ON mo.id_moments = m.id_moments
-  JOIN menu_ingredient_links mil ON mil.id_menus = m.id_menus
-  JOIN ingredients i ON i.id_ingredients = mil.id_ingredients
-  JOIN ingredient_menu_category_links imcl ON imcl.id_ingredients = i.id_ingredients
-  JOIN menu_categories mc ON mc.id_menu_categories = imcl.id_menu_categories
-  JOIN menu_category_moments_links mcml ON mcml.id_menu_categories = mc.id_menu_categories
-  AND mcml.id_moments = m.id_moments
-  LEFT JOIN units u ON u.id_units = mil.id_units
-ORDER BY
-  m.id_menus,
-  mc.id_menu_categories,
-  i.name;
-
-
-
-*/
-  // dispatch weeklyMenuSlice setWeeklyMenu
-}
-
-export async function setIngredientMenuQuantity(
+async function setIngredientMenuQuantity(
   ingredientId: string,
   menuId: string,
   delta: number,

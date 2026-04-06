@@ -6,35 +6,20 @@ import {
   FetchMomentsService,
   FetchStorageLocationsService,
 } from "@services/seeds";
+import { SeedsInitialState } from "@stores/features/seeds";
 
-export const fetchStorageLocationsThunk = createAsyncThunk<
-  Array<WithRequiredId<SeedRow>>,
+export const fetchInitialDataThunk = createAsyncThunk<
+  Omit<SeedsInitialState, "loading" | "error">,
   void
->("seeds/fetchStorageLocations", async () => {
-  const data = await FetchStorageLocationsService();
-  return data;
-});
-
-export const fetchMenuCategoriesThunk = createAsyncThunk<
-  Array<WithRequiredId<SeedRow>>,
-  void
->("seeds/fetchMenuCategories", async () => {
-  const data = await FetchMenuCategoriesService();
-  return data;
-});
-
-export const fetchDaysThunk = createAsyncThunk<
-  Array<WithRequiredId<SeedRow>>,
-  void
->("seeds/fetchDays", async () => {
-  const data = await FetchDaysService();
-  return data;
-});
-
-export const fetchMomentsThunk = createAsyncThunk<
-  Array<WithRequiredId<SeedRow>>,
-  void
->("seeds/fetchMoments", async () => {
-  const data = await FetchMomentsService();
-  return data;
+>("seeds/fetchInitialData", async () => {
+  const storageLocations = await FetchStorageLocationsService();
+  const menuCategories = await FetchMenuCategoriesService();
+  const days = await FetchDaysService();
+  const moments = await FetchMomentsService();
+  return {
+    storageLocations,
+    menuCategories,
+    days,
+    moments,
+  };
 });

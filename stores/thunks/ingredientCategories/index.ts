@@ -22,17 +22,17 @@ export const createIngredientCategoryThunk = createAsyncThunk<
   IngredientCategory
 >(
   "ingredientCategories/createIngredientCategory",
-  async (newIngredientCategory: IngredientCategory) => {
+  async (newIngredientCategory) => {
     const createdCategory = await CreateIngredientCategoryService(
       newIngredientCategory,
     );
-    return createdCategory; // Retourne l'objet avec l'ID généré
+    return createdCategory;
   },
 );
 
 export const deleteIngredientCategoryThunk = createAsyncThunk<number, number>(
   "ingredientCategories/deleteIngredientCategory",
-  async (ingredientCategoryId: number) => {
+  async (ingredientCategoryId) => {
     await DeleteIngredientCategoryService(ingredientCategoryId);
     return ingredientCategoryId;
   },

@@ -1,13 +1,8 @@
 import type { SeedRow, WithRequiredId } from "@app-types/NameId";
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  fetchDaysThunk,
-  fetchMenuCategoriesThunk,
-  fetchMomentsThunk,
-  fetchStorageLocationsThunk,
-} from "@stores/thunks/seeds";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchInitialDataThunk } from "@stores/thunks/seeds";
 
-interface SeedsInitialState {
+export interface SeedsInitialState {
   storageLocations: Array<WithRequiredId<SeedRow>>;
   menuCategories: Array<WithRequiredId<SeedRow>>;
   days: Array<WithRequiredId<SeedRow>>;
@@ -30,87 +25,38 @@ export const seedSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // fetchStorageLocationsThunk
+    // fetchInitialDataThunk
     builder
-      .addCase(fetchStorageLocationsThunk.pending, (state) => {
+      .addCase(fetchInitialDataThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchStorageLocationsThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        if (state.storageLocations.length === 0) {
-          state.storageLocations = action.payload;
-        }
-      })
       .addCase(
-        fetchStorageLocationsThunk.rejected,
+        fetchInitialDataThunk.fulfilled,
         (
           state,
-          action: ReturnType<typeof fetchStorageLocationsThunk.rejected>,
+          action: PayloadAction<Omit<SeedsInitialState, "loading" | "error">>,
         ) => {
           state.loading = false;
-          state.error = action.error.message ?? "Erreur inconnue";
+          const { storageLocations, days, menuCategories, moments } =
+            action.payload;
+          if (state.menuCategories.length === 0) {
+            state.menuCategories = menuCategories;
+          }
+          if (state.storageLocations.length === 0) {
+            state.storageLocations = storageLocations;
+          }
+          if (state.days.length === 0) {
+            state.days = days;
+          }
+          if (state.moments.length === 0) {
+            state.moments = moments;
+          }
         },
-      );
-
-    // fetchMenuCategoriesThunk
-    builder
-      .addCase(fetchMenuCategoriesThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchMenuCategoriesThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        if (state.menuCategories.length === 0) {
-          state.menuCategories = action.payload;
-        }
-      })
+      )
       .addCase(
-        fetchMenuCategoriesThunk.rejected,
-        (
-          state,
-          action: ReturnType<typeof fetchMenuCategoriesThunk.rejected>,
-        ) => {
-          state.loading = false;
-          state.error = action.error.message ?? "Erreur inconnue";
-        },
-      );
-
-    // fetchDaysThunk
-    builder
-      .addCase(fetchDaysThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchDaysThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        if (state.days.length === 0) {
-          state.days = action.payload;
-        }
-      })
-      .addCase(
-        fetchDaysThunk.rejected,
-        (state, action: ReturnType<typeof fetchDaysThunk.rejected>) => {
-          state.loading = false;
-          state.error = action.error.message ?? "Erreur inconnue";
-        },
-      );
-
-    // fetchMomentsThunk
-    builder
-      .addCase(fetchMomentsThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchMomentsThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        if (state.moments.length === 0) {
-          state.moments = action.payload;
-        }
-      })
-      .addCase(
-        fetchMomentsThunk.rejected,
-        (state, action: ReturnType<typeof fetchMomentsThunk.rejected>) => {
+        fetchInitialDataThunk.rejected,
+        (state, action: ReturnType<typeof fetchInitialDataThunk.rejected>) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },

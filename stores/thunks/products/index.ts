@@ -20,14 +20,14 @@ export const fetchProductsThunk = createAsyncThunk<
 export const createProductThunk = createAsyncThunk<
   WithRequiredId<Product>,
   Product
->("products/createProduct", async (newProduct: Product) => {
+>("products/createProduct", async (newProduct) => {
   const createdProduct = await CreateProductService(newProduct);
   return createdProduct;
 });
 
 export const deleteProductThunk = createAsyncThunk<number, number>(
   "products/deleteProduct",
-  async (productId: number) => {
+  async (productId) => {
     await DeleteProductService(productId);
     return productId;
   },
@@ -36,7 +36,7 @@ export const deleteProductThunk = createAsyncThunk<number, number>(
 export const updateProductThunk = createAsyncThunk<
   WithRequiredId<Product>,
   WithRequiredId<Product>
->("products/updateProduct", async (newProduct: WithRequiredId<Product>) => {
+>("products/updateProduct", async (newProduct) => {
   await UpdateProductService(newProduct);
   return newProduct;
 });

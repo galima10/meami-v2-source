@@ -21,7 +21,7 @@ export const createRecipeCategoryThunk = createAsyncThunk<
   RecipeCategory
 >(
   "recipeCategories/createRecipeCategory",
-  async (newRecipeCategory: RecipeCategory) => {
+  async (newRecipeCategory) => {
     const createdRecipeCategory =
       await CreateRecipeCategoryService(newRecipeCategory);
     return createdRecipeCategory;
@@ -30,7 +30,7 @@ export const createRecipeCategoryThunk = createAsyncThunk<
 
 export const deleteRecipeCategoryThunk = createAsyncThunk<number, number>(
   "recipeCategories/deleteRecipeCategory",
-  async (recipeCategoryId: number) => {
+  async (recipeCategoryId) => {
     await DeleteRecipeCategoryService(recipeCategoryId);
     return recipeCategoryId;
   },

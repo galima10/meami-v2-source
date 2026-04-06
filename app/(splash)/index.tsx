@@ -1,13 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import {
-  fetchDaysThunk,
-  fetchMenuCategoriesThunk,
-  fetchMomentsThunk,
-  fetchStorageLocationsThunk,
-} from "@stores/thunks/seeds";
-import { getDb } from "@database/database";
 import { useAppDispatch, useAppSelector } from "features/shared/hooks/redux";
 import type { WithRequiredId } from "@app-types/NameId";
 import type { CookingInfo } from "@stores/features/cookingInfos";
@@ -18,6 +11,7 @@ import type { Ingredient } from "@stores/features/ingredients";
 import type { Product } from "@stores/features/products";
 import type { RecipeCategory } from "@stores/features/recipeCategories";
 import type { Recipe } from "@stores/features/recipes";
+import { getDb } from "@database/database";
 
 import {
   fetchRecipesThunk,
@@ -163,9 +157,10 @@ const recipe1: Recipe = {
   isMorning: false,
   ingredients: [
     {
-      id: 3,
+      ingredientId: 3,
       quantity: 1,
       unitId: 5,
+      menuCategoryId: 1,
     },
   ],
 };
@@ -181,9 +176,10 @@ const newRecipe1: WithRequiredId<Recipe> = {
   isMorning: true,
   ingredients: [
     {
-      id: 3,
+      ingredientId: 3,
       quantity: 1,
       unitId: 5,
+      menuCategoryId: 1,
     },
   ],
 };
@@ -206,6 +202,7 @@ export default function Splash() {
   const { products } = useAppSelector((state) => state.product);
   const { ingredients } = useAppSelector((state) => state.ingredient);
   const { recipes } = useAppSelector((state) => state.recipe);
+  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   // const router = useRouter();
 
   async function handleAdd() {
@@ -267,11 +264,6 @@ export default function Splash() {
   }
 
   useEffect(() => {
-    dispatch(fetchDaysThunk());
-    dispatch(fetchStorageLocationsThunk());
-    dispatch(fetchMenuCategoriesThunk());
-    dispatch(fetchMomentsThunk());
-
     dispatch(fetchStorageInfosThunk());
     dispatch(fetchCookingInfosThunk());
     dispatch(fetchCookingUstensilsThunk());
@@ -282,15 +274,18 @@ export default function Splash() {
     dispatch(fetchIngredientsThunk());
     dispatch(fetchRecipesThunk());
   }, []);
+  useEffect(() => {
+    console.log("weeklyMenu", weeklyMenu);
+  }, [weeklyMenu]);
 
   // useEffect(() => {
   //   const debug = async () => {
   //     const db = await getDb();
 
-  //     const test = await db.getAllAsync(
-  //       "SELECT * FROM recipe_ingredient_links",
-  //     );
-  //     console.log("DB : ", test);
+  //     // const test = await db.getAllAsync(
+  //     //   "SELECT * FROM menus",
+  //     // );
+  //     // console.log("DB : ", test);
   //     for (const recipe of recipes) {
   //       console.log("Slice : ", recipe.ingredients);
   //     }
@@ -311,7 +306,7 @@ export default function Splash() {
   //   };
 
   //   debug();
-  // }, [recipes]);
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -441,7 +436,9 @@ export default function Splash() {
           : [];
         const ingredientsRecipe = r.ingredients
           .map((ri) => {
-            const ingredient = ingredients.find((i) => i.id === ri.id);
+            const ingredient = ingredients.find(
+              (i) => i.id === ri.ingredientId,
+            );
             if (!ingredient) return null; // filtre les cas où l'ingrédient n'existe pas
             return {
               ...ingredient, // infos globales de l'ingrédient (nom, stock, etc.)
@@ -456,9 +453,9 @@ export default function Splash() {
         return (
           <View key={`recipes-${r.id}`}>
             <Text>
-              id: {r.id} :: {r.name} - {r.type} - {r.duration} min - {r.imagePreview} -{" "}
-              {r.recipe} - isMorning: {r.isMorning ? "true" : "false"} :{" "}
-              {r.id}{" "}
+              id: {r.id} :: {r.name} - {r.type} - {r.duration} min -{" "}
+              {r.imagePreview} - {r.recipe} - isMorning:{" "}
+              {r.isMorning ? "true" : "false"} : {r.id}{" "}
             </Text>
             {categories.map((rc, index) => {
               return <Text key={`category-${index}`}>{rc.name}</Text>;

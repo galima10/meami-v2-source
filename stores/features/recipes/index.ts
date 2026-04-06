@@ -19,12 +19,18 @@ export interface Recipe {
   ingredients: RecipeIngredient[];
 }
 
-type RecipeType = "petit-déj." | "plat princ." | "légumes" | "accomp." | "dessert";
+type RecipeType =
+  | "petit-déj."
+  | "plat princ."
+  | "légumes"
+  | "accomp."
+  | "dessert";
 
 export interface RecipeIngredient {
-  id: number;
-  quantity: number;
-  unitId: number;
+  ingredientId: number;
+  quantity: number | null;
+  unitId: number | null;
+  menuCategoryId: number;
 }
 
 const initialState = {
@@ -106,9 +112,7 @@ export const recipeSlice = createSlice({
           state.loading = false;
 
           const recipeId = action.payload.id;
-          const index = state.recipes.findIndex(
-            (item) => item.id === recipeId,
-          );
+          const index = state.recipes.findIndex((item) => item.id === recipeId);
 
           if (index !== -1) {
             state.recipes[index] = action.payload;

@@ -14,6 +14,7 @@ export interface RecipeRaw {
   ingredient_id: number;
   quantity: number;
   unit_id: number;
+  menu_category_id: number;
 }
 
 export async function FetchRecipesService() {
@@ -30,7 +31,8 @@ export async function FetchRecipesService() {
       GROUP_CONCAT(DISTINCT rc.id_recipe_categories) AS recipe_category_ids,
       i.id_ingredients as ingredient_id,
       ril.quantity,
-      u.id_units AS unit_id
+      u.id_units AS unit_id,
+      ril.id_menu_categories
     FROM
       recipes r
       LEFT JOIN recipe_category_links rcl ON rcl.id_recipes = r.id_recipes
@@ -130,8 +132,8 @@ async function AddCategoryToRecipe(recipeCategoryId: number, recipId: number) {
 
 async function AddIngredientToRecipe(
   ingredientId: number,
-  quantity: number,
-  unitId: number,
+  quantity: number | null,
+  unitId: number | null,
   recipeId: number,
 ) {
   const db = await getDb();
@@ -171,7 +173,7 @@ export async function CreateRecipeService(newRecipe: Recipe) {
     }
     for (const ingredient of newRecipe.ingredients) {
       await AddIngredientToRecipe(
-        ingredient.id,
+        ingredient.ingredientId,
         ingredient.quantity,
         ingredient.unitId,
         createdRecipe.id,
@@ -281,7 +283,7 @@ export async function UpdateRecipeService(newRecipe: WithRequiredId<Recipe>) {
     await RemoveIngredientsFromRecipeService(newRecipe.id);
     for (const ingredient of newRecipe.ingredients) {
       await AddIngredientToRecipe(
-        ingredient.id,
+        ingredient.ingredientId,
         ingredient.quantity,
         ingredient.unitId,
         newRecipe.id,

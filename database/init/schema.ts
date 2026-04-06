@@ -284,12 +284,14 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         id_ingredients INTEGER NOT NULL,
         quantity INTEGER,
         id_units INTEGER,
+        id_menu_categories INTEGER,
         -- primary key
         PRIMARY KEY (id_recipes, id_ingredients),
         -- foreign keys
         CONSTRAINT FK_RecipeIngredientLinks_Recipes FOREIGN KEY (id_recipes) REFERENCES recipes (id_recipes) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT FK_RecipeIngredientLinks_Ingredients FOREIGN KEY (id_ingredients) REFERENCES ingredients (id_ingredients) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT FK_RecipeIngredientLinks_Units FOREIGN KEY (id_units) REFERENCES units (id_units) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT FK_RecipeIngredientLinks_Units FOREIGN KEY (id_units) REFERENCES units (id_units) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT FK_RecipeIngredientLinks_MenuCategories FOREIGN KEY (id_menu_categories) REFERENCES menu_categories (id_menu_categories) ON DELETE CASCADE ON UPDATE CASCADE
       );
 
       CREATE TABLE IF NOT EXISTS recipe_category_links (

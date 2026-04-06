@@ -127,7 +127,6 @@ export async function SetStorageInfoService(newStorageInfo: StorageInfo) {
           units: sd.units,
         });
 
-        // On met le premier id global de StorageInfo sur le premier enregistrement
         if (index === 0 && storageInfoResult.id === 0) {
           storageInfoResult.id = createdDuration.id!;
         }

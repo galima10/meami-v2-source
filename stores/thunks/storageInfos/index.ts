@@ -10,7 +10,7 @@ import { formatStorageInfos } from "@utils/formatData/formatStorageInfos";
 
 export const removeStorageInfoThunk = createAsyncThunk<number, number>(
   "storageInfos/removeStorageInfo",
-  async (ingredientId: number) => {
+  async (ingredientId) => {
     await RemoveStorageInfoService(ingredientId);
     return ingredientId;
   },
@@ -19,7 +19,7 @@ export const removeStorageInfoThunk = createAsyncThunk<number, number>(
 export const setStorageInfoThunk = createAsyncThunk<
   WithRequiredId<StorageInfo>,
   StorageInfo
->("storageInfos/setStorageInfo", async (newStorageInfo: StorageInfo) => {
+>("storageInfos/setStorageInfo", async (newStorageInfo) => {
   const createdStorageInfo = await SetStorageInfoService(newStorageInfo);
   return createdStorageInfo;
 });

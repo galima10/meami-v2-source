@@ -11,7 +11,7 @@ import {
 
 export const removeCookingInfoThunk = createAsyncThunk<number, number>(
   "cookingInfos/removeCookingInfo",
-  async (ingredientId: number) => {
+  async (ingredientId) => {
     await RemoveCookingInfoService(ingredientId);
     return ingredientId;
   },
@@ -20,7 +20,7 @@ export const removeCookingInfoThunk = createAsyncThunk<number, number>(
 export const setCookingInfoThunk = createAsyncThunk<
   WithRequiredId<CookingInfo>,
   CookingInfo
->("cookingInfos/setCookingInfo", async (newCookingInfo: CookingInfo) => {
+>("cookingInfos/setCookingInfo", async (newCookingInfo) => {
   const createdCookingInfo = await SetCookingInfoService(newCookingInfo);
   return createdCookingInfo;
 });

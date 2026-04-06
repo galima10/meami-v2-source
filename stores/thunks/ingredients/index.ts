@@ -1,6 +1,6 @@
 import type { Ingredient } from "@stores/features/ingredients";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { WithRequiredId, SeedRow } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/NameId";
 import {
   FetchIngredientsService,
   UpdateIngredientService,
@@ -23,7 +23,7 @@ export const fetchIngredientsThunk = createAsyncThunk<
 export const createIngredientThunk = createAsyncThunk<
   WithRequiredId<Ingredient>,
   Ingredient
->("ingredients/createIngredient", async (newIngredient: Ingredient) => {
+>("ingredients/createIngredient", async (newIngredient) => {
   const createdIngredient = await CreateIngredientService(newIngredient);
   return createdIngredient;
 });
@@ -31,13 +31,10 @@ export const createIngredientThunk = createAsyncThunk<
 export const updateIngredientThunk = createAsyncThunk<
   WithRequiredId<Ingredient>,
   WithRequiredId<Ingredient>
->(
-  "ingredients/updateIngredient",
-  async (newIngredient: WithRequiredId<Ingredient>) => {
-    await UpdateIngredientService(newIngredient);
-    return newIngredient;
-  },
-);
+>("ingredients/updateIngredient", async (newIngredient) => {
+  await UpdateIngredientService(newIngredient);
+  return newIngredient;
+});
 
 export const updateStorageLocationsThunk = createAsyncThunk<
   {
@@ -50,13 +47,7 @@ export const updateStorageLocationsThunk = createAsyncThunk<
   }
 >(
   "ingredients/updateStorageLocations",
-  async ({
-    ingredientId,
-    newStorageLocationsIds,
-  }: {
-    ingredientId: number;
-    newStorageLocationsIds: number[];
-  }) => {
+  async ({ ingredientId, newStorageLocationsIds }) => {
     await UpdateStorageLocationsService(ingredientId, newStorageLocationsIds);
     return {
       ingredientId,
@@ -78,7 +69,7 @@ export const setQuantifiableThunk = createAsyncThunk<
 
 export const deleteIngredientThunk = createAsyncThunk<number, number>(
   "ingredients/deleteIngredient",
-  async (ingredientId: number) => {
+  async (ingredientId) => {
     await DeleteIngredientService(ingredientId);
     return ingredientId;
   },
@@ -87,7 +78,7 @@ export const deleteIngredientThunk = createAsyncThunk<number, number>(
 export const updateStockThunk = createAsyncThunk<
   WithRequiredId<Ingredient>[],
   "menu" | "shopping"
->("ingredients/updateStock", async (from: "menu" | "shopping") => {
+>("ingredients/updateStock", async (from) => {
   await UpdateStockService(from);
   const data = await FetchIngredientsService();
   return formatIngredients(data);

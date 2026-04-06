@@ -27,9 +27,10 @@ export function formatRecipes(rawData: RecipeRaw[]): WithRequiredId<Recipe>[] {
 
       if (!recipe.ingredientsMap[item.ingredient_id]) {
         recipe.ingredientsMap[item.ingredient_id] = {
-          id: item.ingredient_id,
+          ingredientId: item.ingredient_id,
           quantity: item.quantity,
           unitId: item.unit_id,
+          menuCategoryId: item.menu_category_id,
         };
       }
 
