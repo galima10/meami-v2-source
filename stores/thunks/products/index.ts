@@ -1,4 +1,4 @@
-import type { Product } from "@stores/features/products";
+import type { Product, Products } from "@stores/features/products";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { WithRequiredId } from "@app-types/NameId";
 import { formatProducts } from "@utils/formatData/formatProducts";
@@ -10,7 +10,7 @@ import {
 } from "@services/products";
 
 export const fetchProductsThunk = createAsyncThunk<
-  WithRequiredId<Product>[],
+  Products,
   void
 >("products/fetchProducts", async () => {
   const data = await FetchProductsService();
@@ -18,7 +18,7 @@ export const fetchProductsThunk = createAsyncThunk<
 });
 
 export const createProductThunk = createAsyncThunk<
-  WithRequiredId<Product>,
+  Products,
   Product
 >("products/createProduct", async (newProduct) => {
   const createdProduct = await CreateProductService(newProduct);
@@ -34,8 +34,8 @@ export const deleteProductThunk = createAsyncThunk<number, number>(
 );
 
 export const updateProductThunk = createAsyncThunk<
-  WithRequiredId<Product>,
-  WithRequiredId<Product>
+  Products,
+  Products
 >("products/updateProduct", async (newProduct) => {
   await UpdateProductService(newProduct);
   return newProduct;

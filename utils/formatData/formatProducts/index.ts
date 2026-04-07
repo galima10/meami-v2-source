@@ -12,5 +12,6 @@ export function formatProducts(
       stockQuantity: data.stock_quantity,
     };
   });
+  
   return treated;
 }

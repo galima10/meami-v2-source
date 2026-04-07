@@ -8,13 +8,16 @@ import {
 } from "@stores/thunks/products";
 
 export interface Product {
-  id?: number;
   name: string;
   stockQuantity: number;
 }
 
+export interface Products {
+  [productId: number]: Product;
+}
+
 const initialState = {
-  products: [] as WithRequiredId<Product>[],
+  products: {} as Products,
   selectedId: null as number | null,
   loading: false,
   error: null as string | null,
@@ -31,27 +34,27 @@ export const productSlice = createSlice({
     clearProductIdSelected: (state) => {
       state.selectedId = null;
     },
-    productStockQuantitySetted: (
-      state,
-      action: PayloadAction<{ ingredientId: number; delta: number }>,
-    ) => {
-      const { ingredientId, delta } = action.payload;
-      const index = state.products.findIndex(
-        (item) => item.id === ingredientId,
-      );
+    // productStockQuantitySetted: (
+    //   state,
+    //   action: PayloadAction<{ ingredientId: number; delta: number }>,
+    // ) => {
+    //   const { ingredientId, delta } = action.payload;
+    //   const index = state.products.findIndex(
+    //     (item) => item.id === ingredientId,
+    //   );
 
-      if (index !== -1) {
-        const newQuantity =
-          delta !== -1 && delta !== 1
-            ? delta
-            : state.products[index].stockQuantity + delta;
+    //   if (index !== -1) {
+    //     const newQuantity =
+    //       delta !== -1 && delta !== 1
+    //         ? delta
+    //         : state.products[index].stockQuantity + delta;
 
-        state.products[index] = {
-          ...state.products[index],
-          stockQuantity: newQuantity,
-        };
-      }
-    },
+    //     state.products[index] = {
+    //       ...state.products[index],
+    //       stockQuantity: newQuantity,
+    //     };
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     // fetchProductsThunk
@@ -62,9 +65,9 @@ export const productSlice = createSlice({
       })
       .addCase(
         fetchProductsThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Product>[]>) => {
+        (state, action: PayloadAction<Products>) => {
           state.loading = false;
-          if (state.products.length === 0) {
+          if (Object.keys(state.products).length === 0) {
             state.products = action.payload;
           }
         },
@@ -85,13 +88,13 @@ export const productSlice = createSlice({
       })
       .addCase(
         createProductThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Product>>) => {
+        (state, action: PayloadAction<Products>) => {
           state.loading = false;
 
-          const exists = state.products.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.products.push(action.payload);
+          const [productIdStr] = Object.keys(action.payload);
+          const productId = Number(productIdStr);
+
+          state.products[productId] = action.payload[productId];
         },
       )
       .addCase(
@@ -110,15 +113,13 @@ export const productSlice = createSlice({
       })
       .addCase(
         updateProductThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Product>>) => {
+        (state, action: PayloadAction<Products>) => {
           state.loading = false;
 
-          const unitId = action.payload.id;
-          const index = state.products.findIndex((item) => item.id === unitId);
+          const [productIdStr] = Object.keys(action.payload);
+          const productId = Number(productIdStr);
 
-          if (index !== -1) {
-            state.products[index] = action.payload;
-          }
+          state.products[productId] = action.payload[productId];
         },
       )
       .addCase(
@@ -139,14 +140,7 @@ export const productSlice = createSlice({
         deleteProductThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.products.some(
-            (item) => item.id === action.payload,
-          );
-          if (exists) {
-            state.products = state.products.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.products[action.payload];
         },
       )
       .addCase(
@@ -162,7 +156,6 @@ export const productSlice = createSlice({
 export const {
   productIdSelected,
   clearProductIdSelected,
-  productStockQuantitySetted,
   resetProducts,
 } = productSlice.actions;
 export default productSlice.reducer;

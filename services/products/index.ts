@@ -1,5 +1,5 @@
 import { getDb } from "@database/database";
-import type { Product } from "@stores/features/products";
+import type { Product, Products } from "@stores/features/products";
 import { WithRequiredId } from "@app-types/NameId";
 
 export interface ProductRaw {
@@ -33,10 +33,11 @@ export async function DeleteProductService(productId: number) {
   );
 }
 
-export async function UpdateProductService(
-  newProduct: WithRequiredId<Product>,
-) {
+export async function UpdateProductService(newProduct: Products) {
   const db = await getDb();
+  const [productIdStr] = Object.keys(newProduct);
+  const productId = Number(productIdStr);
+  const [values] = Object.values(newProduct);
   await db.runAsync(
     `
     UPDATE
@@ -47,7 +48,7 @@ export async function UpdateProductService(
     WHERE
       id_products = ?;
   `,
-    [newProduct.name, newProduct.stockQuantity, newProduct.id],
+    [values.name, values.stockQuantity, productId],
   );
 }
 
@@ -63,5 +64,9 @@ export async function CreateProductService(newProduct: Product) {
     [newProduct.name, newProduct.stockQuantity],
   );
   const id = result.lastInsertRowId;
-  return { id, ...newProduct };
+  return {
+    [id]: {
+      ...newProduct,
+    },
+  } as Products;
 }

@@ -147,7 +147,7 @@ async function AddIngredientToRecipe(
         id_units
       )
     VALUES
-      (?, ?, ?, ?);
+      (?, ?, MAX(0, ?), ?);
   `,
     [recipeId, ingredientId, quantity, unitId],
   );
