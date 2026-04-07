@@ -3,8 +3,10 @@ import { useAppSelector, useAppDispatch } from "@modules/shared/hooks/redux";
 
 export default function TestButton() {
   const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { products } = useAppSelector((state) => state.product);
+  const { recipes } = useAppSelector((state) => state.recipe);
   const handleTestLog = () => {
-    console.log(ingredients);
+    console.log("ingredients", products);
   };
   return (
     <TouchableOpacity style={styles.testButton} onPress={handleTestLog}>

@@ -47,6 +47,9 @@ import { createIngredientThunk } from "@stores/thunks/ingredients";
 import { mockRecipes } from "@constants/database/mocks/data/recipes";
 import { createRecipeThunk } from "@stores/thunks/recipes";
 
+import { mockProducts } from "@constants/database/mocks/data/products";
+import { createProductThunk } from "@stores/thunks/products";
+
 export const insertMockData = async (dispatch: AppDispatch) => {
   for (const unit of mockUnits) {
     await dispatch(createUnitThunk(unit)).unwrap();
@@ -65,5 +68,8 @@ export const insertMockData = async (dispatch: AppDispatch) => {
   }
   for (const recipe of mockRecipes) {
     await dispatch(createRecipeThunk(recipe)).unwrap();
+  }
+  for (const product of mockProducts) {
+    await dispatch(createProductThunk(product)).unwrap();
   }
 };
