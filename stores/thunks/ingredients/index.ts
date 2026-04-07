@@ -1,4 +1,4 @@
-import type { Ingredient } from "@stores/features/ingredients";
+import type { Ingredient, Ingredients } from "@stores/features/ingredients";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { WithRequiredId } from "@app-types/NameId";
 import {
@@ -12,26 +12,25 @@ import {
 } from "@services/ingredients";
 import { formatIngredients } from "@utils/formatData/formatIngredients";
 
-export const fetchIngredientsThunk = createAsyncThunk<
-  WithRequiredId<Ingredient>[],
-  void
->("ingredients/fetchIngredients", async () => {
-  const data = await FetchIngredientsService();
-  return formatIngredients(data);
-});
+export const fetchIngredientsThunk = createAsyncThunk<Ingredients, void>(
+  "ingredients/fetchIngredients",
+  async () => {
+    const data = await FetchIngredientsService();
+    return formatIngredients(data);
+  },
+);
 
 export const createIngredientThunk = createAsyncThunk<
-  WithRequiredId<Ingredient>,
+  Ingredients,
   Ingredient
 >("ingredients/createIngredient", async (newIngredient) => {
-  console.log("newIngredient", newIngredient);
   const createdIngredient = await CreateIngredientService(newIngredient);
   return createdIngredient;
 });
 
 export const updateIngredientThunk = createAsyncThunk<
-  WithRequiredId<Ingredient>,
-  WithRequiredId<Ingredient>
+  Ingredients,
+  Ingredients
 >("ingredients/updateIngredient", async (newIngredient) => {
   await UpdateIngredientService(newIngredient);
   return newIngredient;
@@ -77,7 +76,7 @@ export const deleteIngredientThunk = createAsyncThunk<number, number>(
 );
 
 export const updateStockThunk = createAsyncThunk<
-  WithRequiredId<Ingredient>[],
+  Ingredients,
   "menu" | "shopping"
 >("ingredients/updateStock", async (from) => {
   await UpdateStockService(from);

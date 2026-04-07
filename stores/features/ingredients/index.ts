@@ -11,7 +11,6 @@ import {
 } from "@stores/thunks/ingredients";
 
 export interface Ingredient {
-  id?: number;
   name: string;
   categoryId: number;
   stockQuantity: number;
@@ -21,8 +20,12 @@ export interface Ingredient {
   storageLocationIds: number[] | null;
 }
 
+export interface Ingredients {
+  [ingredientId: number]: Ingredient;
+}
+
 const initialState = {
-  ingredients: [] as WithRequiredId<Ingredient>[],
+  ingredients: {} as Ingredients,
   selectedId: null as number | null,
   loading: false,
   error: null as string | null,
@@ -39,27 +42,29 @@ export const ingredientSlice = createSlice({
     clearIngredientIdSelected: (state) => {
       state.selectedId = null;
     },
-    ingredientStockQuantitySetted: (
-      state,
-      action: PayloadAction<{ ingredientId: number; delta: number }>,
-    ) => {
-      const { ingredientId, delta } = action.payload;
-      const index = state.ingredients.findIndex(
-        (item) => item.id === ingredientId,
-      );
+    // ingredientStockQuantitySetted: (
+    //   state,
+    //   action: PayloadAction<{ ingredientId: number; delta: number }>,
+    // ) => {
+    //   const { ingredientId, delta } = action.payload;
+    //   const index = state.ingredients.findIndex(
+    //     (item) => item.id === ingredientId,
+    //   );
 
-      if (index !== -1) {
-        const newQuantity =
-          delta !== -1 && delta !== 1
-            ? delta
-            : state.ingredients[index].stockQuantity + delta;
+    //   const ingredient = state.ingredients[ingredientId];
 
-        state.ingredients[index] = {
-          ...state.ingredients[index],
-          stockQuantity: newQuantity,
-        };
-      }
-    },
+    //   if (index !== -1) {
+    //     const newQuantity =
+    //       delta !== -1 && delta !== 1
+    //         ? delta
+    //         : state.ingredients[index].stockQuantity + delta;
+
+    //     state.ingredients[index] = {
+    //       ...state.ingredients[index],
+    //       stockQuantity: newQuantity,
+    //     };
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     // fetchIngredientsThunk
@@ -70,9 +75,9 @@ export const ingredientSlice = createSlice({
       })
       .addCase(
         fetchIngredientsThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Ingredient>[]>) => {
+        (state, action: PayloadAction<Ingredients>) => {
           state.loading = false;
-          if (state.ingredients.length === 0) {
+          if (Object.values(state.ingredients).length === 0) {
             state.ingredients = action.payload;
           }
         },
@@ -93,13 +98,13 @@ export const ingredientSlice = createSlice({
       })
       .addCase(
         createIngredientThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Ingredient>>) => {
+        (state, action: PayloadAction<Ingredients>) => {
           state.loading = false;
 
-          const exists = state.ingredients.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.ingredients.push(action.payload);
+          const [ingredientIdStr] = Object.keys(action.payload);
+          const ingredientId = Number(ingredientIdStr);
+
+          state.ingredients[ingredientId] = action.payload[ingredientId];
         },
       )
       .addCase(
@@ -118,17 +123,13 @@ export const ingredientSlice = createSlice({
       })
       .addCase(
         updateIngredientThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Ingredient>>) => {
+        (state, action: PayloadAction<Ingredients>) => {
           state.loading = false;
 
-          const ingredientId = action.payload.id;
-          const index = state.ingredients.findIndex(
-            (item) => item.id === ingredientId,
-          );
+          const [ingredientIdStr] = Object.keys(action.payload);
+          const ingredientId = Number(ingredientIdStr);
 
-          if (index !== -1) {
-            state.ingredients[index] = action.payload;
-          }
+          state.ingredients[ingredientId] = action.payload[ingredientId];
         },
       )
       .addCase(
@@ -156,15 +157,10 @@ export const ingredientSlice = createSlice({
         ) => {
           state.loading = false;
 
-          const ingredientId = action.payload.ingredientId;
-          const index = state.ingredients.findIndex(
-            (item) => item.id === ingredientId,
-          );
+          const { ingredientId, newStorageLocationsIds } = action.payload;
 
-          if (index !== -1) {
-            state.ingredients[index].storageLocationIds =
-              action.payload.newStorageLocationsIds;
-          }
+          state.ingredients[ingredientId].storageLocationIds =
+            newStorageLocationsIds;
         },
       )
       .addCase(
@@ -194,16 +190,9 @@ export const ingredientSlice = createSlice({
           }>,
         ) => {
           state.loading = false;
+          const { ingredientId, newQuantifiable } = action.payload;
 
-          const ingredientId = action.payload.ingredientId;
-          const index = state.ingredients.findIndex(
-            (item) => item.id === ingredientId,
-          );
-
-          if (index !== -1) {
-            state.ingredients[index].quantifiable =
-              action.payload.newQuantifiable;
-          }
+          state.ingredients[ingredientId].quantifiable = newQuantifiable;
         },
       )
       .addCase(
@@ -224,14 +213,7 @@ export const ingredientSlice = createSlice({
         deleteIngredientThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.ingredients.some(
-            (item) => item.id === action.payload,
-          );
-          if (exists) {
-            state.ingredients = state.ingredients.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.ingredients[action.payload];
         },
       )
       .addCase(
@@ -240,24 +222,21 @@ export const ingredientSlice = createSlice({
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },
-      );
+      )
 
-    // updateStockThunk
-    builder
-      .addCase(updateStockThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      // updateStockThunk
       .addCase(
         updateStockThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Ingredient>[]>) => {
+        (state, action: PayloadAction<Ingredients>) => {
           state.loading = false;
 
-          const map = new Map(state.ingredients.map((i) => [i.id, i]));
+          const updatedIngredients = action.payload;
 
-          for (const updated of action.payload) {
-            const existing = map.get(updated.id);
+          for (const ingredientIdStr of Object.keys(updatedIngredients)) {
+            const ingredientId = Number(ingredientIdStr);
+            const updated = updatedIngredients[ingredientId];
 
+            const existing = state.ingredients[ingredientId];
             if (existing && existing.stockQuantity !== updated.stockQuantity) {
               existing.stockQuantity = updated.stockQuantity;
             }
@@ -274,6 +253,9 @@ export const ingredientSlice = createSlice({
   },
 });
 
-export const { selectIngredientId, clearIngredientIdSelected, resetIngredients } =
-  ingredientSlice.actions;
+export const {
+  selectIngredientId,
+  clearIngredientIdSelected,
+  resetIngredients,
+} = ingredientSlice.actions;
 export default ingredientSlice.reducer;

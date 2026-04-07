@@ -1,6 +1,6 @@
 import type { WithRequiredId } from "@app-types/NameId";
 import { getDb } from "@database/database";
-import type { Ingredient } from "@stores/features/ingredients";
+import type { Ingredient, Ingredients } from "@stores/features/ingredients";
 
 export interface IngredientRaw {
   ingredient_id: number;
@@ -138,9 +138,12 @@ async function AddStorageLocationToIngredientService(
   );
 }
 
-export async function CreateIngredientService(newIngredient: Ingredient) {
+export async function CreateIngredientService(
+  newIngredient: Ingredient,
+): Promise<Ingredients> {
   const db = await getDb();
-  let createdIngredient: Ingredient | null = null;
+  let createdIngredient: Ingredients | null = null;
+
   await db.withExclusiveTransactionAsync(async () => {
     const baseIngredient = await CreateIngredientInfosService(
       newIngredient.name,
@@ -149,27 +152,40 @@ export async function CreateIngredientService(newIngredient: Ingredient) {
       newIngredient.unitId,
       newIngredient.categoryId,
     );
+
     for (const menuCategoryId of newIngredient.menuCategoryIds) {
       await AddMenuCategoryToIngredientService(
         menuCategoryId,
         baseIngredient.id,
       );
     }
-    for (const storageLocationId of newIngredient.storageLocationIds) {
-      await AddStorageLocationToIngredientService(
-        storageLocationId,
-        baseIngredient.id,
-      );
+
+    if (newIngredient.storageLocationIds) {
+      for (const storageLocationId of newIngredient.storageLocationIds) {
+        await AddStorageLocationToIngredientService(
+          storageLocationId,
+          baseIngredient.id,
+        );
+      }
     }
+
     createdIngredient = {
-      ...baseIngredient,
-      menuCategoryIds: [...newIngredient.menuCategoryIds],
-      storageLocationIds: [...newIngredient.storageLocationIds],
+      [baseIngredient.id]: {
+        name: baseIngredient.name,
+        categoryId: baseIngredient.categoryId,
+        stockQuantity: baseIngredient.stockQuantity,
+        unitId: baseIngredient.unitId,
+        menuCategoryIds: newIngredient.menuCategoryIds,
+        quantifiable: baseIngredient.quantifiable,
+        storageLocationIds: newIngredient.storageLocationIds,
+      },
     };
   });
+
   if (!createdIngredient) {
     throw new Error("Ingredient creation failed");
   }
+
   return createdIngredient;
 }
 
@@ -250,32 +266,35 @@ async function RemoveStorageLocationsFromIngredientService(
   );
 }
 
-export async function UpdateIngredientService(
-  newIngredient: WithRequiredId<Ingredient>,
-) {
+export async function UpdateIngredientService(newIngredient: Ingredients) {
   const db = await getDb();
   await db.withExclusiveTransactionAsync(async () => {
+    const [ingredientIdStr] = Object.keys(newIngredient);
+    const ingredientId = Number(ingredientIdStr);
+    const [values] = Object.values(newIngredient) as Ingredient[];
     await UpdateIngredientInfosService(
-      newIngredient.id,
-      newIngredient.name,
-      newIngredient.quantifiable,
-      newIngredient.stockQuantity,
-      newIngredient.unitId,
-      newIngredient.categoryId,
+      ingredientId,
+      values.name,
+      values.quantifiable,
+      values.stockQuantity,
+      values.unitId,
+      values.categoryId,
     );
-    await RemoveMenuCategoriesFromIngredientService(newIngredient.id);
-    for (const menuCategoryId of newIngredient.menuCategoryIds) {
+    await RemoveMenuCategoriesFromIngredientService(ingredientId);
+    for (const menuCategoryId of values.menuCategoryIds) {
       await AddMenuCategoryToIngredientService(
         menuCategoryId,
-        newIngredient.id,
+        ingredientId,
       );
     }
-    await RemoveStorageLocationsFromIngredientService(newIngredient.id);
-    for (const storageLocationId of newIngredient.storageLocationIds) {
-      await AddStorageLocationToIngredientService(
-        storageLocationId,
-        newIngredient.id,
-      );
+    await RemoveStorageLocationsFromIngredientService(ingredientId);
+    if (values.storageLocationIds) {
+      for (const storageLocationId of values.storageLocationIds) {
+        await AddStorageLocationToIngredientService(
+          storageLocationId,
+          ingredientId,
+        );
+      }
     }
   });
 }
