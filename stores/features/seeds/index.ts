@@ -1,12 +1,18 @@
-import type { SeedRow, WithRequiredId } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/NameId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchInitialDataThunk } from "@stores/thunks/seeds";
 
+export interface SeedRow {
+  [seedId: number]: {
+    name: string;
+  };
+}
+
 export interface SeedsInitialState {
-  storageLocations: Array<WithRequiredId<SeedRow>>;
-  menuCategories: Array<WithRequiredId<SeedRow>>;
-  days: Array<WithRequiredId<SeedRow>>;
-  moments: Array<WithRequiredId<SeedRow>>;
+  storageLocations: SeedRow;
+  menuCategories: SeedRow;
+  days: SeedRow;
+  moments: SeedRow;
   loading: boolean;
   error: string | null;
 }
@@ -40,16 +46,16 @@ export const seedSlice = createSlice({
           state.loading = false;
           const { storageLocations, days, menuCategories, moments } =
             action.payload;
-          if (state.menuCategories.length === 0) {
+          if (Object.keys(state.menuCategories).length === 0) {
             state.menuCategories = menuCategories;
           }
-          if (state.storageLocations.length === 0) {
+          if (Object.keys(state.storageLocations).length === 0) {
             state.storageLocations = storageLocations;
           }
-          if (state.days.length === 0) {
+          if (Object.keys(state.days).length === 0) {
             state.days = days;
           }
-          if (state.moments.length === 0) {
+          if (Object.keys(state.moments).length === 0) {
             state.moments = moments;
           }
         },

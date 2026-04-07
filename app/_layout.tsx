@@ -12,24 +12,11 @@ import TestButton from "@modules/shared/components/atoms/TestButton";
 function InitData() {
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const debug = async () => {
-  //     const db = await getDb();
-
-  //     const test = await db.getAllAsync(
-  //       "SELECT * FROM ingredients",
-  //     );
-  //     // console.log("DB : ", test);
-  //   };
-
-  //   debug();
-  // }, []);
-
   useEffect(() => {
     async function initDBAndFetch() {
       await getDb();
       dispatch(fetchInitialDataThunk());
-      dispatch(fetchAllMenusThunk());
+      
     }
 
     initDBAndFetch();

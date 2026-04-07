@@ -31,7 +31,6 @@ export const fetchAllMenusThunk = createAsyncThunk<WeeklyMenu, void>(
   "weeklyMenu/fetchAllMenus",
   async () => {
     const data = await FetchAllMenusService();
-    // console.log("data", data);
     return formatAllMenus(data);
   },
 );
@@ -71,28 +70,41 @@ export const addRecipeToMenuThunk = createAsyncThunk<
   { ingredientsToInsert: MenuIngredients; menuId: number },
   { recipeId: number; menuId: number },
   { state: RootState }
->("weeklyMenu/addRecipeToMenu", async ({ recipeId, menuId }, { getState }) => {
-  const state = getState();
-  const recipe: Recipe = findElementById(recipeId, state.recipe.recipes);
+>(
+  "weeklyMenu/addRecipeToMenu",
+  async ({ recipeId, menuId }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const recipe: Recipe = state.recipe.recipes[recipeId];
 
-  const ingredientsToInsert: MenuIngredients = {};
+      if (!recipe) {
+        throw new Error(`Recipe with id ${recipeId} not found`);
+      }
 
-  for (const recipeIng of recipe.ingredients) {
-    const menuCategoryId = recipeIng.menuCategoryId;
-    if (!ingredientsToInsert[menuCategoryId])
-      ingredientsToInsert[menuCategoryId] = [];
+      const ingredientsToInsert: MenuIngredients = {};
 
-    ingredientsToInsert[menuCategoryId].push({
-      ingredientId: recipeIng.ingredientId,
-      quantity: recipeIng.quantity ?? null,
-      unitId: recipeIng.unitId ?? null,
-    });
-  }
+      for (const recipeIng of recipe.ingredients) {
+        const menuCategoryId = recipeIng.menuCategoryId;
+        if (!ingredientsToInsert[menuCategoryId])
+          ingredientsToInsert[menuCategoryId] = [];
 
-  await AddRecipeToMenuService(recipeId, menuId);
+        ingredientsToInsert[menuCategoryId].push({
+          ingredientId: recipeIng.ingredientId,
+          quantity: recipeIng.quantity ?? null,
+          unitId: recipeIng.unitId ?? null,
+        });
+      }
 
-  return { ingredientsToInsert, menuId };
-});
+      await AddRecipeToMenuService(recipeId, menuId);
+
+      return { ingredientsToInsert, menuId };
+    } catch (err: any) {
+      return rejectWithValue(
+        err.message ?? "Unknown error in addRecipeToMenuThunk",
+      );
+    }
+  },
+);
 
 export const setMenuDoneThunk = createAsyncThunk<
   {

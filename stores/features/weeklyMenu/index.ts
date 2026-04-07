@@ -15,12 +15,14 @@ export interface WeeklyMenuIngredients {
 }
 
 export interface WeeklyMenu {
-  [menuId: number]: {
-    dayId: number;
-    momentId: number;
-    done: boolean;
-    ingredients: MenuIngredients;
-  };
+  [menuId: number]: Menu;
+}
+
+export interface Menu {
+  dayId: number;
+  momentId: number;
+  done: boolean;
+  ingredients: MenuIngredients;
 }
 
 export interface MenuIngredients {
@@ -186,14 +188,20 @@ export const weeklyMenuSlice = createSlice({
 
           for (const [menuCategoryIdStr, ingredientList] of Object.entries(
             ingredientsToInsert,
-          )) {
+          ) as [string, IngredientMenu[]][]) {
             const menuCategoryId = Number(menuCategoryIdStr);
 
             if (!menu.ingredients[menuCategoryId]) {
               menu.ingredients[menuCategoryId] = [];
             }
+            const existingIds = new Set(
+              menu.ingredients[menuCategoryId].map((i) => i.ingredientId),
+            );
+            const newIngredients = ingredientList.filter(
+              (i) => !existingIds.has(i.ingredientId),
+            );
 
-            menu.ingredients[menuCategoryId].push(...ingredientList);
+            menu.ingredients[menuCategoryId].push(...newIngredients);
           }
         },
       )
@@ -231,14 +239,22 @@ export const weeklyMenuSlice = createSlice({
 
           for (const [menuCategoryIdStr, ingredientList] of Object.entries(
             ingredientsToInsert,
-          )) {
+          ) as [string, IngredientMenu[]][]) {
             const menuCategoryId = Number(menuCategoryIdStr);
 
             if (!menu.ingredients[menuCategoryId]) {
               menu.ingredients[menuCategoryId] = [];
             }
 
-            menu.ingredients[menuCategoryId].push(...ingredientList);
+            const existingIds = new Set(
+              menu.ingredients[menuCategoryId].map((i) => i.ingredientId),
+            );
+
+            const newIngredients = ingredientList.filter(
+              (i) => !existingIds.has(i.ingredientId),
+            );
+
+            menu.ingredients[menuCategoryId].push(...newIngredients);
           }
         },
       )

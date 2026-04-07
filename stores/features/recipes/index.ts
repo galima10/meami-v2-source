@@ -31,8 +31,8 @@ export type RecipeType =
 
 export interface RecipeIngredient {
   ingredientId: number;
-  quantity: number | null;
-  unitId: number | null;
+  quantity: number;
+  unitId: number;
   menuCategoryId: number;
 }
 

@@ -1,4 +1,3 @@
-import type { SeedRow, WithRequiredId } from "@app-types/NameId";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   FetchDaysService,
@@ -7,6 +6,7 @@ import {
   FetchStorageLocationsService,
 } from "@services/seeds";
 import { SeedsInitialState } from "@stores/features/seeds";
+import { formatSeeds } from "@utils/formatData/formatSeeds";
 
 export const fetchInitialDataThunk = createAsyncThunk<
   Omit<SeedsInitialState, "loading" | "error">,
@@ -17,9 +17,9 @@ export const fetchInitialDataThunk = createAsyncThunk<
   const days = await FetchDaysService();
   const moments = await FetchMomentsService();
   return {
-    storageLocations,
-    menuCategories,
-    days,
-    moments,
+    storageLocations: formatSeeds(storageLocations),
+    menuCategories: formatSeeds(menuCategories),
+    days: formatSeeds(days),
+    moments: formatSeeds(moments),
   };
 });

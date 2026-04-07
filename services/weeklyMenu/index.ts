@@ -81,23 +81,30 @@ export async function RemoveIngredientToMenuService(
   );
 }
 
-async function InsertIngredientToMenuService(
+export async function InsertIngredientToMenuService(
   newIngredient: IngredientMenu,
   menuId: number,
 ) {
   const db = await getDb();
+
   await db.runAsync(
     `
-    INSERT INTO
-      menu_ingredient_links (id_menus, id_ingredients, quantity, id_units)
-    VALUES
-      (?, ?, ?, ?);
+    INSERT INTO menu_ingredient_links (id_menus, id_ingredients, quantity, id_units)
+    SELECT ?, ?, ?, ?
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM menu_ingredient_links
+      WHERE id_menus = ?
+        AND id_ingredients = ?
+    );
   `,
     [
       menuId,
       newIngredient.ingredientId,
       newIngredient.quantity,
       newIngredient.unitId,
+      menuId,
+      newIngredient.ingredientId,
     ],
   );
 }
@@ -194,7 +201,7 @@ export async function AddRecipeToMenuService(recipeId: number, menuId: number) {
     SELECT
       m.id_menus,
       i.id_ingredients,
-      ril.quantity,
+      MAX(COALESCE(ril.quantity, 1), 1),
       ril.id_units
     FROM
       menus m
