@@ -13,7 +13,6 @@ export const fetchUnitsThunk = createAsyncThunk<Units, void>(
   "units/fetchUnits",
   async () => {
     const data = await FetchUnitsService();
-    console.log("data", data);
     return formatUnits(data);
   },
 );

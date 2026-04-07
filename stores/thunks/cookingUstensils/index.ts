@@ -1,4 +1,7 @@
-import type { CookingUstensil } from "@stores/features/cookingUstensils";
+import type {
+  CookingUstensil,
+  CookingUstensils,
+} from "@stores/features/cookingUstensils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   FetchCookingUstensilsService,
@@ -9,7 +12,7 @@ import { formatCookingUstensils } from "@utils/formatData/formatCookingUstensils
 import type { WithRequiredId } from "@app-types/NameId";
 
 export const fetchCookingUstensilsThunk = createAsyncThunk<
-  WithRequiredId<CookingUstensil>[],
+  CookingUstensils,
   void
 >("cookingUstensils/fetchCookingUstensils", async () => {
   const data = await FetchCookingUstensilsService();
@@ -17,16 +20,13 @@ export const fetchCookingUstensilsThunk = createAsyncThunk<
 });
 
 export const createUstensilThunk = createAsyncThunk<
-  WithRequiredId<CookingUstensil>,
+  CookingUstensils,
   CookingUstensil
->(
-  "cookingUstensils/createUstensil",
-  async (newCookingUstensil) => {
-    const createdCookingUstensil =
-      await CreateUstensilService(newCookingUstensil);
-    return createdCookingUstensil;
-  },
-);
+>("cookingUstensils/createUstensil", async (newCookingUstensil) => {
+  const createdCookingUstensil =
+    await CreateUstensilService(newCookingUstensil);
+  return createdCookingUstensil;
+});
 
 export const deleteUstensilThunk = createAsyncThunk<number, number>(
   "cookingUstensils/deleteUstensil",

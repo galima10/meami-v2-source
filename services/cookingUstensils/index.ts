@@ -1,5 +1,8 @@
 import { getDb } from "@database/database";
-import type { CookingUstensil } from "@stores/features/cookingUstensils";
+import type {
+  CookingUstensil,
+  CookingUstensils,
+} from "@stores/features/cookingUstensils";
 
 export interface CookingUstensilRaw {
   cooking_ustensil_id: number;
@@ -17,7 +20,9 @@ export async function FetchCookingUstensilsService() {
   `);
 }
 
-export async function CreateUstensilService(newCookingUstensil: CookingUstensil) {
+export async function CreateUstensilService(
+  newCookingUstensil: CookingUstensil,
+) {
   const db = await getDb();
   const result = await db.runAsync(
     `
@@ -29,7 +34,7 @@ export async function CreateUstensilService(newCookingUstensil: CookingUstensil)
     [newCookingUstensil.name],
   );
   const id = result.lastInsertRowId;
-  return { id, ...newCookingUstensil };
+  return { [id]: { ...newCookingUstensil } } as CookingUstensils;
 }
 
 export async function DeleteUstensilService(cookingUstensilId: number) {
@@ -44,4 +49,3 @@ export async function DeleteUstensilService(cookingUstensilId: number) {
     [cookingUstensilId],
   );
 }
-

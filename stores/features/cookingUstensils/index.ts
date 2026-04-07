@@ -7,12 +7,15 @@ import {
 } from "@stores/thunks/cookingUstensils";
 
 export interface CookingUstensil {
-  id?: number;
   name: string;
 }
 
+export interface CookingUstensils {
+  [cookingUstensilId: number]: CookingUstensil;
+}
+
 const initialState = {
-  cookingUstensils: [] as WithRequiredId<CookingUstensil>[],
+  cookingUstensils: {} as CookingUstensils,
   loading: false,
   error: null as string | null,
 };
@@ -32,9 +35,9 @@ export const cookingUstensilSlice = createSlice({
       })
       .addCase(
         fetchCookingUstensilsThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<CookingUstensil>[]>) => {
+        (state, action: PayloadAction<CookingUstensils>) => {
           state.loading = false;
-          if (state.cookingUstensils.length === 0) {
+          if (Object.keys(state.cookingUstensils).length === 0) {
             state.cookingUstensils = action.payload;
           }
         },
@@ -58,13 +61,14 @@ export const cookingUstensilSlice = createSlice({
       })
       .addCase(
         createUstensilThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<CookingUstensil>>) => {
+        (state, action: PayloadAction<CookingUstensils>) => {
           state.loading = false;
 
-          const exists = state.cookingUstensils.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.cookingUstensils.push(action.payload);
+          const [cookingUstensilIdStr] = Object.keys(action.payload);
+          const cookingUstensilId = Number(cookingUstensilIdStr);
+
+          state.cookingUstensils[cookingUstensilId] =
+            action.payload[cookingUstensilId];
         },
       )
       .addCase(
@@ -85,14 +89,7 @@ export const cookingUstensilSlice = createSlice({
         deleteUstensilThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.cookingUstensils.some(
-            (item) => item.id === action.payload,
-          );
-          if (exists) {
-            state.cookingUstensils = state.cookingUstensils.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.cookingUstensils[action.payload];
         },
       )
       .addCase(

@@ -11,6 +11,7 @@ export default function TestButton() {
   const { units } = useAppSelector((state) => state.unit);
   const { ingredientCategories } = useAppSelector((state) => state.ingredientCategory);
   const { recipeCategories } = useAppSelector((state) => state.recipeCategory);
+  const { cookingUstensils } = useAppSelector((state) => state.cookingUstensil);
 
   const handleTestLog = async () => {
     // const db = await getDb();
@@ -21,7 +22,7 @@ export default function TestButton() {
     // WHERE quantity IS NULL OR quantity < 1;
     // `,
     // );
-    console.log(ingredients);
+    console.log(cookingUstensils);
   };
   return (
     <TouchableOpacity style={styles.testButton} onPress={handleTestLog}>
