@@ -1,5 +1,4 @@
-import type { RecipeCategory } from "@stores/features/recipeCategories";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { RecipeCategories, RecipeCategory } from "@stores/features/recipeCategories";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { formatRecipeCategories } from "@utils/formatData/formatRecipeCategories";
 import {
@@ -9,7 +8,7 @@ import {
 } from "@services/recipeCategories";
 
 export const fetchRecipeCategoriesThunk = createAsyncThunk<
-  WithRequiredId<RecipeCategory>[],
+  RecipeCategories,
   void
 >("recipeCategories/fetchRecipeCategories", async () => {
   const data = await FetchRecipeCategoriesService();
@@ -17,7 +16,7 @@ export const fetchRecipeCategoriesThunk = createAsyncThunk<
 });
 
 export const createRecipeCategoryThunk = createAsyncThunk<
-  WithRequiredId<RecipeCategory>,
+  RecipeCategories,
   RecipeCategory
 >(
   "recipeCategories/createRecipeCategory",

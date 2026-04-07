@@ -11,8 +11,12 @@ export interface IngredientCategory {
   name: string;
 }
 
+export interface IngredientCategories {
+  [ingredientCategoryId: number]: IngredientCategory;
+}
+
 const initialState = {
-  ingredientCategories: [] as WithRequiredId<IngredientCategory>[],
+  ingredientCategories: {} as IngredientCategories,
   loading: false,
   error: null as string | null,
 };
@@ -32,12 +36,9 @@ export const ingredientCategorySlice = createSlice({
       })
       .addCase(
         fetchIngredientCategoriesThunk.fulfilled,
-        (
-          state,
-          action: PayloadAction<WithRequiredId<IngredientCategory>[]>,
-        ) => {
+        (state, action: PayloadAction<IngredientCategories>) => {
           state.loading = false;
-          if (state.ingredientCategories.length === 0) {
+          if (Object.keys(state.ingredientCategories).length === 0) {
             state.ingredientCategories = action.payload;
           }
         },
@@ -61,13 +62,14 @@ export const ingredientCategorySlice = createSlice({
       })
       .addCase(
         createIngredientCategoryThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<IngredientCategory>>) => {
+        (state, action: PayloadAction<IngredientCategories>) => {
           state.loading = false;
 
-          const exists = state.ingredientCategories.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.ingredientCategories.push(action.payload);
+          const [ingredientCategoryIdStr] = Object.keys(action.payload);
+          const ingredientCategoryId = Number(ingredientCategoryIdStr);
+
+          state.ingredientCategories[ingredientCategoryId] =
+            action.payload[ingredientCategoryId];
         },
       )
       .addCase(
@@ -91,14 +93,7 @@ export const ingredientCategorySlice = createSlice({
         deleteIngredientCategoryThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.ingredientCategories.some(
-            (item) => item.id === action.payload,
-          );
-          if (exists) {
-            state.ingredientCategories = state.ingredientCategories.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.ingredientCategories[action.payload];
         },
       )
       .addCase(

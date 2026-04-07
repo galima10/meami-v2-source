@@ -6,13 +6,16 @@ import {
   createRecipeCategoryThunk,
 } from "@stores/thunks/recipeCategories";
 
+export interface RecipeCategories {
+  [recipeCategoryId: number]: RecipeCategory;
+}
+
 export interface RecipeCategory {
-  id?: number;
   name: string;
 }
 
 const initialState = {
-  recipeCategories: [] as WithRequiredId<RecipeCategory>[],
+  recipeCategories: {} as RecipeCategories,
   loading: false,
   error: null as string | null,
 };
@@ -30,9 +33,9 @@ export const recipeCategorySlice = createSlice({
       })
       .addCase(
         fetchRecipeCategoriesThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<RecipeCategory>[]>) => {
+        (state, action: PayloadAction<RecipeCategories>) => {
           state.loading = false;
-          if (state.recipeCategories.length === 0) {
+          if (Object.keys(state.recipeCategories).length === 0) {
             state.recipeCategories = action.payload;
           }
         },
@@ -56,13 +59,13 @@ export const recipeCategorySlice = createSlice({
       })
       .addCase(
         createRecipeCategoryThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<RecipeCategory>>) => {
+        (state, action: PayloadAction<RecipeCategories>) => {
           state.loading = false;
 
-          const exists = state.recipeCategories.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.recipeCategories.push(action.payload);
+          const [recipeCategoryIdStr] = Object.keys(action.payload);
+          const recipeCategoryId = Number(recipeCategoryIdStr);
+
+          state.recipeCategories[recipeCategoryId] = action.payload[recipeCategoryId];
         },
       )
       .addCase(
@@ -86,14 +89,7 @@ export const recipeCategorySlice = createSlice({
         deleteRecipeCategoryThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.recipeCategories.some(
-            (item) => item.id === action.payload,
-          );
-          if (exists) {
-            state.recipeCategories = state.recipeCategories.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.recipeCategories[action.payload];
         },
       )
       .addCase(
