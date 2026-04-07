@@ -8,7 +8,6 @@ import {
 } from "@stores/thunks/recipes";
 
 export interface Recipe {
-  id?: number;
   name: string;
   type: RecipeType;
   duration: number;
@@ -17,6 +16,10 @@ export interface Recipe {
   categoryIds: number[];
   isMorning: boolean;
   ingredients: RecipeIngredient[];
+}
+
+export interface Recipes {
+  [recipeId: number]: Recipe;
 }
 
 export type RecipeType =
@@ -34,7 +37,7 @@ export interface RecipeIngredient {
 }
 
 const initialState = {
-  recipes: [] as Recipe[],
+  recipes: {} as Recipes,
   selectedRecipeId: null as number | null,
   loading: false,
   error: null as string | null,
@@ -61,9 +64,9 @@ export const recipeSlice = createSlice({
       })
       .addCase(
         fetchRecipesThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Recipe>[]>) => {
+        (state, action: PayloadAction<Recipes>) => {
           state.loading = false;
-          if (state.recipes.length === 0) {
+          if (Object.keys(state.recipes).length === 0) {
             state.recipes = action.payload;
           }
         },
@@ -84,13 +87,13 @@ export const recipeSlice = createSlice({
       })
       .addCase(
         createRecipeThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Recipe>>) => {
+        (state, action: PayloadAction<Recipes>) => {
           state.loading = false;
 
-          const exists = state.recipes.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.recipes.push(action.payload);
+          const [recipeIdStr] = Object.keys(action.payload);
+          const recipeId = Number(recipeIdStr);
+
+          state.recipes[recipeId] = action.payload[recipeId];
         },
       )
       .addCase(
@@ -109,15 +112,13 @@ export const recipeSlice = createSlice({
       })
       .addCase(
         updateRecipeThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Recipe>>) => {
+        (state, action: PayloadAction<Recipes>) => {
           state.loading = false;
 
-          const recipeId = action.payload.id;
-          const index = state.recipes.findIndex((item) => item.id === recipeId);
+          const [recipeIdStr] = Object.keys(action.payload);
+          const recipeId = Number(recipeIdStr);
 
-          if (index !== -1) {
-            state.recipes[index] = action.payload;
-          }
+          state.recipes[recipeId] = action.payload[recipeId];
         },
       )
       .addCase(
@@ -138,14 +139,7 @@ export const recipeSlice = createSlice({
         deleteRecipeThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.recipes.some(
-            (item) => item.id === action.payload,
-          );
-          if (exists) {
-            state.recipes = state.recipes.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.recipes[action.payload];
         },
       )
       .addCase(

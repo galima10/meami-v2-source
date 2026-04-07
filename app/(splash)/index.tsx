@@ -217,7 +217,7 @@ export default function Splash() {
       //   }),
       // ).unwrap();
       // const result = await dispatch(updateProductThunk(newProduct1)).unwrap();
-      const result = await dispatch(updateRecipeThunk(newRecipe1)).unwrap();
+      // const result = await dispatch(updateRecipeThunk(newRecipe1)).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -298,7 +298,7 @@ export default function Splash() {
           </View>
         );
       })} */}
-      {cookingInfos.map((ci) => {
+      {/* {cookingInfos.map((ci) => {
         const ingredient = ingredients.find((i) => i.id === ci.ingredientId);
         return (
           <View key={`cookingInfo-${ci.id}`} style={styles.rowContainer}>
@@ -362,7 +362,7 @@ export default function Splash() {
             })}
           </View>
         );
-      })}
+      })} */}
       {/* {recipes.map((r) => {
         const categories = r.categoryIds
           ? recipeCategories.filter((rc) => r.categoryIds.includes(rc.id))

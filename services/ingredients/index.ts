@@ -186,7 +186,7 @@ export async function CreateIngredientService(
     throw new Error("Ingredient creation failed");
   }
 
-  return createdIngredient;
+  return createdIngredient as Ingredients;
 }
 
 async function UpdateIngredientInfosService(
@@ -282,10 +282,7 @@ export async function UpdateIngredientService(newIngredient: Ingredients) {
     );
     await RemoveMenuCategoriesFromIngredientService(ingredientId);
     for (const menuCategoryId of values.menuCategoryIds) {
-      await AddMenuCategoryToIngredientService(
-        menuCategoryId,
-        ingredientId,
-      );
+      await AddMenuCategoryToIngredientService(menuCategoryId, ingredientId);
     }
     await RemoveStorageLocationsFromIngredientService(ingredientId);
     if (values.storageLocationIds) {

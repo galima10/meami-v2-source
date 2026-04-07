@@ -7,6 +7,7 @@ import { useAppDispatch } from "modules/shared/hooks/redux";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
 import HiddenResetButton from "@modules/shared/components/atoms/HiddenResetButton";
+import TestButton from "@modules/shared/components/atoms/TestButton";
 
 function InitData() {
   const dispatch = useAppDispatch();
@@ -46,6 +47,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
       <HiddenResetButton />
+      <TestButton />
     </Provider>
   );
 }

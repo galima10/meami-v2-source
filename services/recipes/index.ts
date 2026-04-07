@@ -1,6 +1,6 @@
 import type { WithRequiredId } from "@app-types/NameId";
 import { getDb } from "@database/database";
-import type { Recipe, RecipeType } from "@stores/features/recipes";
+import type { Recipe, RecipeType, Recipes } from "@stores/features/recipes";
 
 export interface RecipeRaw {
   recipe_id: number;
@@ -155,7 +155,8 @@ async function AddIngredientToRecipe(
 
 export async function CreateRecipeService(newRecipe: Recipe) {
   const db = await getDb();
-  let createdRecipe: Recipe | null = null;
+  let createdRecipe: Recipes | null = null;
+
   await db.withExclusiveTransactionAsync(async () => {
     const baseRecipe = await CreateRecipeInfosService(
       newRecipe.name,
@@ -169,6 +170,7 @@ export async function CreateRecipeService(newRecipe: Recipe) {
     for (const categoryId of newRecipe.categoryIds) {
       await AddCategoryToRecipe(categoryId, baseRecipe.id);
     }
+
     for (const ingredient of newRecipe.ingredients) {
       await AddIngredientToRecipe(
         ingredient.ingredientId,
@@ -177,16 +179,21 @@ export async function CreateRecipeService(newRecipe: Recipe) {
         baseRecipe.id,
       );
     }
+
     createdRecipe = {
-      ...baseRecipe,
-      categoryIds: [...newRecipe.categoryIds],
-      ingredients: [...newRecipe.ingredients],
+      [baseRecipe.id]: {
+        ...baseRecipe,
+        categoryIds: [...newRecipe.categoryIds],
+        ingredients: [...newRecipe.ingredients],
+      },
     };
   });
+
   if (!createdRecipe) {
     throw new Error("Recipe creation failed");
   }
-  return createdRecipe;
+
+  return createdRecipe as Recipes;
 }
 
 async function UpdateRecipeInfosService(
@@ -267,29 +274,32 @@ async function RemoveIngredientsFromRecipeService(recipeId: number) {
   );
 }
 
-export async function UpdateRecipeService(newRecipe: WithRequiredId<Recipe>) {
+export async function UpdateRecipeService(newRecipe: Recipes) {
   const db = await getDb();
   await db.withExclusiveTransactionAsync(async () => {
+    const [recipeIdStr] = Object.keys(newRecipe);
+    const recipeId = Number(recipeIdStr);
+    const [values] = Object.values(newRecipe) as Recipe[];
     await UpdateRecipeInfosService(
-      newRecipe.id,
-      newRecipe.name,
-      newRecipe.duration,
-      newRecipe.imagePreview ?? null,
-      newRecipe.isMorning,
-      newRecipe.type,
-      newRecipe.recipe ?? null,
+      recipeId,
+      values.name,
+      values.duration,
+      values.imagePreview ?? null,
+      values.isMorning,
+      values.type,
+      values.recipe ?? null,
     );
-    await RemoveCategoriesFromRecipeService(newRecipe.id);
-    for (const categoryId of newRecipe.categoryIds) {
-      await AddCategoryToRecipe(categoryId, newRecipe.id);
+    await RemoveCategoriesFromRecipeService(recipeId);
+    for (const categoryId of newRecipe[recipeId].categoryIds) {
+      await AddCategoryToRecipe(categoryId, recipeId);
     }
-    await RemoveIngredientsFromRecipeService(newRecipe.id);
-    for (const ingredient of newRecipe.ingredients) {
+    await RemoveIngredientsFromRecipeService(recipeId);
+    for (const ingredient of newRecipe[recipeId].ingredients) {
       await AddIngredientToRecipe(
         ingredient.ingredientId,
         ingredient.quantity,
         ingredient.unitId,
-        newRecipe.id,
+        recipeId,
       );
     }
   });
