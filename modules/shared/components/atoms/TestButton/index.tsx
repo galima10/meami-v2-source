@@ -8,17 +8,18 @@ export default function TestButton() {
   const { recipes } = useAppSelector((state) => state.recipe);
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { days } = useAppSelector((state) => state.seed);
+  const { units } = useAppSelector((state) => state.unit);
 
   const handleTestLog = async () => {
-    const db = await getDb();
-    const test = await db.getAllAsync(
-    `
-    SELECT id_recipes, id_ingredients, quantity
-    FROM recipe_ingredient_links
-    WHERE quantity IS NULL OR quantity < 1;
-    `,
-    );
-    console.log("weeklyMenu", weeklyMenu);
+    // const db = await getDb();
+    // const test = await db.getAllAsync(
+    // `
+    // SELECT id_recipes, id_ingredients, quantity
+    // FROM recipe_ingredient_links
+    // WHERE quantity IS NULL OR quantity < 1;
+    // `,
+    // );
+    console.log(units);
   };
   return (
     <TouchableOpacity style={styles.testButton} onPress={handleTestLog}>

@@ -1,9 +1,18 @@
 import { getDb } from "@database/database";
-import type { Unit } from "@stores/features/units";
+import type { Units, Unit } from "@stores/features/units";
 import type { WithRequiredId } from "@app-types/NameId";
 
-export async function UpdateUnitService(newUnit: WithRequiredId<Unit>) {
+export interface UnitRaw {
+  id: number;
+  name: string;
+  abbreviation: string;
+}
+
+export async function UpdateUnitService(newUnit: Units) {
   const db = await getDb();
+  const [unitIdStr] = Object.keys(newUnit);
+  const unitId = Number(unitIdStr);
+  const [values] = Object.values(newUnit) as [Unit];
   await db.runAsync(
     `
     UPDATE
@@ -15,9 +24,9 @@ export async function UpdateUnitService(newUnit: WithRequiredId<Unit>) {
       name = $id;
   `,
     {
-      $newName: newUnit.name,
-      $newAbbreviation: newUnit.abbreviation,
-      $id: newUnit.id,
+      $newName: values.name,
+      $newAbbreviation: values.abbreviation,
+      $id: unitId,
     },
   );
 }
@@ -47,12 +56,12 @@ export async function CreateUnitService(newUnit: Unit) {
     [newUnit.name, newUnit.abbreviation],
   );
   const id = result.lastInsertRowId;
-  return { id, ...newUnit };
+  return { [id]: { ...newUnit } } as Units;
 }
 
 export async function FetchUnitsService() {
   const db = await getDb();
-  return db.getAllAsync<WithRequiredId<Unit>>(`
+  return db.getAllAsync<UnitRaw>(`
     SELECT
       u.id_units AS id,
       u.name,

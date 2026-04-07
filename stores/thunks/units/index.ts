@@ -1,4 +1,4 @@
-import type { Unit } from "@stores/features/units";
+import type { Unit, Units } from "@stores/features/units";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   FetchUnitsService,
@@ -7,16 +7,18 @@ import {
   UpdateUnitService,
 } from "@services/units";
 import type { WithRequiredId } from "@app-types/NameId";
+import { formatUnits } from "@utils/formatData/formatUnits";
 
-export const fetchUnitsThunk = createAsyncThunk<WithRequiredId<Unit>[], void>(
+export const fetchUnitsThunk = createAsyncThunk<Units, void>(
   "units/fetchUnits",
   async () => {
     const data = await FetchUnitsService();
-    return data;
+    console.log("data", data);
+    return formatUnits(data);
   },
 );
 
-export const createUnitThunk = createAsyncThunk<WithRequiredId<Unit>, Unit>(
+export const createUnitThunk = createAsyncThunk<Units, Unit>(
   "units/createUnit",
   async (newUnit) => {
     const createdUnit = await CreateUnitService(newUnit);
@@ -32,7 +34,7 @@ export const deleteUnitThunk = createAsyncThunk<number, number>(
   },
 );
 
-export const updateUnitThunk = createAsyncThunk<WithRequiredId<Unit>, WithRequiredId<Unit>>(
+export const updateUnitThunk = createAsyncThunk<Units, Units>(
   "units/updateUnit",
   async (newUnit) => {
     await UpdateUnitService(newUnit);

@@ -8,13 +8,16 @@ import {
 import type { WithRequiredId } from "@app-types/NameId";
 
 export interface Unit {
-  id?: number;
   name: string;
   abbreviation: string;
 }
 
+export interface Units {
+  [unitId: number]: Unit;
+}
+
 const initialState = {
-  units: [] as WithRequiredId<Unit>[],
+  units: {} as Units,
   loading: false,
   error: null as string | null,
 };
@@ -32,9 +35,9 @@ export const unitSlice = createSlice({
       })
       .addCase(
         fetchUnitsThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Unit>[]>) => {
+        (state, action: PayloadAction<Units>) => {
           state.loading = false;
-          if (state.units.length === 0) {
+          if (Object.keys(state.units).length === 0) {
             state.units = action.payload;
           }
         },
@@ -55,13 +58,13 @@ export const unitSlice = createSlice({
       })
       .addCase(
         createUnitThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Unit>>) => {
+        (state, action: PayloadAction<Units>) => {
           state.loading = false;
 
-          const exists = state.units.some(
-            (item) => item.id === action.payload.id,
-          );
-          if (!exists) state.units.push(action.payload);
+          const [unitIdStr] = Object.keys(action.payload);
+          const unittId = Number(unitIdStr);
+
+          state.units[unittId] = action.payload[unittId];
         },
       )
       .addCase(
@@ -80,15 +83,13 @@ export const unitSlice = createSlice({
       })
       .addCase(
         updateUnitThunk.fulfilled,
-        (state, action: PayloadAction<WithRequiredId<Unit>>) => {
+        (state, action: PayloadAction<Units>) => {
           state.loading = false;
 
-          const unitId = action.payload.id;
-          const index = state.units.findIndex((item) => item.id === unitId);
+          const [unitIdStr] = Object.keys(action.payload);
+          const unittId = Number(unitIdStr);
 
-          if (index !== -1) {
-            state.units[index] = action.payload;
-          }
+          state.units[unittId] = action.payload[unittId];
         },
       )
       .addCase(
@@ -109,12 +110,7 @@ export const unitSlice = createSlice({
         deleteUnitThunk.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.loading = false;
-          const exists = state.units.some((item) => item.id === action.payload);
-          if (exists) {
-            state.units = state.units.filter(
-              (item) => item.id !== action.payload,
-            );
-          }
+          delete state.units[action.payload];
         },
       )
       .addCase(

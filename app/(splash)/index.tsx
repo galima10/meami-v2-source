@@ -66,15 +66,15 @@ export default function Splash() {
   }
 
   useEffect(() => {
-    // dispatch(fetchStorageInfosThunk());
-    // dispatch(fetchCookingInfosThunk());
-    // dispatch(fetchCookingUstensilsThunk());
-    // dispatch(fetchIngredientCategoriesThunk());
-    // dispatch(fetchRecipeCategoriesThunk());
-    // dispatch(fetchUnitsThunk());
-    // dispatch(fetchProductsThunk());
-    // dispatch(fetchIngredientsThunk());
-    // dispatch(fetchRecipesThunk());
+    dispatch(fetchStorageInfosThunk());
+    dispatch(fetchCookingInfosThunk());
+    dispatch(fetchCookingUstensilsThunk());
+    dispatch(fetchIngredientCategoriesThunk());
+    dispatch(fetchRecipeCategoriesThunk());
+    dispatch(fetchUnitsThunk());
+    dispatch(fetchProductsThunk());
+    dispatch(fetchIngredientsThunk());
+    dispatch(fetchRecipesThunk());
     async function fetchMenus() {
       await dispatch(fetchAllMenusThunk());
       await dispatch(fetchWeeklyMenuThunk());
