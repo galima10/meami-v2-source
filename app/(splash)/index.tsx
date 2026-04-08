@@ -26,22 +26,44 @@ import {
   removeMenuThunk,
   removeWeeklyMenuThunk,
 } from "@stores/thunks/weeklyMenu";
-import type { WeeklyMenu, Menu } from "@stores/features/weeklyMenu";
+import type {
+  WeeklyMenu,
+  MenuIngredients,
+  IngredientMenu,
+} from "@stores/features/weeklyMenu";
 import type { Recipe } from "@stores/features/recipes";
+import {
+  weeklyMenuToUi,
+  MomentUi,
+  MenuUi,
+} from "@utils/dataToUi/weeklyMenuToUi";
+import type { IngredientInsert } from "@stores/thunks/weeklyMenu";
 
-const newStorageLocationsIngredient1 = [1, 3];
+const ingredient: IngredientInsert = {
+  menuCategoryId: 4,
+  ingredientId: 13,
+  quantity: 1,
+  unitId: 1,
+};
 
 export default function Splash() {
   const dispatch = useAppDispatch();
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
-  const { moments, days } = useAppSelector((state) => state.seed);
+  const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { moments, days, menuCategories } = useAppSelector(
+    (state) => state.seed,
+  );
   // const router = useRouter();
+  const weeklyMenuUi = weeklyMenuToUi(weeklyMenu, days, moments);
 
   async function handleAdd() {
     try {
       const result = await dispatch(
         addRecipeToMenuThunk({ recipeId: 3, menuId: 1 }),
       ).unwrap();
+      // const result = await dispatch(
+      //   addIngredientToMenuThunk({ newIngredient: ingredient, menuId: 2 }),
+      // ).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -49,7 +71,7 @@ export default function Splash() {
 
   async function handleDelete() {
     try {
-      // const result = await dispatch(deleteIngredientCategoryThunk(1)).unwrap();
+      const result = await dispatch(removeWeeklyMenuThunk()).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -100,11 +122,47 @@ export default function Splash() {
         <Text style={styles.button}>Modifier</Text>
       </Pressable>
       <View style={styles.infosContainer}>
-        {(Object.entries(weeklyMenu) as [string, Menu][]).map(
-          ([key, value]) => {
+        {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
+          ([keyDay, moment], dayIndex) => {
             return (
-              <View key={key}>
-                <Text>{value.momentId}</Text>
+              <View key={`day-${dayIndex}`}>
+                <Text>{keyDay}</Text>
+                <View>
+                  {(Object.entries(moment) as [string, MenuUi][]).map(
+                    ([keyMoment, menu], momentIndex) => {
+                      return (
+                        <View key={`moment-${momentIndex}`}>
+                          <Text>{keyMoment}</Text>
+                          <Text>{menu.id}</Text>
+                          {(
+                            Object.entries(menu.ingredients) as [
+                              string,
+                              IngredientMenu[],
+                            ][]
+                          ).map(([key, value], menuCategoryIndex) => {
+                            return (
+                              <View key={`menuCategory-${menuCategoryIndex}`}>
+                                <Text>{menuCategories[Number(key)].name}</Text>
+                                {value.map((item, ingredientIndex) => {
+                                  return (
+                                    <Text
+                                      key={`ingredients-${ingredientIndex}`}
+                                    >
+                                      {
+                                        ingredients[Number(item?.ingredientId)]
+                                          ?.name
+                                      }
+                                    </Text>
+                                  );
+                                })}
+                              </View>
+                            );
+                          })}
+                        </View>
+                      );
+                    },
+                  )}
+                </View>
               </View>
             );
           },

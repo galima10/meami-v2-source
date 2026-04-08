@@ -22,7 +22,7 @@ export default function TestButton() {
     // WHERE quantity IS NULL OR quantity < 1;
     // `,
     // );
-    console.log(cookingUstensils);
+    console.log(weeklyMenu);
   };
   return (
     <TouchableOpacity style={styles.testButton} onPress={handleTestLog}>

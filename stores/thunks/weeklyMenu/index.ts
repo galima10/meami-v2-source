@@ -23,7 +23,7 @@ import { findElementById } from "@utils/findElementById";
 import type { RootState } from "@stores/index";
 import type { Recipe } from "@stores/features/recipes";
 
-interface IngredientInsert extends IngredientMenu {
+export interface IngredientInsert extends IngredientMenu {
   menuCategoryId: number;
 }
 
