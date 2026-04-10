@@ -1,9 +1,11 @@
 import { getDb } from "@database/database";
+import { getDbContext } from "helpers/getDbContext";
 import type {
   CookingInfo,
   CookingDuration,
 } from "@stores/features/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
+import type { SQLiteDatabase } from "expo-sqlite";
 
 export interface CookingInfoRaw {
   cooking_info_id: number;
@@ -38,8 +40,11 @@ export async function FetchCookingInfosService() {
   `);
 }
 
-export async function RemoveCookingInfoService(ingredientId: number) {
-  const db = await getDb();
+export async function RemoveCookingInfoService(
+  ingredientId: number,
+  tx?: SQLiteDatabase,
+) {
+  const db = await getDbContext(tx);
   return db.runAsync(
     `
     DELETE FROM
@@ -83,9 +88,9 @@ async function CreateCookingDurationService(
   temperature: number | null,
   ustensilId: number,
   cookingInfoId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  const result = await db.runAsync(
+  const result = await tx.runAsync(
     `
     INSERT INTO cooking_durations (
       duration_in_minutes,
@@ -109,13 +114,13 @@ export async function SetCookingInfoService(newCookingInfo: CookingInfo) {
   const db = await getDb();
 
   const cookingInfoResult: WithRequiredId<CookingInfo> = {
-    id: 0, // sera remplacé par le premier id créé
+    id: 0,
     ingredientId: newCookingInfo.ingredientId,
     preparationTypes: [],
   };
 
-  await db.withExclusiveTransactionAsync(async () => {
-    await RemoveCookingInfoService(newCookingInfo.ingredientId);
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    await RemoveCookingInfoService(newCookingInfo.ingredientId, tx);
 
     for (const [
       index,
@@ -126,7 +131,6 @@ export async function SetCookingInfoService(newCookingInfo: CookingInfo) {
         newCookingInfo.ingredientId,
       );
 
-      // On met le premier id comme ID global du CookingInfo
       if (index === 0) {
         cookingInfoResult.id = createdCookingInfo.id!;
       }
@@ -142,6 +146,7 @@ export async function SetCookingInfoService(newCookingInfo: CookingInfo) {
           cookingDuration.temperature,
           cookingDuration.ustensilId,
           createdCookingInfo.id,
+          tx,
         );
 
         preparationTypeResult.cookingDurations.push({

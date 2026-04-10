@@ -1,6 +1,5 @@
 import { getDb } from "@database/database";
 import type { Units, Unit } from "@stores/features/units";
-import type { WithRequiredId } from "@app-types/NameId";
 
 export interface UnitRaw {
   id: number;

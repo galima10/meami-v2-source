@@ -1,4 +1,4 @@
-import type { WithRequiredId } from "@app-types/NameId";
+import type { SQLiteDatabase } from "expo-sqlite";
 import { getDb } from "@database/database";
 import type { Recipe, RecipeType, Recipes } from "@stores/features/recipes";
 
@@ -66,9 +66,9 @@ async function CreateRecipeInfosService(
   isMorning: boolean,
   type: RecipeType,
   recipe: string | null,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  const result = await db.runAsync(
+  const result = await tx.runAsync(
     `
     INSERT INTO
       recipes (
@@ -110,9 +110,12 @@ async function CreateRecipeInfosService(
   };
 }
 
-async function AddCategoryToRecipe(recipeCategoryId: number, recipId: number) {
-  const db = await getDb();
-  await db.runAsync(
+async function AddCategoryToRecipe(
+  recipeCategoryId: number,
+  recipId: number,
+  tx: SQLiteDatabase,
+) {
+  await tx.runAsync(
     `
     INSERT INTO
       recipe_category_links (id_recipes, id_recipe_categories)
@@ -135,9 +138,9 @@ async function AddIngredientToRecipe(
   quantity: number | null,
   unitId: number | null,
   recipeId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  await db.runAsync(
+  await tx.runAsync(
     `
     INSERT INTO
       recipe_ingredient_links (
@@ -157,7 +160,7 @@ export async function CreateRecipeService(newRecipe: Recipe) {
   const db = await getDb();
   let createdRecipe: Recipes | null = null;
 
-  await db.withExclusiveTransactionAsync(async () => {
+  await db.withExclusiveTransactionAsync(async (tx) => {
     const baseRecipe = await CreateRecipeInfosService(
       newRecipe.name,
       newRecipe.duration,
@@ -165,10 +168,11 @@ export async function CreateRecipeService(newRecipe: Recipe) {
       newRecipe.isMorning,
       newRecipe.type,
       newRecipe.recipe,
+      tx,
     );
 
     for (const categoryId of newRecipe.categoryIds) {
-      await AddCategoryToRecipe(categoryId, baseRecipe.id);
+      await AddCategoryToRecipe(categoryId, baseRecipe.id, tx);
     }
 
     for (const ingredient of newRecipe.ingredients) {
@@ -177,6 +181,7 @@ export async function CreateRecipeService(newRecipe: Recipe) {
         ingredient.quantity,
         ingredient.unitId,
         baseRecipe.id,
+        tx,
       );
     }
 
@@ -204,9 +209,9 @@ async function UpdateRecipeInfosService(
   isMorning: boolean,
   type: string,
   recipe: string | null,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  await db.runAsync(
+  await tx.runAsync(
     `
     UPDATE
       recipes
@@ -232,9 +237,11 @@ async function UpdateRecipeInfosService(
   );
 }
 
-async function RemoveCategoriesFromRecipeService(recipeId: number) {
-  const db = await getDb();
-  await db.runAsync(
+async function RemoveCategoriesFromRecipeService(
+  recipeId: number,
+  tx: SQLiteDatabase,
+) {
+  await tx.runAsync(
     `
     DELETE FROM
       recipe_category_links
@@ -253,9 +260,11 @@ async function RemoveCategoriesFromRecipeService(recipeId: number) {
   );
 }
 
-async function RemoveIngredientsFromRecipeService(recipeId: number) {
-  const db = await getDb();
-  await db.runAsync(
+async function RemoveIngredientsFromRecipeService(
+  recipeId: number,
+  tx: SQLiteDatabase,
+) {
+  await tx.runAsync(
     `
     DELETE FROM
       recipe_ingredient_links
@@ -276,7 +285,7 @@ async function RemoveIngredientsFromRecipeService(recipeId: number) {
 
 export async function UpdateRecipeService(newRecipe: Recipes) {
   const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
+  await db.withExclusiveTransactionAsync(async (tx) => {
     const [recipeIdStr] = Object.keys(newRecipe);
     const recipeId = Number(recipeIdStr);
     const [values] = Object.values(newRecipe) as Recipe[];
@@ -288,18 +297,20 @@ export async function UpdateRecipeService(newRecipe: Recipes) {
       values.isMorning,
       values.type,
       values.recipe ?? null,
+      tx,
     );
-    await RemoveCategoriesFromRecipeService(recipeId);
+    await RemoveCategoriesFromRecipeService(recipeId, tx);
     for (const categoryId of newRecipe[recipeId].categoryIds) {
-      await AddCategoryToRecipe(categoryId, recipeId);
+      await AddCategoryToRecipe(categoryId, recipeId, tx);
     }
-    await RemoveIngredientsFromRecipeService(recipeId);
+    await RemoveIngredientsFromRecipeService(recipeId, tx);
     for (const ingredient of newRecipe[recipeId].ingredients) {
       await AddIngredientToRecipe(
         ingredient.ingredientId,
         ingredient.quantity,
         ingredient.unitId,
         recipeId,
+        tx,
       );
     }
   });

@@ -1,5 +1,7 @@
 import { getDb } from "@database/database";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import type { SQLiteDatabase } from "expo-sqlite";
+import { getDbContext } from "helpers/getDbContext";
 
 export interface WeeklyMenuRaw {
   menu_id: number;
@@ -59,8 +61,9 @@ export async function FetchWeeklyMenuService() {
 export async function RemoveIngredientToMenuService(
   ingredientId: number,
   menuId: number,
+  tx?: SQLiteDatabase,
 ) {
-  const db = await getDb();
+  const db = await getDbContext(tx);
   await db.runAsync(
     `
     DELETE FROM menu_ingredient_links
@@ -81,13 +84,12 @@ export async function RemoveIngredientToMenuService(
   );
 }
 
-export async function InsertIngredientToMenuService(
+async function InsertIngredientToMenuService(
   newIngredient: IngredientMenu,
   menuId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-
-  await db.runAsync(
+  await tx.runAsync(
     `
     INSERT INTO menu_ingredient_links (id_menus, id_ingredients, quantity, id_units)
     SELECT ?, ?, ?, ?
@@ -114,17 +116,15 @@ export async function AddIngredientToMenuService(
   menuId: number,
 ) {
   const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
-    await RemoveIngredientToMenuService(newIngredient.ingredientId, menuId);
-    await InsertIngredientToMenuService(newIngredient, menuId);
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    await RemoveIngredientToMenuService(newIngredient.ingredientId, menuId, tx);
+    await InsertIngredientToMenuService(newIngredient, menuId, tx);
   });
 }
 
-export async function RemoveMenuService(menuId: number) {
-  const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
-    await db.runAsync(
-      `
+async function ResetMenuService(menuId: number, tx: SQLiteDatabase) {
+  await tx.runAsync(
+    `
     DELETE FROM
       menu_ingredient_links
     WHERE
@@ -138,15 +138,20 @@ export async function RemoveMenuService(menuId: number) {
           AND m.id_menus = ?
       );
   `,
-      [menuId],
-    );
-    await SetMenuDoneService(menuId, false);
+    [menuId],
+  );
+}
+
+export async function RemoveMenuService(menuId: number) {
+  const db = await getDb();
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    await ResetMenuService(menuId, tx);
+    await SetMenuDoneService(menuId, false, tx);
   });
 }
 
-async function RemoveAllMenuService() {
-  const db = await getDb();
-  await db.runAsync(
+async function RemoveAllMenuService(tx: SQLiteDatabase) {
+  await tx.runAsync(
     `
     DELETE FROM
       menu_ingredient_links;
@@ -154,9 +159,8 @@ async function RemoveAllMenuService() {
   );
 }
 
-async function SetAllMenuUnDone() {
-  const db = await getDb();
-  await db.runAsync(
+async function SetAllMenuUnDone(tx: SQLiteDatabase) {
+  await tx.runAsync(
     `
     UPDATE
       menus
@@ -168,14 +172,18 @@ async function SetAllMenuUnDone() {
 
 export async function RemoveWeeklyMenuService() {
   const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
-    await RemoveAllMenuService();
-    await SetAllMenuUnDone();
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    await RemoveAllMenuService(tx);
+    await SetAllMenuUnDone(tx);
   });
 }
 
-export async function SetMenuDoneService(menuId: number, done: boolean) {
-  const db = await getDb();
+export async function SetMenuDoneService(
+  menuId: number,
+  done: boolean,
+  tx?: SQLiteDatabase,
+) {
+  const db = await getDbContext(tx);
   await db.runAsync(
     `
     UPDATE

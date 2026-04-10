@@ -4,6 +4,8 @@ import type {
   StorageInfo,
 } from "@stores/features/storageInfos";
 import type { WithRequiredId } from "@app-types/NameId";
+import type { SQLiteDatabase } from "expo-sqlite";
+import { getDbContext } from "helpers/getDbContext";
 
 export interface StorageInfoRaw {
   storage_info_id: number;
@@ -40,9 +42,9 @@ async function CreateStorageInfoService(
   type: string,
   ingredientId: number,
   storageLocationId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  const result = await db.runAsync(
+  const result = await tx.runAsync(
     `
     INSERT INTO storage_infos (
       duration,
@@ -52,7 +54,13 @@ async function CreateStorageInfoService(
       id_storage_locations
     ) VALUES (?, ?, ?, ?, ?);
     `,
-    [duration, units.toUpperCase(), type.toUpperCase(), ingredientId, storageLocationId],
+    [
+      duration,
+      units.toUpperCase(),
+      type.toUpperCase(),
+      ingredientId,
+      storageLocationId,
+    ],
   );
 
   return {
@@ -65,8 +73,11 @@ async function CreateStorageInfoService(
   };
 }
 
-export async function RemoveStorageInfoService(ingredientId: number) {
-  const db = await getDb();
+export async function RemoveStorageInfoService(
+  ingredientId: number,
+  tx?: SQLiteDatabase,
+) {
+  const db = await getDbContext(tx);
   await db.runAsync(
     `
     DELETE FROM
@@ -95,8 +106,8 @@ export async function SetStorageInfoService(newStorageInfo: StorageInfo) {
     storageLocations: [],
   };
 
-  await db.withExclusiveTransactionAsync(async () => {
-    await RemoveStorageInfoService(newStorageInfo.ingredientId);
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    await RemoveStorageInfoService(newStorageInfo.ingredientId, tx);
 
     for (const [
       index,
@@ -105,20 +116,13 @@ export async function SetStorageInfoService(newStorageInfo: StorageInfo) {
       const storageDurationsResult: StorageDuration[] = [];
 
       for (const sd of storageLocation.storageDurations) {
-        console.log(
-          "INSERT storage_infos",
-          sd.duration,
-          sd.units,
-          sd.type,
-          newStorageInfo.ingredientId,
-          storageLocation.id,
-        );
         const createdDuration = await CreateStorageInfoService(
           sd.duration ?? null,
           sd.units,
           sd.type,
           newStorageInfo.ingredientId,
           storageLocation.id,
+          tx,
         );
 
         storageDurationsResult.push({

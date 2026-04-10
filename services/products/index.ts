@@ -1,6 +1,5 @@
 import { getDb } from "@database/database";
 import type { Product, Products } from "@stores/features/products";
-import { WithRequiredId } from "@app-types/NameId";
 
 export interface ProductRaw {
   product_id: number;

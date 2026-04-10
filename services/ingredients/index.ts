@@ -1,4 +1,4 @@
-import type { WithRequiredId } from "@app-types/NameId";
+import type { SQLiteDatabase } from "expo-sqlite";
 import { getDb } from "@database/database";
 import type { Ingredient, Ingredients } from "@stores/features/ingredients";
 
@@ -43,9 +43,9 @@ async function CreateIngredientInfosService(
   stockQuantity: number,
   unitId: number,
   categoryId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  const result = await db.runAsync(
+  const result = await tx.runAsync(
     `
     INSERT INTO
       ingredients (
@@ -95,9 +95,9 @@ async function CreateIngredientInfosService(
 async function AddMenuCategoryToIngredientService(
   menuCategoryId: number,
   ingredientId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  await db.runAsync(
+  await tx.runAsync(
     `
     INSERT INTO
       ingredient_menu_category_links (id_ingredients, id_menu_categories)
@@ -118,9 +118,9 @@ async function AddMenuCategoryToIngredientService(
 async function AddStorageLocationToIngredientService(
   storageLocationId: number,
   ingredientId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  await db.runAsync(
+  await tx.runAsync(
     `
     INSERT INTO
       ingredient_storage_location_links (id_ingredients, id_storage_locations)
@@ -144,19 +144,21 @@ export async function CreateIngredientService(
   const db = await getDb();
   let createdIngredient: Ingredients | null = null;
 
-  await db.withExclusiveTransactionAsync(async () => {
+  await db.withExclusiveTransactionAsync(async (tx) => {
     const baseIngredient = await CreateIngredientInfosService(
       newIngredient.name,
       newIngredient.quantifiable,
       newIngredient.stockQuantity,
       newIngredient.unitId,
       newIngredient.categoryId,
+      tx,
     );
 
     for (const menuCategoryId of newIngredient.menuCategoryIds) {
       await AddMenuCategoryToIngredientService(
         menuCategoryId,
         baseIngredient.id,
+        tx,
       );
     }
 
@@ -165,6 +167,7 @@ export async function CreateIngredientService(
         await AddStorageLocationToIngredientService(
           storageLocationId,
           baseIngredient.id,
+          tx,
         );
       }
     }
@@ -196,9 +199,9 @@ async function UpdateIngredientInfosService(
   stockQuantity: number,
   unitId: number,
   categoryId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  await db.runAsync(
+  await tx.runAsync(
     `
     UPDATE
       ingredients
@@ -222,9 +225,11 @@ async function UpdateIngredientInfosService(
   );
 }
 
-async function RemoveMenuCategoriesFromIngredientService(ingredientId: number) {
-  const db = await getDb();
-  await db.runAsync(
+async function RemoveMenuCategoriesFromIngredientService(
+  ingredientId: number,
+  tx: SQLiteDatabase,
+) {
+  await tx.runAsync(
     `
     DELETE FROM
       ingredient_menu_category_links
@@ -245,9 +250,9 @@ async function RemoveMenuCategoriesFromIngredientService(ingredientId: number) {
 
 async function RemoveStorageLocationsFromIngredientService(
   ingredientId: number,
+  tx: SQLiteDatabase,
 ) {
-  const db = await getDb();
-  await db.runAsync(
+  await tx.runAsync(
     `
     DELETE FROM
       ingredient_storage_location_links
@@ -268,7 +273,7 @@ async function RemoveStorageLocationsFromIngredientService(
 
 export async function UpdateIngredientService(newIngredient: Ingredients) {
   const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
+  await db.withExclusiveTransactionAsync(async (tx) => {
     const [ingredientIdStr] = Object.keys(newIngredient);
     const ingredientId = Number(ingredientIdStr);
     const [values] = Object.values(newIngredient) as Ingredient[];
@@ -279,17 +284,23 @@ export async function UpdateIngredientService(newIngredient: Ingredients) {
       values.stockQuantity,
       values.unitId,
       values.categoryId,
+      tx,
     );
-    await RemoveMenuCategoriesFromIngredientService(ingredientId);
+    await RemoveMenuCategoriesFromIngredientService(ingredientId, tx);
     for (const menuCategoryId of values.menuCategoryIds) {
-      await AddMenuCategoryToIngredientService(menuCategoryId, ingredientId);
+      await AddMenuCategoryToIngredientService(
+        menuCategoryId,
+        ingredientId,
+        tx,
+      );
     }
-    await RemoveStorageLocationsFromIngredientService(ingredientId);
+    await RemoveStorageLocationsFromIngredientService(ingredientId, tx);
     if (values.storageLocationIds) {
       for (const storageLocationId of values.storageLocationIds) {
         await AddStorageLocationToIngredientService(
           storageLocationId,
           ingredientId,
+          tx,
         );
       }
     }
@@ -301,12 +312,13 @@ export async function UpdateStorageLocationsService(
   newStorageLocationIds: number[],
 ) {
   const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
-    await RemoveStorageLocationsFromIngredientService(ingredientId);
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    await RemoveStorageLocationsFromIngredientService(ingredientId, tx);
     for (const storageLocationId of newStorageLocationIds) {
       await AddStorageLocationToIngredientService(
         storageLocationId,
         ingredientId,
+        tx,
       );
     }
   });
@@ -343,9 +355,8 @@ export async function DeleteIngredientService(ingredientId: number) {
   );
 }
 
-async function UpdateStockFromMenu() {
-  const db = await getDb();
-  await db.runAsync(
+async function UpdateStockFromMenu(tx: SQLiteDatabase) {
+  await tx.runAsync(
     `
     UPDATE
       ingredients
@@ -367,9 +378,8 @@ async function UpdateStockFromMenu() {
   );
 }
 
-async function UpdateStockFromShopping() {
-  const db = await getDb();
-  await db.runAsync(
+async function UpdateStockFromShopping(tx: SQLiteDatabase) {
+  await tx.runAsync(
     `
     UPDATE ingredients
     SET stock_quantity = stock_quantity + COALESCE((
@@ -397,8 +407,8 @@ async function UpdateStockFromShopping() {
 
 export async function UpdateStockService(from: "menu" | "shopping") {
   const db = await getDb();
-  await db.withExclusiveTransactionAsync(async () => {
-    if (from === "menu") await UpdateStockFromMenu();
-    else await UpdateStockFromShopping();
+  await db.withExclusiveTransactionAsync(async (tx) => {
+    if (from === "menu") await UpdateStockFromMenu(tx);
+    else await UpdateStockFromShopping(tx);
   });
 }
