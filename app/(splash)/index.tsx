@@ -58,9 +58,9 @@ export default function Splash() {
 
   async function handleAdd() {
     try {
-      const result = await dispatch(
-        addRecipeToMenuThunk({ recipeId: 3, menuId: 1 }),
-      ).unwrap();
+      // const result = await dispatch(
+      //   addRecipeToMenuThunk({ recipeId: 3, menuId: 1 }),
+      // ).unwrap();
       // const result = await dispatch(
       //   addIngredientToMenuThunk({ newIngredient: ingredient, menuId: 2 }),
       // ).unwrap();
@@ -71,7 +71,7 @@ export default function Splash() {
 
   async function handleDelete() {
     try {
-      const result = await dispatch(removeWeeklyMenuThunk()).unwrap();
+      // const result = await dispatch(removeWeeklyMenuThunk()).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -103,9 +103,6 @@ export default function Splash() {
     }
     fetchMenus();
   }, []);
-  // useEffect(() => {
-  //   console.log(weeklyMenu);
-  // }, [weeklyMenu]);
 
   return (
     <View style={styles.container}>
@@ -122,18 +119,18 @@ export default function Splash() {
         <Text style={styles.button}>Modifier</Text>
       </Pressable>
       <View style={styles.infosContainer}>
-        {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
+        {/* {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
           ([keyDay, moment], dayIndex) => {
             return (
               <View key={`day-${dayIndex}`}>
-                <Text>{keyDay}</Text>
+                <Text style={styles.littleText}>{keyDay}</Text>
                 <View>
                   {(Object.entries(moment) as [string, MenuUi][]).map(
                     ([keyMoment, menu], momentIndex) => {
                       return (
                         <View key={`moment-${momentIndex}`}>
-                          <Text>{keyMoment}</Text>
-                          <Text>{menu.id}</Text>
+                          <Text style={styles.littleText}>{keyMoment}</Text>
+                          <Text style={styles.littleText}>{menu.id}</Text>
                           {(
                             Object.entries(menu.ingredients) as [
                               string,
@@ -142,11 +139,14 @@ export default function Splash() {
                           ).map(([key, value], menuCategoryIndex) => {
                             return (
                               <View key={`menuCategory-${menuCategoryIndex}`}>
-                                <Text>{menuCategories[Number(key)].name}</Text>
+                                <Text style={styles.littleText}>
+                                  {menuCategories[Number(key)].name}
+                                </Text>
                                 {value.map((item, ingredientIndex) => {
                                   return (
                                     <Text
                                       key={`ingredients-${ingredientIndex}`}
+                                      style={styles.littleText}
                                     >
                                       {
                                         ingredients[Number(item?.ingredientId)]
@@ -166,7 +166,7 @@ export default function Splash() {
               </View>
             );
           },
-        )}
+        )} */}
       </View>
     </View>
   );

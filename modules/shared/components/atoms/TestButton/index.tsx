@@ -26,7 +26,7 @@ export default function TestButton() {
   };
   return (
     <TouchableOpacity style={styles.testButton} onPress={handleTestLog}>
-      <Text style={{ color: "transparent" }}>Reset</Text>
+      <Text style={{ color: "transparent" }}>Test</Text>
     </TouchableOpacity>
   );
 }

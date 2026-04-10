@@ -50,6 +50,15 @@ import { createRecipeThunk } from "@stores/thunks/recipes";
 import { mockProducts } from "@constants/database/mocks/data/products";
 import { createProductThunk } from "@stores/thunks/products";
 
+import {
+  mockWeeklyIngredients,
+  mockWeeklyRecipes,
+} from "@constants/database/mocks/data/weeklyMenu";
+import {
+  addRecipeToMenuThunk,
+  addIngredientToMenuThunk,
+} from "@stores/thunks/weeklyMenu";
+
 export const insertMockData = async (dispatch: AppDispatch) => {
   for (const unit of mockUnits) {
     await dispatch(createUnitThunk(unit)).unwrap();
@@ -72,4 +81,10 @@ export const insertMockData = async (dispatch: AppDispatch) => {
   for (const product of mockProducts) {
     await dispatch(createProductThunk(product)).unwrap();
   }
+  for (const recipe of mockWeeklyRecipes) {
+    await dispatch(addRecipeToMenuThunk(recipe)).unwrap();
+  }
+  // for (const ingredient of mockWeeklyIngredients) {
+  //   await dispatch(addIngredientToMenuThunk(ingredient)).unwrap();
+  // }
 };

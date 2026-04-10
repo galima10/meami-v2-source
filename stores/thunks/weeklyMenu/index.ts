@@ -19,7 +19,6 @@ import {
   formatWeeklyMenu,
   formatAllMenus,
 } from "@utils/formatData/formatWeeklyMenu";
-import { findElementById } from "@utils/findElementById";
 import type { RootState } from "@stores/index";
 import type { Recipe } from "@stores/features/recipes";
 
