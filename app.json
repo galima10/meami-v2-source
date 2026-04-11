@@ -65,6 +65,29 @@
             ]
           }
         }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/images/precharged/logos/logo.png",
+            "./assets/images/precharged/logos/logo_text.png",
+
+            "./assets/images/precharged/illustrations/illustrations_cooking_3x.jpg",
+            "./assets/images/precharged/illustrations/illustrations_ingredients_3x.jpg",
+            "./assets/images/precharged/illustrations/illustrations_morning_3x.jpg",
+            "./assets/images/precharged/illustrations/illustrations_noon_evening_3x.jpg",
+            "./assets/images/precharged/illustrations/illustrations_products_3x.jpg",
+            "./assets/images/precharged/illustrations/illustrations_recipes_3x.jpg",
+            "./assets/images/precharged/illustrations/illustrations_storage_3x.jpg",
+
+            "./assets/images/precharged/background/background_cart_3x.jpg",
+            "./assets/images/precharged/background/background_infos_3x.jpg",
+            "./assets/images/precharged/background/background_menu_3x.jpg",
+            "./assets/images/precharged/background/background_overlay_3x.jpg",
+            "./assets/images/precharged/background/background_stock_3x.jpg"
+          ]
+        }
       ]
     ],
     "updates": {
