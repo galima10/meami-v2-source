@@ -23,7 +23,10 @@ import {
 import { fetchStorageInfosThunk } from "@stores/thunks/storageInfos";
 import { fetchUnitsThunk } from "@stores/thunks/units";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import type { Ingredient } from "@stores/features/ingredients";
+import {
+  selectIngredientId,
+  clearIngredientIdSelected,
+} from "@stores/features/ingredients";
 
 import { fetchCookingInfosThunk } from "@stores/thunks/cookingInfos";
 import { fetchCookingUstensilsThunk } from "@stores/thunks/cookingUstensils";
@@ -73,8 +76,13 @@ import type { Product } from "@stores/features/products";
 export default function Splash() {
   const dispatch = useAppDispatch();
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
-  const { ingredients } = useAppSelector((state) => state.ingredient);
-  const { products } = useAppSelector((state) => state.product);
+  const { ingredients, selectedIngredientId } = useAppSelector(
+    (state) => state.ingredient,
+  );
+  const { products, selectedProductId } = useAppSelector(
+    (state) => state.product,
+  );
+  const { recipes, selectedRecipeId } = useAppSelector((state) => state.recipe);
   const { units } = useAppSelector((state) => state.unit);
   const { shoppingChecks, stockChecks } = useAppSelector(
     (state) => state.manualAdjustement,
@@ -93,14 +101,14 @@ export default function Splash() {
 
   async function handleAdd() {
     try {
-      const result = await dispatch(
-        setIngredientMenuQuantityThunk({
-          itemId: 1,
-          value: 15,
-          operation: "set",
-          menuId: 1,
-        }),
-      ).unwrap();
+      // const result = await dispatch(
+      //   setIngredientMenuQuantityThunk({
+      //     itemId: 1,
+      //     value: 15,
+      //     operation: "set",
+      //     menuId: 1,
+      //   }),
+      // ).unwrap();
       // const result = await dispatch(
       //   addItemToShoppingThunk({
       //     newItemId: 1,
@@ -108,7 +116,7 @@ export default function Splash() {
       //     type: "ingredients",
       //   }),
       // ).unwrap();
-      console.log("test");
+      dispatch(selectIngredientId(1));
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -127,8 +135,9 @@ export default function Splash() {
       // dispatch(resetShoppingList());
       // await ResetShoppingManualChecksService();
       // dispatch(resetShoppingAdjustements());
-      await ResetStockManualChecksService();
-      dispatch(resetStockAdjustements());
+      dispatch(clearIngredientIdSelected());
+      // await ResetStockManualChecksService();
+      // dispatch(resetStockAdjustements());
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -177,6 +186,9 @@ export default function Splash() {
   return (
     <View style={styles.container}>
       <View style={styles.infosContainer}>
+        <Text>
+          {selectedIngredientId && ingredients[selectedIngredientId].name}
+        </Text>
         {/* {(Object.entries(ingredients) as [string, Ingredient][]).map(
           ([key, values]) => {
             return (

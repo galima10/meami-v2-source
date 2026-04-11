@@ -20,7 +20,7 @@ export interface Products {
 
 const initialState = {
   products: {} as Products,
-  selectedId: null as number | null,
+  selectedProductId: null as number | null,
   loading: false,
   error: null as string | null,
 };
@@ -31,10 +31,10 @@ export const productSlice = createSlice({
   reducers: {
     resetProducts: () => initialState,
     productIdSelected: (state, action: PayloadAction<number | null>) => {
-      state.selectedId = action.payload;
+      state.selectedProductId = action.payload;
     },
     clearProductIdSelected: (state) => {
-      state.selectedId = null;
+      state.selectedProductId = null;
     },
   },
   extraReducers: (builder) => {

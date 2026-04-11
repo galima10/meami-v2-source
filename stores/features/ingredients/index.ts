@@ -28,7 +28,7 @@ export interface Ingredients {
 
 const initialState = {
   ingredients: {} as Ingredients,
-  selectedId: null as number | null,
+  selectedIngredientId: null as number | null,
   loading: false,
   error: null as string | null,
 };
@@ -39,10 +39,10 @@ export const ingredientSlice = createSlice({
   reducers: {
     resetIngredients: () => initialState,
     selectIngredientId: (state, action: PayloadAction<number | null>) => {
-      state.selectedId = action.payload;
+      state.selectedIngredientId = action.payload;
     },
     clearIngredientIdSelected: (state) => {
-      state.selectedId = null;
+      state.selectedIngredientId = null;
     },
   },
   extraReducers: (builder) => {
