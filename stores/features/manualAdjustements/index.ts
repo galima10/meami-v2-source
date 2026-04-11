@@ -1,17 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { act } from "react";
+import {
+  fetchShoppingManualChecksThunk,
+  fetchStockManualChecksThunk,
+  setIngredientShoppingCheckThunk,
+} from "@stores/thunks/manualAdjustements";
 
 export interface ManualAdjustementItem {
-  id: number;
-  name: string;
-  unit: string;
   usageCount: number;
   checked: boolean;
 }
 
+export interface ManualAdjustementItems {
+  [ingredientId: number]: ManualAdjustementItem;
+}
+
 const initialState = {
-  shopping: [] as ManualAdjustementItem[],
-  stock: [] as ManualAdjustementItem[],
+  shoppingChecks: {} as ManualAdjustementItems,
+  stockChecks: {} as ManualAdjustementItems,
+  loading: false,
+  error: null as string | null,
 };
 
 export const manualAdjustementSlice = createSlice({
@@ -19,34 +26,104 @@ export const manualAdjustementSlice = createSlice({
   initialState,
   reducers: {
     resetManualAdjustements: () => initialState,
-    setManualAdjustements: (
-      state,
-      action: PayloadAction<{
-        ingredients: ManualAdjustementItem[];
-        type: "shopping" | "stock";
-      }>,
-    ) => {
-      const { ingredients, type } = action.payload;
-      state[type] = ingredients;
+    resetShoppingAdjustements: (state) => {
+      state.shoppingChecks = initialState.shoppingChecks;
     },
-    ingredientCheckToggled: (
-      state,
-      action: PayloadAction<{
-        type: "shopping" | "stock";
-        ingredientId: number;
-        checked: boolean;
-      }>,
-    ) => {
-      const { type, ingredientId, checked } = action.payload;
-      const index = state[type].findIndex((item) => item.id === ingredientId);
+    resetStockAdjustements: (state) => {
+      state.stockChecks = initialState.stockChecks;
+    },
+  },
+  extraReducers: (builder) => {
+    // fetchShoppingManualChecksThunk
+    builder
+      .addCase(fetchShoppingManualChecksThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchShoppingManualChecksThunk.fulfilled,
+        (state, action: PayloadAction<ManualAdjustementItems>) => {
+          state.loading = false;
+          if (Object.keys(state.shoppingChecks).length === 0) {
+            state.shoppingChecks = action.payload;
+          }
+        },
+      )
+      .addCase(
+        fetchShoppingManualChecksThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof fetchShoppingManualChecksThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
 
-      if (index !== -1) {
-        state[type][index].checked = checked;
-      }
-    },
+    // fetchStockManualChecksThunk
+    builder
+      .addCase(fetchStockManualChecksThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchStockManualChecksThunk.fulfilled,
+        (state, action: PayloadAction<ManualAdjustementItems>) => {
+          state.loading = false;
+          if (Object.keys(state.stockChecks).length === 0) {
+            state.stockChecks = action.payload;
+          }
+        },
+      )
+      .addCase(
+        fetchStockManualChecksThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof fetchStockManualChecksThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
+
+    // setIngredientShoppingCheckThunk
+    builder
+      .addCase(setIngredientShoppingCheckThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        setIngredientShoppingCheckThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            ingredientId: number;
+            checked: boolean;
+            type: "shopping" | "stock";
+          }>,
+        ) => {
+          state.loading = false;
+
+          const { ingredientId, checked, type } = action.payload;
+          state[`${type}Checks`][ingredientId].checked = checked;
+        },
+      )
+      .addCase(
+        setIngredientShoppingCheckThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof setIngredientShoppingCheckThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
   },
 });
 
-export const { setManualAdjustements, ingredientCheckToggled, resetManualAdjustements } =
-  manualAdjustementSlice.actions;
+export const {
+  resetManualAdjustements,
+  resetShoppingAdjustements,
+  resetStockAdjustements,
+} = manualAdjustementSlice.actions;
 export default manualAdjustementSlice.reducer;

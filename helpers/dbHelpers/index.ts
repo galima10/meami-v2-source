@@ -1,4 +1,4 @@
-const QUANTITY_SCALE = 100;
+import { QUANTITY_SCALE } from "@constants/general";
 
 export function toDbNumber(value: number): number {
   return Math.round(value * QUANTITY_SCALE);
