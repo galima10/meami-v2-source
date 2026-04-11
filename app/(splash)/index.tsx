@@ -50,6 +50,7 @@ export default function Splash() {
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { ingredients } = useAppSelector((state) => state.ingredient);
   const { products } = useAppSelector((state) => state.product);
+  const { units } = useAppSelector((state) => state.unit);
   const { ingredientCategories } = useAppSelector(
     (state) => state.ingredientCategory,
   );
@@ -67,17 +68,16 @@ export default function Splash() {
       // const result = await dispatch(
       //   setShoppingListItemQuantityThunk({
       //     itemId: 1,
-      //     type: "products",
+      //     type: "ingredients",
       //     quantityNeeded: 2,
       //     quantityBuyed: 1,
       //   }),
       // ).unwrap();
-
       // const result = await dispatch(
       //   addItemToShoppingThunk({
       //     newItemId: 1,
       //     quantityNeeded: 1,
-      //     type: "products",
+      //     type: "ingredients",
       //   }),
       // ).unwrap();
     } catch (err) {
@@ -102,8 +102,8 @@ export default function Splash() {
       // const result = await dispatch(
       //   updateIngredientThunk(newIngredient1),
       // ).unwrap();
-      await LoadShoppingListService();
-      await dispatch(fetchShoppingListThunk());
+      // await LoadShoppingListService();
+      // await dispatch(fetchShoppingListThunk());
     } catch (err) {
       console.error(err);
     }
@@ -210,9 +210,11 @@ export default function Splash() {
             <View key={key}>
               <Text>
                 {ingredients[Number(key)]?.name}
+                {/* {key} */}
               </Text>
               <Text>
-                {values.quantityBuyed} / {values.quantityNeeded}
+                {values.quantityBuyed} / {values.quantityNeeded}{" "}
+                {units[values.unitId]?.abbreviation}
               </Text>
             </View>
           );
@@ -222,9 +224,7 @@ export default function Splash() {
         ).map(([key, values]) => {
           return (
             <View key={key}>
-              <Text>
-                {products[Number(key)]?.name}
-              </Text>
+              <Text>{products[Number(key)]?.name}</Text>
               <Text>
                 {values.quantityBuyed} / {values.quantityNeeded}
               </Text>

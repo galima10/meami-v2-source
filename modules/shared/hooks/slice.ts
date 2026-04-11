@@ -59,6 +59,14 @@ import {
   addIngredientToMenuThunk,
 } from "@stores/thunks/weeklyMenu";
 
+import { LoadShoppingListService } from "@services/shoppingList";
+import {
+  fetchShoppingListThunk,
+  addItemToShoppingThunk,
+  setShoppingListItemQuantityThunk,
+} from "@stores/thunks/shoppingList";
+import { mockIngredientsBuyed } from "@constants/database/mocks/data/shoppingList";
+
 export const insertMockData = async (dispatch: AppDispatch) => {
   for (const unit of mockUnits) {
     await dispatch(createUnitThunk(unit)).unwrap();
@@ -87,7 +95,13 @@ export const insertMockData = async (dispatch: AppDispatch) => {
   for (const ingredient of mockWeeklyIngredients) {
     await dispatch(addIngredientToMenuThunk(ingredient)).unwrap();
   }
-  
-  
-  
+  await loadShopping(dispatch);
+  for (const ingredient of mockIngredientsBuyed) {
+    await dispatch(setShoppingListItemQuantityThunk(ingredient)).unwrap();
+  }
 };
+
+async function loadShopping(dispatch: AppDispatch) {
+  await LoadShoppingListService();
+  await dispatch(fetchShoppingListThunk());
+}
