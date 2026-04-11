@@ -400,8 +400,7 @@ async function UpdateStockFromShopping(tx: SQLiteDatabase) {
             LIMIT 1
         )
         AND sli.quantity_buyed >= 0
-    ), 0)
-    WHERE quantifiable = 1;
+    ), 0);
   `,
   );
 }

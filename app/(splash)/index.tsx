@@ -19,10 +19,14 @@ import {
 import { fetchStorageInfosThunk } from "@stores/thunks/storageInfos";
 import { fetchUnitsThunk } from "@stores/thunks/units";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import type { Ingredient } from "@stores/features/ingredients";
 
 import { fetchCookingInfosThunk } from "@stores/thunks/cookingInfos";
 import { fetchCookingUstensilsThunk } from "@stores/thunks/cookingUstensils";
-import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
+import {
+  fetchIngredientsThunk,
+  updateStockThunk,
+} from "@stores/thunks/ingredients";
 import {
   LoadShoppingListService,
   ResetShoppingListService,
@@ -80,13 +84,7 @@ export default function Splash() {
 
   async function handleAdd() {
     try {
-      const result = await dispatch(
-        setIngredientShoppingCheckThunk({
-          ingredientId: 1,
-          checked: false,
-          type: "shopping",
-        }),
-      ).unwrap();
+      const result = await dispatch(updateStockThunk("menu")).unwrap();
       // const result = await dispatch(
       //   addItemToShoppingThunk({
       //     newItemId: 1,
@@ -94,6 +92,7 @@ export default function Splash() {
       //     type: "ingredients",
       //   }),
       // ).unwrap();
+      console.log("test")
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -106,8 +105,8 @@ export default function Splash() {
       // ).unwrap();
       // await ResetShoppingListService();
       // dispatch(resetShoppingList());
-      await ResetShoppingManualChecksService();
-      dispatch(resetShoppingAdjustements());
+      // await ResetShoppingManualChecksService();
+      // dispatch(resetShoppingAdjustements());
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -153,6 +152,16 @@ export default function Splash() {
   return (
     <View style={styles.container}>
       <View style={styles.infosContainer}>
+        {(Object.entries(ingredients) as [string, Ingredient][]).map(
+          ([key, values]) => {
+            return (
+              <Text key={`ingredient-${key}`}>
+                {values.name} - {values.stockQuantity}{" "}
+                {units[values.unitId]?.abbreviation}
+              </Text>
+            );
+          },
+        )}
         {/* {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
           ([keyDay, moment], dayIndex) => {
             return (
@@ -213,7 +222,7 @@ export default function Splash() {
             </Text>
           );
         })} */}
-        {(
+        {/* {(
           Object.entries(ingredientsShopping) as [
             string,
             ShoppingListIngredient,
@@ -223,7 +232,6 @@ export default function Splash() {
             <View key={key}>
               <Text>
                 {ingredients[Number(key)]?.name}
-                {/* {key} */}
               </Text>
               <Text>
                 {values.quantityBuyed} / {values.quantityNeeded}{" "}
@@ -243,9 +251,9 @@ export default function Splash() {
               </Text>
             </View>
           );
-        })}
+        })} */}
       </View>
-      {/* <Pressable
+      <Pressable
         // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
         onPress={() => handleAdd()}
       >
@@ -256,7 +264,7 @@ export default function Splash() {
       </Pressable>
       <Pressable onPress={() => handleUpdate()}>
         <Text style={styles.button}>Loader</Text>
-      </Pressable> */}
+      </Pressable>
     </View>
   );
 }
