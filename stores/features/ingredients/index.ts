@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { WithRequiredId } from "@app-types/NameId";
 import {
   fetchIngredientsThunk,
   createIngredientThunk,
@@ -8,7 +7,10 @@ import {
   updateStorageLocationsThunk,
   setQuantifiableThunk,
   deleteIngredientThunk,
+  setIngredientStockQuantityThunk,
 } from "@stores/thunks/ingredients";
+import type { Operation } from "@app-types/DbQuantity";
+import { applyOperation } from "@utils/applyOperation";
 
 export interface Ingredient {
   name: string;
@@ -42,29 +44,6 @@ export const ingredientSlice = createSlice({
     clearIngredientIdSelected: (state) => {
       state.selectedId = null;
     },
-    // ingredientStockQuantitySetted: (
-    //   state,
-    //   action: PayloadAction<{ ingredientId: number; delta: number }>,
-    // ) => {
-    //   const { ingredientId, delta } = action.payload;
-    //   const index = state.ingredients.findIndex(
-    //     (item) => item.id === ingredientId,
-    //   );
-
-    //   const ingredient = state.ingredients[ingredientId];
-
-    //   if (index !== -1) {
-    //     const newQuantity =
-    //       delta !== -1 && delta !== 1
-    //         ? delta
-    //         : state.ingredients[index].stockQuantity + delta;
-
-    //     state.ingredients[index] = {
-    //       ...state.ingredients[index],
-    //       stockQuantity: newQuantity,
-    //     };
-    //   }
-    // },
   },
   extraReducers: (builder) => {
     // fetchIngredientsThunk
@@ -222,9 +201,14 @@ export const ingredientSlice = createSlice({
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },
-      )
+      );
 
-      // updateStockThunk
+    // updateStockThunk
+    builder
+      .addCase(updateStockThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(
         updateStockThunk.fulfilled,
         (state, action: PayloadAction<Ingredients>) => {
@@ -246,6 +230,45 @@ export const ingredientSlice = createSlice({
       .addCase(
         updateStockThunk.rejected,
         (state, action: ReturnType<typeof updateStockThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
+
+    // setIngredientStockQuantityThunk
+    builder
+      .addCase(setIngredientStockQuantityThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        setIngredientStockQuantityThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            itemId: number;
+            value: number;
+            operation: Operation;
+          }>,
+        ) => {
+          state.loading = false;
+
+          const { itemId, value, operation } = action.payload;
+          const ingredient = state.ingredients[itemId];
+          if (!ingredient) return;
+          ingredient.stockQuantity = applyOperation(
+            ingredient.stockQuantity,
+            value,
+            operation,
+          );
+        },
+      )
+      .addCase(
+        setIngredientStockQuantityThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof setIngredientStockQuantityThunk.rejected>,
+        ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },

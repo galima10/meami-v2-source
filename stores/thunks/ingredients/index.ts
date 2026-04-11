@@ -1,6 +1,5 @@
 import type { Ingredient, Ingredients } from "@stores/features/ingredients";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { WithRequiredId } from "@app-types/NameId";
 import {
   FetchIngredientsService,
   UpdateIngredientService,
@@ -11,6 +10,8 @@ import {
   SetQuantifiableService,
 } from "@services/ingredients";
 import { formatIngredients } from "@utils/formatData/formatIngredients";
+import { UpdateQuantityGenericService } from "@services/shared";
+import type { Operation } from "@app-types/DbQuantity";
 
 export const fetchIngredientsThunk = createAsyncThunk<Ingredients, void>(
   "ingredients/fetchIngredients",
@@ -20,21 +21,21 @@ export const fetchIngredientsThunk = createAsyncThunk<Ingredients, void>(
   },
 );
 
-export const createIngredientThunk = createAsyncThunk<
-  Ingredients,
-  Ingredient
->("ingredients/createIngredient", async (newIngredient) => {
-  const createdIngredient = await CreateIngredientService(newIngredient);
-  return createdIngredient;
-});
+export const createIngredientThunk = createAsyncThunk<Ingredients, Ingredient>(
+  "ingredients/createIngredient",
+  async (newIngredient) => {
+    const createdIngredient = await CreateIngredientService(newIngredient);
+    return createdIngredient;
+  },
+);
 
-export const updateIngredientThunk = createAsyncThunk<
-  Ingredients,
-  Ingredients
->("ingredients/updateIngredient", async (newIngredient) => {
-  await UpdateIngredientService(newIngredient);
-  return newIngredient;
-});
+export const updateIngredientThunk = createAsyncThunk<Ingredients, Ingredients>(
+  "ingredients/updateIngredient",
+  async (newIngredient) => {
+    await UpdateIngredientService(newIngredient);
+    return newIngredient;
+  },
+);
 
 export const updateStorageLocationsThunk = createAsyncThunk<
   {
@@ -83,6 +84,32 @@ export const updateStockThunk = createAsyncThunk<
   const data = await FetchIngredientsService();
   return formatIngredients(data);
 });
+
+export const setIngredientStockQuantityThunk = createAsyncThunk<
+  {
+    itemId: number;
+    value: number;
+    operation: Operation;
+  },
+  {
+    itemId: number;
+    value: number;
+    operation: Operation;
+  }
+>(
+  "ingredients/setIngredientStockQuantity",
+  async ({ itemId, value, operation }) => {
+    await UpdateQuantityGenericService(
+      "ingredients",
+      "stock_quantity",
+      "id_ingredients",
+      itemId,
+      value,
+      operation,
+    );
+    return { itemId, value, operation };
+  },
+);
 
 function selectIngredient(ingredientId: number) {
   // dispatch ingredientsSlice.selectedId ingredientId ingredientIdSelected et clearIngredientIdSelected avant à faire
