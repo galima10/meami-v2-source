@@ -1,6 +1,6 @@
-import type { Products } from "@stores/features/products";
+import { fromDbNumber } from "@helpers/dbHelpers";
 import type { ProductRaw } from "@services/products";
-import { fromDbNumber } from "helpers/dbHelpers";
+import type { Products } from "@stores/features/products";
 
 export function formatProducts(rawData: ProductRaw[]): Products {
   const treated = rawData.reduce<Products>((acc, data) => {

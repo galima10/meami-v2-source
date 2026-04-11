@@ -1,6 +1,6 @@
 import { getDb } from "@database/database";
+import { toDbNumber } from "@helpers/dbHelpers";
 import type { Product, Products } from "@stores/features/products";
-import { toDbNumber } from "helpers/dbHelpers";
 
 export interface ProductRaw {
   product_id: number;

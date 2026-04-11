@@ -17,7 +17,8 @@
       "@app-types/*": ["./types/*"],
       "@utils/*": ["./utils/*"],
       "@themes/*": ["./constants/themes/*"],
-      "@modules/*": ["./modules/*"]
+      "@modules/*": ["./modules/*"],
+      "@helpers/*": ["./helpers/*"]
     }
   },
   "include": [

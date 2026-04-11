@@ -1,7 +1,7 @@
 import { getDb } from "@database/database";
+import { toDbNumber } from "@helpers/dbHelpers";
+import { getDbContext } from "@helpers/getDbContext";
 import type { SQLiteDatabase } from "expo-sqlite";
-import { toDbNumber } from "helpers/dbHelpers";
-import { getDbContext } from "helpers/getDbContext";
 
 interface ShoppingListIngredientsRaw {
   ingredient_id: number;

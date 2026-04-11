@@ -1,12 +1,12 @@
-import { getDb } from "@database/database";
-import { getDbContext } from "helpers/getDbContext";
-import type {
-  CookingInfo,
-  CookingDuration,
-} from "@stores/features/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
+import { getDb } from "@database/database";
+import { toDbNumberOrNull } from "@helpers/dbHelpers";
+import { getDbContext } from "@helpers/getDbContext";
+import type {
+  CookingDuration,
+  CookingInfo,
+} from "@stores/features/cookingInfos";
 import type { SQLiteDatabase } from "expo-sqlite";
-import { toDbNumberOrNull } from "helpers/dbHelpers";
 
 export interface CookingInfoRaw {
   cooking_info_id: number;
@@ -100,7 +100,12 @@ async function CreateCookingDurationService(
       id_cooking_infos
     ) VALUES (?, ?, ?, ?)
     `,
-    [toDbNumberOrNull(duration), toDbNumberOrNull(temperature), ustensilId, cookingInfoId],
+    [
+      toDbNumberOrNull(duration),
+      toDbNumberOrNull(temperature),
+      ustensilId,
+      cookingInfoId,
+    ],
   );
 
   return {

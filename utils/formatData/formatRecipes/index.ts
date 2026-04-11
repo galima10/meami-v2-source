@@ -1,9 +1,6 @@
-import type {
-  Recipes,
-  RecipeType,
-} from "@stores/features/recipes";
+import { fromDbNumber } from "@helpers/dbHelpers";
 import type { RecipeRaw } from "@services/recipes";
-import { fromDbNumber } from "helpers/dbHelpers";
+import type { Recipes, RecipeType } from "@stores/features/recipes";
 
 export function formatRecipes(rawData: RecipeRaw[]): Recipes {
   const treated = rawData.reduce<Recipes>((acc, item) => {

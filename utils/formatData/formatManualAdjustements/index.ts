@@ -1,6 +1,6 @@
+import { fromDbNumber } from "@helpers/dbHelpers";
 import type { ManualAdjustementItemRaw } from "@services/manualAdjustements";
 import type { ManualAdjustementItems } from "@stores/features/manualAdjustements";
-import { fromDbNumber } from "helpers/dbHelpers";
 
 export function formatManualAdjustements(
   rawData: ManualAdjustementItemRaw[],

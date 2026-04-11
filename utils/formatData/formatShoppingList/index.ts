@@ -1,9 +1,9 @@
-import type {
-  ShoppingListIngredients,
-  ShoppingListProducts,
-} from "@stores/features/shoppingList";
+import { fromDbNumber } from "@helpers/dbHelpers";
 import type { ShoppingListRaw } from "@services/shoppingList";
-import { fromDbNumber } from "helpers/dbHelpers";
+import type {
+    ShoppingListIngredients,
+    ShoppingListProducts,
+} from "@stores/features/shoppingList";
 
 export function formatShoppingList(rawData: ShoppingListRaw): {
   ingredients: ShoppingListIngredients;

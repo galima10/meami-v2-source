@@ -1,11 +1,11 @@
-import { getDb } from "@database/database";
 import type {
+  Operation,
+  QuantityCondition,
   QuantityField,
   QuantityTable,
-  QuantityCondition,
-  Operation,
 } from "@app-types/DbQuantity";
-import { toDbNumber } from "helpers/dbHelpers";
+import { getDb } from "@database/database";
+import { toDbNumber } from "@helpers/dbHelpers";
 
 export async function UpdateQuantityGenericService(
   table: QuantityTable,

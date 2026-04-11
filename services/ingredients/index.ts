@@ -1,7 +1,7 @@
-import type { SQLiteDatabase } from "expo-sqlite";
 import { getDb } from "@database/database";
+import { toDbNumber } from "@helpers/dbHelpers";
 import type { Ingredient, Ingredients } from "@stores/features/ingredients";
-import { toDbNumber } from "helpers/dbHelpers";
+import type { SQLiteDatabase } from "expo-sqlite";
 
 export interface IngredientRaw {
   ingredient_id: number;

@@ -1,7 +1,10 @@
-import type { CookingInfo, CookingDuration } from "@stores/features/cookingInfos";
-import type { CookingInfoRaw } from "@services/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
-import { fromDbNumberOrNull } from "helpers/dbHelpers";
+import { fromDbNumberOrNull } from "@helpers/dbHelpers";
+import type { CookingInfoRaw } from "@services/cookingInfos";
+import type {
+    CookingDuration,
+    CookingInfo,
+} from "@stores/features/cookingInfos";
 
 export function formatCookingInfos(
   rawData: CookingInfoRaw[],
@@ -16,7 +19,10 @@ export function formatCookingInfos(
           ingredientId: item.ingredient_id,
           preparationTypesMap: {} as Record<
             string,
-            { name: string; cookingDurations: WithRequiredId<CookingDuration>[] }
+            {
+              name: string;
+              cookingDurations: WithRequiredId<CookingDuration>[];
+            }
           >,
         };
       }

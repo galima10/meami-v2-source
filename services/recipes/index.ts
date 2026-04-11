@@ -1,7 +1,7 @@
-import type { SQLiteDatabase } from "expo-sqlite";
 import { getDb } from "@database/database";
+import { toDbNumberOrNull } from "@helpers/dbHelpers";
 import type { Recipe, RecipeType, Recipes } from "@stores/features/recipes";
-import { toDbNumberOrNull } from "helpers/dbHelpers";
+import type { SQLiteDatabase } from "expo-sqlite";
 
 export interface RecipeRaw {
   recipe_id: number;
@@ -155,7 +155,13 @@ async function AddIngredientToRecipe(
     VALUES
       (?, ?, MAX(1, ?), ?, ?);
   `,
-    [recipeId, ingredientId, toDbNumberOrNull(quantity), unitId, menuCategoryId],
+    [
+      recipeId,
+      ingredientId,
+      toDbNumberOrNull(quantity),
+      unitId,
+      menuCategoryId,
+    ],
   );
 }
 

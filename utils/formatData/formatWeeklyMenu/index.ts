@@ -1,12 +1,11 @@
+import { fromDbNumberOrNull } from "@helpers/dbHelpers";
+import type { MenuRaw, WeeklyMenuRaw } from "@services/weeklyMenu";
 import type {
-  WeeklyMenuIngredients,
-  WeeklyMenu,
+    WeeklyMenu,
+    WeeklyMenuIngredients,
 } from "@stores/features/weeklyMenu";
-import type { WeeklyMenuRaw, MenuRaw } from "@services/weeklyMenu";
-import { fromDbNumberOrNull } from "helpers/dbHelpers";
 
 export function formatAllMenus(rawData: MenuRaw[]): WeeklyMenu {
-  
   const treated: WeeklyMenu = rawData.reduce<WeeklyMenu>((acc, item) => {
     const menuId = item.menu_id;
 
@@ -21,7 +20,7 @@ export function formatAllMenus(rawData: MenuRaw[]): WeeklyMenu {
 
     return acc;
   }, {});
-  
+
   return treated;
 }
 

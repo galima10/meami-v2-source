@@ -1,6 +1,6 @@
+import { fromDbNumber } from "@helpers/dbHelpers";
 import type { IngredientRaw } from "@services/ingredients";
 import type { Ingredients } from "@stores/features/ingredients";
-import { fromDbNumber } from "helpers/dbHelpers";
 
 export function formatIngredients(rawData: IngredientRaw[]): Ingredients {
   const treated = rawData.reduce<Ingredients>((acc, data) => {

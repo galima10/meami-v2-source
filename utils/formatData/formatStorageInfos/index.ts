@@ -1,10 +1,10 @@
-import type {
-  StorageDuration,
-  StorageInfo,
-} from "@stores/features/storageInfos";
-import type { StorageInfoRaw } from "@services/storageInfos";
 import type { WithRequiredId } from "@app-types/NameId";
-import { fromDbNumberOrNull } from "helpers/dbHelpers";
+import { fromDbNumberOrNull } from "@helpers/dbHelpers";
+import type { StorageInfoRaw } from "@services/storageInfos";
+import type {
+    StorageDuration,
+    StorageInfo,
+} from "@stores/features/storageInfos";
 
 export function formatStorageInfos(
   rawData: StorageInfoRaw[],
