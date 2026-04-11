@@ -101,9 +101,6 @@
       "reactCompiler": true
     },
     "extra": {
-      "router": {
-        "expoRouterAppRoot": "./app"
-      },
       "eas": {
         "projectId": "04918abf-e8aa-4a94-a689-1de474bddc6e"
       }
