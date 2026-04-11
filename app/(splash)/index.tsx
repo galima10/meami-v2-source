@@ -202,17 +202,17 @@ export default function Splash() {
             );
           },
         )} */}
-        {(
+        {/* {(
           Object.entries(shoppingChecks) as [string, ManualAdjustementItem][]
         ).map(([key, values]) => {
           return (
             <Text key={`check-${key}`}>
-              {ingredients[Number(key)]?.name} - {values.usageCount} fois -{" "}
+              {ingredients[Number(key)]?.name} ID : {key} - {values.usageCount} fois -{" "}
               {units[ingredients[Number(key)]?.unitId]?.abbreviation} -{" "}
               {values.checked ? "fait" : "pas fait"}
             </Text>
           );
-        })}
+        })} */}
         {(
           Object.entries(ingredientsShopping) as [
             string,
@@ -245,7 +245,7 @@ export default function Splash() {
           );
         })}
       </View>
-      <Pressable
+      {/* <Pressable
         // onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
         onPress={() => handleAdd()}
       >
@@ -256,7 +256,7 @@ export default function Splash() {
       </Pressable>
       <Pressable onPress={() => handleUpdate()}>
         <Text style={styles.button}>Loader</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 }
