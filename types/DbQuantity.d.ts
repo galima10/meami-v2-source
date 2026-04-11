@@ -10,6 +10,6 @@ export type QuantityField =
   | "stock_quantity"
   | "quantity";
 
-export type QuantityCondition = "id_ingredients" | "id_products";
+export type QuantityCondition = "id_ingredients" | "id_products" | "id_menus";
 
 export type Operation = "set" | "increment" | "decrement";

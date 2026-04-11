@@ -1,6 +1,7 @@
 import type { Product, Products } from "@stores/features/products";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { Operation } from "@app-types/DbQuantity";
+import { UpdateQuantityGenericService } from "@services/shared";
 import { formatProducts } from "@utils/formatData/formatProducts";
 import {
   FetchProductsService,
@@ -9,21 +10,21 @@ import {
   CreateProductService,
 } from "@services/products";
 
-export const fetchProductsThunk = createAsyncThunk<
-  Products,
-  void
->("products/fetchProducts", async () => {
-  const data = await FetchProductsService();
-  return formatProducts(data);
-});
+export const fetchProductsThunk = createAsyncThunk<Products, void>(
+  "products/fetchProducts",
+  async () => {
+    const data = await FetchProductsService();
+    return formatProducts(data);
+  },
+);
 
-export const createProductThunk = createAsyncThunk<
-  Products,
-  Product
->("products/createProduct", async (newProduct) => {
-  const createdProduct = await CreateProductService(newProduct);
-  return createdProduct;
-});
+export const createProductThunk = createAsyncThunk<Products, Product>(
+  "products/createProduct",
+  async (newProduct) => {
+    const createdProduct = await CreateProductService(newProduct);
+    return createdProduct;
+  },
+);
 
 export const deleteProductThunk = createAsyncThunk<number, number>(
   "products/deleteProduct",
@@ -33,18 +34,37 @@ export const deleteProductThunk = createAsyncThunk<number, number>(
   },
 );
 
-export const updateProductThunk = createAsyncThunk<
-  Products,
-  Products
->("products/updateProduct", async (newProduct) => {
-  await UpdateProductService(newProduct);
-  return newProduct;
+export const updateProductThunk = createAsyncThunk<Products, Products>(
+  "products/updateProduct",
+  async (newProduct) => {
+    await UpdateProductService(newProduct);
+    return newProduct;
+  },
+);
+
+export const setProductStockQuantityThunk = createAsyncThunk<
+  {
+    itemId: number;
+    value: number;
+    operation: Operation;
+  },
+  {
+    itemId: number;
+    value: number;
+    operation: Operation;
+  }
+>("products/setProductStockQuantity", async ({ itemId, value, operation }) => {
+  await UpdateQuantityGenericService(
+    "products",
+    "stock_quantity",
+    "id_products",
+    itemId,
+    value,
+    operation,
+  );
+  return { itemId, value, operation };
 });
 
 function selectProduct(productId: number) {
   // dispatch productsSlice.selectedId productId productIdSelected et clearProductIdSelected avant à faire
-}
-
-async function setProductStockQuantity(productId: string, delta: number) {
-  // dispatch productsSlice productStockQuantitySetted productId delta
 }

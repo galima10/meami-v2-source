@@ -3,8 +3,10 @@ import {
   fetchShoppingListThunk,
   addItemToShoppingThunk,
   removeItemToShoppingThunk,
-  setShoppingListItemQuantityThunk,
+  setItemShoppingQuantityThunk,
 } from "@stores/thunks/shoppingList";
+import type { Operation, QuantityField } from "@app-types/DbQuantity";
+import { applyOperation } from "@utils/applyOperation";
 
 export interface ShoppingListIngredient {
   quantityNeeded: number;
@@ -140,35 +142,38 @@ export const shoppingListSlice = createSlice({
         },
       );
 
-    // setShoppingListItemQuantityThunk
+    // setItemShoppingQuantityThunk
     builder
-      .addCase(setShoppingListItemQuantityThunk.pending, (state) => {
+      .addCase(setItemShoppingQuantityThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        setShoppingListItemQuantityThunk.fulfilled,
+        setItemShoppingQuantityThunk.fulfilled,
         (
           state,
           action: PayloadAction<{
             itemId: number;
+            value: number;
+            field: QuantityField;
+            operation: Operation;
             type: "ingredients" | "products";
-            quantityNeeded: number;
-            quantityBuyed: number;
           }>,
         ) => {
           state.loading = false;
-          const { itemId, type, quantityNeeded, quantityBuyed } =
-            action.payload;
-          state[`${type}Shopping`][itemId].quantityBuyed = quantityBuyed;
-          state[`${type}Shopping`][itemId].quantityNeeded = quantityNeeded;
+          const { itemId, value, field, operation, type } = action.payload;
+          const property =
+            field === "quantity_buyed" ? "quantityBuyed" : "quantityNeeded";
+          const item = state[`${type}Shopping`][itemId];
+          if (!item) return;
+          item[property] = applyOperation(item[property], value, operation);
         },
       )
       .addCase(
-        setShoppingListItemQuantityThunk.rejected,
+        setItemShoppingQuantityThunk.rejected,
         (
           state,
-          action: ReturnType<typeof setShoppingListItemQuantityThunk.rejected>,
+          action: ReturnType<typeof setItemShoppingQuantityThunk.rejected>,
         ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";

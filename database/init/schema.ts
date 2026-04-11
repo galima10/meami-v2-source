@@ -216,7 +216,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         id_products INTEGER,
         id_ingredients INTEGER,
         -- checks
-        CONSTRAINT chk_quantity_needed CHECK (quantity_needed > 0),
+        CONSTRAINT chk_quantity_needed CHECK (quantity_needed >= 0),
         CONSTRAINT chk_quantity_buyed CHECK (quantity_buyed >= 0),
         CONSTRAINT chk_product_xor_ingredient CHECK (
           (
@@ -271,7 +271,7 @@ export async function schemaDatabase(db: SQLite.SQLiteDatabase) {
         -- primary key
         PRIMARY KEY (id_menus, id_ingredients),
         -- checks
-        CONSTRAINT chk_menu_ingredient_quantity CHECK (quantity > 0),
+        CONSTRAINT chk_menu_ingredient_quantity CHECK (quantity >= 0),
         -- foreign keys
         CONSTRAINT FK_MenuIngredientLinks_Menus FOREIGN KEY (id_menus) REFERENCES menus (id_menus) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT FK_MenuIngredientLinks_Ingredients FOREIGN KEY (id_ingredients) REFERENCES ingredients (id_ingredients) ON DELETE CASCADE ON UPDATE CASCADE,

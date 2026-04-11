@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { Operation } from "@app-types/DbQuantity";
 import {
   fetchProductsThunk,
   createProductThunk,
   deleteProductThunk,
   updateProductThunk,
+  setProductStockQuantityThunk,
 } from "@stores/thunks/products";
+import { applyOperation } from "@utils/applyOperation";
 
 export interface Product {
   name: string;
@@ -34,27 +36,6 @@ export const productSlice = createSlice({
     clearProductIdSelected: (state) => {
       state.selectedId = null;
     },
-    // productStockQuantitySetted: (
-    //   state,
-    //   action: PayloadAction<{ ingredientId: number; delta: number }>,
-    // ) => {
-    //   const { ingredientId, delta } = action.payload;
-    //   const index = state.products.findIndex(
-    //     (item) => item.id === ingredientId,
-    //   );
-
-    //   if (index !== -1) {
-    //     const newQuantity =
-    //       delta !== -1 && delta !== 1
-    //         ? delta
-    //         : state.products[index].stockQuantity + delta;
-
-    //     state.products[index] = {
-    //       ...state.products[index],
-    //       stockQuantity: newQuantity,
-    //     };
-    //   }
-    // },
   },
   extraReducers: (builder) => {
     // fetchProductsThunk
@@ -150,12 +131,48 @@ export const productSlice = createSlice({
           state.error = action.error.message ?? "Erreur inconnue";
         },
       );
+
+    // setProductStockQuantityThunk
+    builder
+      .addCase(setProductStockQuantityThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        setProductStockQuantityThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            itemId: number;
+            value: number;
+            operation: Operation;
+          }>,
+        ) => {
+          state.loading = false;
+
+          const { itemId, value, operation } = action.payload;
+          const product = state.products[itemId];
+          if (!product) return;
+          product.stockQuantity = applyOperation(
+            product.stockQuantity,
+            value,
+            operation,
+          );
+        },
+      )
+      .addCase(
+        setProductStockQuantityThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof setProductStockQuantityThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
   },
 });
 
-export const {
-  productIdSelected,
-  clearProductIdSelected,
-  resetProducts,
-} = productSlice.actions;
+export const { productIdSelected, clearProductIdSelected, resetProducts } =
+  productSlice.actions;
 export default productSlice.reducer;

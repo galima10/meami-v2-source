@@ -21,6 +21,8 @@ import {
 } from "@utils/formatData/formatWeeklyMenu";
 import type { RootState } from "@stores/index";
 import type { Recipe } from "@stores/features/recipes";
+import type { Operation } from "@app-types/DbQuantity";
+import { UpdateQuantityGenericService } from "@services/shared";
 
 export interface IngredientInsert extends IngredientMenu {
   menuCategoryId: number;
@@ -69,35 +71,32 @@ export const addRecipeToMenuThunk = createAsyncThunk<
   { ingredientsToInsert: MenuIngredients; menuId: number },
   { recipeId: number; menuId: number },
   { state: RootState }
->(
-  "weeklyMenu/addRecipeToMenu",
-  async ({ recipeId, menuId }, { getState }) => {
-    const state = getState();
-    const recipe: Recipe = state.recipe.recipes[recipeId];
+>("weeklyMenu/addRecipeToMenu", async ({ recipeId, menuId }, { getState }) => {
+  const state = getState();
+  const recipe: Recipe = state.recipe.recipes[recipeId];
 
-    if (!recipe) {
-      throw new Error(`Recipe with id ${recipeId} not found`);
-    }
+  if (!recipe) {
+    throw new Error(`Recipe with id ${recipeId} not found`);
+  }
 
-    const ingredientsToInsert: MenuIngredients = {};
+  const ingredientsToInsert: MenuIngredients = {};
 
-    for (const recipeIng of recipe.ingredients) {
-      const menuCategoryId = recipeIng.menuCategoryId;
-      if (!ingredientsToInsert[menuCategoryId])
-        ingredientsToInsert[menuCategoryId] = [];
+  for (const recipeIng of recipe.ingredients) {
+    const menuCategoryId = recipeIng.menuCategoryId;
+    if (!ingredientsToInsert[menuCategoryId])
+      ingredientsToInsert[menuCategoryId] = [];
 
-      ingredientsToInsert[menuCategoryId].push({
-        ingredientId: recipeIng.ingredientId,
-        quantity: recipeIng.quantity ?? null,
-        unitId: recipeIng.unitId ?? null,
-      });
-    }
+    ingredientsToInsert[menuCategoryId].push({
+      ingredientId: recipeIng.ingredientId,
+      quantity: recipeIng.quantity ?? null,
+      unitId: recipeIng.unitId ?? null,
+    });
+  }
 
-    await AddRecipeToMenuService(recipeId, menuId);
+  await AddRecipeToMenuService(recipeId, menuId);
 
-    return { ingredientsToInsert, menuId };
-  },
-);
+  return { ingredientsToInsert, menuId };
+});
 
 export const setMenuDoneThunk = createAsyncThunk<
   {
@@ -143,10 +142,31 @@ export const removeWeeklyMenuThunk = createAsyncThunk<{}, void>(
   },
 );
 
-async function setIngredientMenuQuantity(
-  ingredientId: string,
-  menuId: string,
-  delta: number,
-) {
-  // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId menuId delta
-}
+export const setIngredientMenuQuantityThunk = createAsyncThunk<
+  {
+    itemId: number;
+    value: number | null;
+    operation: Operation;
+    menuId: number;
+  },
+  {
+    itemId: number;
+    value: number | null;
+    operation: Operation;
+    menuId: number;
+  }
+>(
+  "weeklyMenu/setIngredientMenuQuantity",
+  async ({ itemId, value, operation, menuId }) => {
+    await UpdateQuantityGenericService(
+      "menu_ingredient_links",
+      "quantity",
+      "id_ingredients",
+      itemId,
+      value,
+      operation,
+      { condition: "id_menus", id: menuId },
+    );
+    return { itemId, value, operation, menuId };
+  },
+);

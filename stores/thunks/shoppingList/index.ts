@@ -8,9 +8,10 @@ import {
   FetchShoppingListService,
   AddItemToShoppingService,
   RemoveItemToShoppingService,
-  SetShoppingListItemQuantityService,
 } from "@services/shoppingList";
 import type { RootState } from "@stores/index";
+import type { Operation, QuantityField } from "@app-types/DbQuantity";
+import { UpdateQuantityGenericService } from "@services/shared";
 
 export const fetchShoppingListThunk = createAsyncThunk<
   { ingredients: ShoppingListIngredients; products: ShoppingListProducts },
@@ -69,28 +70,43 @@ export const removeItemToShoppingThunk = createAsyncThunk<
   return { itemId, type };
 });
 
-export const setShoppingListItemQuantityThunk = createAsyncThunk<
+export const setItemShoppingQuantityThunk = createAsyncThunk<
   {
     itemId: number;
+    value: number;
+    field: QuantityField;
+    operation: Operation;
     type: "ingredients" | "products";
-    quantityNeeded: number;
-    quantityBuyed: number;
   },
   {
     itemId: number;
+    value: number;
+    field: QuantityField;
+    operation: Operation;
     type: "ingredients" | "products";
-    quantityNeeded: number;
-    quantityBuyed: number;
   }
 >(
-  "shoppingList/setShoppingListItemQuantity",
-  async ({ itemId, type, quantityBuyed, quantityNeeded }) => {
-    await SetShoppingListItemQuantityService(
-      itemId,
-      type,
-      quantityNeeded,
-      quantityBuyed,
-    );
-    return { itemId, type, quantityBuyed, quantityNeeded };
+  "shoppingList/setItemShoppingQuantity",
+  async ({ itemId, value, field, operation, type }) => {
+    if (type === "products") {
+      await UpdateQuantityGenericService(
+        "shopping_list_items",
+        field,
+        "id_products",
+        itemId,
+        value,
+        operation,
+      );
+    } else {
+      await UpdateQuantityGenericService(
+        "shopping_list_items",
+        field,
+        "id_ingredients",
+        itemId,
+        value,
+        operation,
+      );
+    }
+    return { itemId, value, field, operation, type };
   },
 );

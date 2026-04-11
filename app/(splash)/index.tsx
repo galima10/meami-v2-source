@@ -3,7 +3,10 @@ import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { fetchIngredientCategoriesThunk } from "@stores/thunks/ingredientCategories";
-import { fetchProductsThunk } from "@stores/thunks/products";
+import {
+  fetchProductsThunk,
+  setProductStockQuantityThunk,
+} from "@stores/thunks/products";
 import { fetchRecipeCategoriesThunk } from "@stores/thunks/recipeCategories";
 import {
   createRecipeThunk,
@@ -15,6 +18,7 @@ import {
   fetchAllMenusThunk,
   fetchWeeklyMenuThunk,
   addIngredientToMenuThunk,
+  setIngredientMenuQuantityThunk,
 } from "@stores/thunks/weeklyMenu";
 import { fetchStorageInfosThunk } from "@stores/thunks/storageInfos";
 import { fetchUnitsThunk } from "@stores/thunks/units";
@@ -26,6 +30,7 @@ import { fetchCookingUstensilsThunk } from "@stores/thunks/cookingUstensils";
 import {
   fetchIngredientsThunk,
   updateStockThunk,
+  setIngredientStockQuantityThunk,
 } from "@stores/thunks/ingredients";
 import {
   LoadShoppingListService,
@@ -35,7 +40,7 @@ import {
   fetchShoppingListThunk,
   addItemToShoppingThunk,
   removeItemToShoppingThunk,
-  setShoppingListItemQuantityThunk,
+  setItemShoppingQuantityThunk,
 } from "@stores/thunks/shoppingList";
 import {
   weeklyMenuToUi,
@@ -63,6 +68,7 @@ import type {
   ShoppingListProduct,
 } from "@stores/features/shoppingList";
 import { resetShoppingList } from "@stores/features/shoppingList";
+import type { Product } from "@stores/features/products";
 
 export default function Splash() {
   const dispatch = useAppDispatch();
@@ -87,7 +93,14 @@ export default function Splash() {
 
   async function handleAdd() {
     try {
-      // const result = await dispatch(updateStockThunk("menu")).unwrap();
+      const result = await dispatch(
+        setIngredientMenuQuantityThunk({
+          itemId: 1,
+          value: 15,
+          operation: "set",
+          menuId: 1,
+        }),
+      ).unwrap();
       // const result = await dispatch(
       //   addItemToShoppingThunk({
       //     newItemId: 1,
@@ -174,6 +187,15 @@ export default function Splash() {
             );
           },
         )} */}
+        {/* {(Object.entries(products) as [string, Product][]).map(
+          ([key, values]) => {
+            return (
+              <Text key={`ingredient-${key}`}>
+                {values.name} - {values.stockQuantity}
+              </Text>
+            );
+          },
+        )} */}
         {/* {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
           ([keyDay, moment], dayIndex) => {
             return (
@@ -236,7 +258,7 @@ export default function Splash() {
             </Text>
           );
         })} */}
-        {(Object.entries(stockChecks) as [string, ManualAdjustementItem][]).map(
+        {/* {(Object.entries(stockChecks) as [string, ManualAdjustementItem][]).map(
           ([key, values]) => {
             return (
               <Text key={`check-${key}`}>
@@ -247,7 +269,7 @@ export default function Splash() {
               </Text>
             );
           },
-        )}
+        )} */}
         {/* {(
           Object.entries(ingredientsShopping) as [
             string,
@@ -256,9 +278,7 @@ export default function Splash() {
         ).map(([key, values]) => {
           return (
             <View key={key}>
-              <Text>
-                {ingredients[Number(key)]?.name}
-              </Text>
+              <Text>{ingredients[Number(key)]?.name}</Text>
               <Text>
                 {values.quantityBuyed} / {values.quantityNeeded}{" "}
                 {units[values.unitId]?.abbreviation}

@@ -115,6 +115,3 @@ function selectIngredient(ingredientId: number) {
   // dispatch ingredientsSlice.selectedId ingredientId ingredientIdSelected et clearIngredientIdSelected avant à faire
 }
 
-function setIngredientStockQuantity(ingredientId: number, delta: number) {
-  // dispatch ingredientsSlice ingredientStockQuantitySetted ingredientId delta
-}

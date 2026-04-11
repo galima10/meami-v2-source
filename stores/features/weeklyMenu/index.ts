@@ -8,7 +8,10 @@ import {
   removeIngredientToMenuThunk,
   removeMenuThunk,
   removeWeeklyMenuThunk,
+  setIngredientMenuQuantityThunk,
 } from "@stores/thunks/weeklyMenu";
+import type { Operation } from "@app-types/DbQuantity";
+import { applyOperation } from "@utils/applyOperation";
 
 export interface WeeklyMenuIngredients {
   [menuId: number]: MenuIngredients;
@@ -46,42 +49,6 @@ export const weeklyMenuSlice = createSlice({
   initialState,
   reducers: {
     resetWeeklyMenu: () => initialState,
-    // ingredientMenuQuantitySetted: (
-    //   state,
-    //   action: PayloadAction<{
-    //     ingredientId: number;
-    //     menuId: number;
-    //     delta: number;
-    //   }>,
-    // ) => {
-    //   const { ingredientId, menuId, delta } = action.payload;
-    //   const menuLocation = state.menuIndex[menuId];
-    //   if (menuLocation) {
-    //     const { day, moment } = menuLocation;
-    //     const menu =
-    //       state.weeklyMenu[day as keyof WeeklyMenu][moment as keyof DayMenu];
-    //     if (menu) {
-    //       for (const menuCategory of Object.keys(menu.ingredients)) {
-    //         const ingredients = menu.ingredients[menuCategory];
-    //         const ingredientIndex = ingredients.findIndex(
-    //           (ingredient: IngredientMenu) => ingredient.id === ingredientId,
-    //         );
-    //         if (ingredientIndex !== -1) {
-    //           const ingredient = ingredients[ingredientIndex];
-    //           ingredients[ingredientIndex] = {
-    //             ...ingredient,
-    //             quantity:
-    //               ingredient.quantity !== null
-    //                 ? delta !== -1 && delta !== 1
-    //                   ? delta
-    //                   : ingredient.quantity + delta
-    //                 : ingredient.quantity,
-    //           };
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
   },
   extraReducers: (builder) => {
     // fetchAllMenusThunk
@@ -349,6 +316,68 @@ export const weeklyMenuSlice = createSlice({
       .addCase(
         removeWeeklyMenuThunk.rejected,
         (state, action: ReturnType<typeof removeWeeklyMenuThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
+
+    // setIngredientMenuQuantityThunk
+    builder
+      .addCase(setIngredientMenuQuantityThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        setIngredientMenuQuantityThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            itemId: number;
+            value: number | null;
+            operation: Operation;
+            menuId: number;
+          }>,
+        ) => {
+          state.loading = false;
+          const { itemId, value, operation, menuId } = action.payload;
+          const menu = state.weeklyMenu[menuId];
+          if (!menu) return;
+          for (const ingredientList of Object.values(menu.ingredients)) {
+            for (const ingredient of ingredientList) {
+              if (ingredient.ingredientId !== itemId) continue;
+
+              if (value == null) {
+                ingredient.quantity = null;
+                continue;
+              }
+
+              const current = ingredient.quantity;
+
+              if (operation === "set") {
+                ingredient.quantity = value;
+                continue;
+              }
+
+              if (current == null) {
+                ingredient.quantity = value;
+                continue;
+              }
+
+              if (operation === "increment") {
+                ingredient.quantity = current + value;
+              } else {
+                ingredient.quantity = Math.max(0, current - value);
+              }
+            }
+          }
+        },
+      )
+      .addCase(
+        setIngredientMenuQuantityThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof setIngredientMenuQuantityThunk.rejected>,
+        ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },
