@@ -1,15 +1,18 @@
-import { View, StyleSheet, Pressable, Text } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { AppText } from "@modules/shared/components/atoms/AppText";
+import theme from "@constants/themes";
+import { typography } from "@constants/styles";
 
 export default function Splash() {
   const router = useRouter();
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Splash Screen</Text>
+      <AppText style={styles.text}>Splash Screen</AppText>
       <Pressable
         onPress={() => router.replace("/(tabs)/menuTab/MenuCalendarScreen")}
       >
-        <Text style={styles.button}>Sortir du splash screen</Text>
+        <AppText style={styles.button}>Sortir du splash screen</AppText>
       </Pressable>
     </View>
   );
@@ -20,15 +23,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: theme.properties.darkOrange,
     gap: 16,
   },
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: typography.h3,
+    fontWeight: theme.properties.bold,
+    color: theme.properties.beige,
   },
   button: {
-    fontSize: 24,
+    fontSize: typography.h5,
+    fontFamily: theme.properties.fontFamily,
+    color: theme.properties.beige,
   },
 });

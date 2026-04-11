@@ -1,0 +1,11 @@
+import { typeScale } from "@utils/typeScale";
+
+export const typography = {
+  small: typeScale(-1),
+  body: typeScale(0),
+  h6: typeScale(1),
+  h5: typeScale(2),
+  h4: typeScale(3),
+  h3: typeScale(4),
+  h2: typeScale(5),
+};

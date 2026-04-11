@@ -24,7 +24,6 @@ module.exports = function (api: any): TransformOptions {
             "@stores": "./stores",
             "@app-types": "./types",
             "@utils": "./utils",
-            "@themes": "./constants/themes",
             "@modules": "./modules",
             "@helpers": "./helpers",
           },

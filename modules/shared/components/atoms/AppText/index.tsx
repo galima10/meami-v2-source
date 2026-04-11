@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, TextProps } from "react-native";
 import Animated from "react-native-reanimated";
 import theme from "@constants/themes";
@@ -7,10 +8,21 @@ const defaultStyle = {
   color: theme.properties.brown,
 };
 
-export const AppText = (props: TextProps) => (
-  <Text {...props} style={[defaultStyle, props.style as any]} />
+type Props = Omit<TextProps, "style"> & {
+  style?: TextProps["style"] | object;
+  children?: React.ReactNode;
+};
+
+export const AppText = ({ style, ...props }: Props) => (
+  <Text
+    {...props}
+    style={[defaultStyle, style] as any}
+  />
 );
 
-export const AnimatedAppText = (props: TextProps) => (
-  <Animated.Text style={[defaultStyle, props.style as any]} {...props} />
+export const AnimatedAppText = ({ style, ...props }: Props) => (
+  <Animated.Text
+    {...props}
+    style={[defaultStyle, style] as any}
+  />
 );
