@@ -33,8 +33,8 @@ export default function RootLayout() {
         <Stack.Screen name="(splash)/index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
-      <HiddenResetButton />
-      <TestButton />
+      {/* <HiddenResetButton />
+      <TestButton /> */}
     </Provider>
   );
 }
