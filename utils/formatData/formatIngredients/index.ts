@@ -1,5 +1,6 @@
 import type { IngredientRaw } from "@services/ingredients";
 import type { Ingredients } from "@stores/features/ingredients";
+import { fromDbNumber } from "helpers/dbHelpers";
 
 export function formatIngredients(rawData: IngredientRaw[]): Ingredients {
   const treated = rawData.reduce<Ingredients>((acc, data) => {
@@ -14,7 +15,7 @@ export function formatIngredients(rawData: IngredientRaw[]): Ingredients {
     acc[data.ingredient_id] = {
       name: data.ingredient_name,
       categoryId: data.category_id,
-      stockQuantity: data.stock_quantity,
+      stockQuantity: fromDbNumber(data.stock_quantity)!,
       unitId: data.unit_id,
       menuCategoryIds,
       quantifiable: Boolean(data.quantifiable),

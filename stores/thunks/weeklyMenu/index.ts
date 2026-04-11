@@ -71,37 +71,31 @@ export const addRecipeToMenuThunk = createAsyncThunk<
   { state: RootState }
 >(
   "weeklyMenu/addRecipeToMenu",
-  async ({ recipeId, menuId }, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      const recipe: Recipe = state.recipe.recipes[recipeId];
+  async ({ recipeId, menuId }, { getState }) => {
+    const state = getState();
+    const recipe: Recipe = state.recipe.recipes[recipeId];
 
-      if (!recipe) {
-        throw new Error(`Recipe with id ${recipeId} not found`);
-      }
-
-      const ingredientsToInsert: MenuIngredients = {};
-
-      for (const recipeIng of recipe.ingredients) {
-        const menuCategoryId = recipeIng.menuCategoryId;
-        if (!ingredientsToInsert[menuCategoryId])
-          ingredientsToInsert[menuCategoryId] = [];
-
-        ingredientsToInsert[menuCategoryId].push({
-          ingredientId: recipeIng.ingredientId,
-          quantity: recipeIng.quantity ?? null,
-          unitId: recipeIng.unitId ?? null,
-        });
-      }
-
-      await AddRecipeToMenuService(recipeId, menuId);
-
-      return { ingredientsToInsert, menuId };
-    } catch (err: any) {
-      return rejectWithValue(
-        err.message ?? "Unknown error in addRecipeToMenuThunk",
-      );
+    if (!recipe) {
+      throw new Error(`Recipe with id ${recipeId} not found`);
     }
+
+    const ingredientsToInsert: MenuIngredients = {};
+
+    for (const recipeIng of recipe.ingredients) {
+      const menuCategoryId = recipeIng.menuCategoryId;
+      if (!ingredientsToInsert[menuCategoryId])
+        ingredientsToInsert[menuCategoryId] = [];
+
+      ingredientsToInsert[menuCategoryId].push({
+        ingredientId: recipeIng.ingredientId,
+        quantity: recipeIng.quantity ?? null,
+        unitId: recipeIng.unitId ?? null,
+      });
+    }
+
+    await AddRecipeToMenuService(recipeId, menuId);
+
+    return { ingredientsToInsert, menuId };
   },
 );
 

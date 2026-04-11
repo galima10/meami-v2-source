@@ -4,6 +4,7 @@ import type {
 } from "@stores/features/storageInfos";
 import type { StorageInfoRaw } from "@services/storageInfos";
 import type { WithRequiredId } from "@app-types/NameId";
+import { fromDbNumberOrNull } from "helpers/dbHelpers";
 
 export function formatStorageInfos(
   rawData: StorageInfoRaw[],
@@ -36,7 +37,7 @@ export function formatStorageInfos(
         item.storage_location_id
       ].storageDurations.push({
         type: item.type,
-        duration: item.duration ?? null,
+        duration: fromDbNumberOrNull(item.duration),
         units: item.units,
       });
 

@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 import { getDb } from "@database/database";
 import type { Ingredient, Ingredients } from "@stores/features/ingredients";
+import { toDbNumber } from "helpers/dbHelpers";
 
 export interface IngredientRaw {
   ingredient_id: number;
@@ -76,7 +77,7 @@ async function CreateIngredientInfosService(
     {
       $name: ingredientName,
       $quantifiable: quantifiable ? 1 : 0,
-      $stockQuantity: stockQuantity,
+      $stockQuantity: toDbNumber(stockQuantity),
       $unitId: unitId,
       $categoryId: categoryId,
     },
@@ -217,7 +218,7 @@ async function UpdateIngredientInfosService(
     {
       $name: ingredientName,
       $quantifiable: quantifiable ? 1 : 0,
-      $stockQuantity: stockQuantity,
+      $stockQuantity: toDbNumber(stockQuantity),
       $unitId: unitId,
       $categoryId: categoryId,
       $ingredientId: ingredientId,

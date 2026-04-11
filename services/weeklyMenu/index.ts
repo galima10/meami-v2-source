@@ -2,6 +2,7 @@ import { getDb } from "@database/database";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { SQLiteDatabase } from "expo-sqlite";
 import { getDbContext } from "helpers/getDbContext";
+import { toDbNumberOrNull } from "helpers/dbHelpers";
 
 export interface WeeklyMenuRaw {
   menu_id: number;
@@ -53,8 +54,7 @@ export async function FetchWeeklyMenuService() {
       LEFT JOIN units u ON u.id_units = mil.id_units
     ORDER BY
       m.id_menus,
-      mc.id_menu_categories,
-      i.name;
+      mc.id_menu_categories;
   `);
 }
 
@@ -67,18 +67,8 @@ export async function RemoveIngredientToMenuService(
   await db.runAsync(
     `
     DELETE FROM menu_ingredient_links
-    WHERE 
-      EXISTS (
-        SELECT 
-          1
-        FROM 
-          menus m
-        JOIN ingredients i ON i.id_ingredients = menu_ingredient_links.id_ingredients
-        WHERE 
-          m.id_menus = ?
-          AND i.id_ingredients = menu_ingredient_links.id_ingredients
-          AND i.id_ingredients = ?
-      );
+    WHERE id_menus = ?
+      AND id_ingredients = ?;
   `,
     [menuId, ingredientId],
   );
@@ -103,7 +93,7 @@ async function InsertIngredientToMenuService(
     [
       menuId,
       newIngredient.ingredientId,
-      newIngredient.quantity,
+      toDbNumberOrNull(newIngredient.quantity),
       newIngredient.unitId,
       menuId,
       newIngredient.ingredientId,

@@ -3,6 +3,7 @@ import type {
   WeeklyMenu,
 } from "@stores/features/weeklyMenu";
 import type { WeeklyMenuRaw, MenuRaw } from "@services/weeklyMenu";
+import { fromDbNumberOrNull } from "helpers/dbHelpers";
 
 export function formatAllMenus(rawData: MenuRaw[]): WeeklyMenu {
   
@@ -42,7 +43,7 @@ export function formatWeeklyMenu(
 
     menu[item.menu_category_id].push({
       ingredientId: item.ingredient_id,
-      quantity: item.quantity ?? null,
+      quantity: fromDbNumberOrNull(item.quantity) ?? null,
       unitId: item.unit_id ?? null,
     });
 

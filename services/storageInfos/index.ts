@@ -6,12 +6,13 @@ import type {
 import type { WithRequiredId } from "@app-types/NameId";
 import type { SQLiteDatabase } from "expo-sqlite";
 import { getDbContext } from "helpers/getDbContext";
+import { toDbNumberOrNull } from "helpers/dbHelpers";
 
 export interface StorageInfoRaw {
   storage_info_id: number;
   ingredient_id: number;
   storage_location_id: number;
-  duration: number;
+  duration: number | null;
   units: number;
   type: number;
 }
@@ -55,7 +56,7 @@ async function CreateStorageInfoService(
     ) VALUES (?, ?, ?, ?, ?);
     `,
     [
-      duration,
+      toDbNumberOrNull(duration),
       units.toUpperCase(),
       type.toUpperCase(),
       ingredientId,

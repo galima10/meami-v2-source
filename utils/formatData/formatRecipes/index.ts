@@ -1,11 +1,9 @@
-import type { WithRequiredId } from "@app-types/NameId";
 import type {
-  Recipe,
-  RecipeIngredient,
   Recipes,
   RecipeType,
 } from "@stores/features/recipes";
 import type { RecipeRaw } from "@services/recipes";
+import { fromDbNumber } from "helpers/dbHelpers";
 
 export function formatRecipes(rawData: RecipeRaw[]): Recipes {
   const treated = rawData.reduce<Recipes>((acc, item) => {
@@ -35,7 +33,7 @@ export function formatRecipes(rawData: RecipeRaw[]): Recipes {
     ) {
       recipe.ingredients.push({
         ingredientId: item.ingredient_id,
-        quantity: item.quantity,
+        quantity: fromDbNumber(item.quantity),
         unitId: item.unit_id,
         menuCategoryId: item.menu_category_id,
       });

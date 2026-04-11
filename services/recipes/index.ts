@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 import { getDb } from "@database/database";
 import type { Recipe, RecipeType, Recipes } from "@stores/features/recipes";
+import { toDbNumberOrNull } from "helpers/dbHelpers";
 
 export interface RecipeRaw {
   recipe_id: number;
@@ -29,10 +30,10 @@ export async function FetchRecipesService() {
       r.recipe,
       r.is_morning,
       GROUP_CONCAT(DISTINCT rc.id_recipe_categories) AS recipe_category_ids,
-      i.id_ingredients as ingredient_id,
+      i.id_ingredients AS ingredient_id,
       ril.quantity,
       u.id_units AS unit_id,
-      ril.id_menu_categories
+      ril.id_menu_categories AS menu_category_id
     FROM
       recipes r
       LEFT JOIN recipe_category_links rcl ON rcl.id_recipes = r.id_recipes
@@ -138,6 +139,7 @@ async function AddIngredientToRecipe(
   quantity: number | null,
   unitId: number | null,
   recipeId: number,
+  menuCategoryId: number,
   tx: SQLiteDatabase,
 ) {
   await tx.runAsync(
@@ -147,12 +149,13 @@ async function AddIngredientToRecipe(
         id_recipes,
         id_ingredients,
         quantity,
-        id_units
+        id_units,
+        id_menu_categories
       )
     VALUES
-      (?, ?, MAX(1, ?), ?);
+      (?, ?, MAX(1, ?), ?, ?);
   `,
-    [recipeId, ingredientId, quantity, unitId],
+    [recipeId, ingredientId, toDbNumberOrNull(quantity), unitId, menuCategoryId],
   );
 }
 
@@ -181,6 +184,7 @@ export async function CreateRecipeService(newRecipe: Recipe) {
         ingredient.quantity,
         ingredient.unitId,
         baseRecipe.id,
+        ingredient.menuCategoryId,
         tx,
       );
     }
@@ -310,6 +314,7 @@ export async function UpdateRecipeService(newRecipe: Recipes) {
         ingredient.quantity,
         ingredient.unitId,
         recipeId,
+        ingredient.menuCategoryId,
         tx,
       );
     }

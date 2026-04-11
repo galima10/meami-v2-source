@@ -1,6 +1,7 @@
 import type { CookingInfo, CookingDuration } from "@stores/features/cookingInfos";
 import type { CookingInfoRaw } from "@services/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
+import { fromDbNumberOrNull } from "helpers/dbHelpers";
 
 export function formatCookingInfos(
   rawData: CookingInfoRaw[],
@@ -34,8 +35,8 @@ export function formatCookingInfos(
       ].cookingDurations.push({
         id: item.cooking_duration_id,
         ustensilId: item.ustensil_id,
-        duration: item.duration ?? null,
-        temperature: item.temperature ?? null,
+        duration: fromDbNumberOrNull(item.duration),
+        temperature: fromDbNumberOrNull(item.temperature),
       });
 
       return acc;

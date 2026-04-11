@@ -1,21 +1,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  fetchShoppingListThunk,
+  addItemToShoppingThunk,
+  removeItemToShoppingThunk,
+  setShoppingListItemQuantityThunk,
+} from "@stores/thunks/shoppingList";
 
-export interface ShoppingListItem {
-  id: number;
-  name: string;
+export interface ShoppingListIngredient {
   quantityNeeded: number;
   quantityBuyed: number;
-  unit: string;
-  category: string;
+  unitId: number;
+  categoryId: number;
 }
 
-interface ShoppingList {
-  ingredients: ShoppingListItem[];
-  products: ShoppingListItem[];
+export interface ShoppingListProduct {
+  quantityNeeded: number;
+  quantityBuyed: number;
+}
+
+export interface ShoppingListIngredients {
+  [ingredientId: number]: ShoppingListIngredient;
+}
+
+export interface ShoppingListProducts {
+  [productId: number]: ShoppingListProduct;
 }
 
 const initialState = {
-  shoppingList: {} as ShoppingList,
+  ingredientsShopping: {} as ShoppingListIngredients,
+  productsShopping: {} as ShoppingListProducts,
+  loading: false,
+  error: null as string | null,
 };
 
 export const shoppingListSlice = createSlice({
@@ -23,67 +38,144 @@ export const shoppingListSlice = createSlice({
   initialState,
   reducers: {
     resetShoppingList: () => initialState,
-    setShoppingList: (state, action: PayloadAction<ShoppingList>) => {
-      state.shoppingList = action.payload;
-    },
-    itemAdded: (
-      state,
-      action: PayloadAction<{
-        newItem: ShoppingListItem;
-        type: "ingredients" | "products";
-      }>,
-    ) => {
-      const { newItem, type } = action.payload;
-      state.shoppingList[type].push(newItem);
-    },
-    itemRemoved: (
-      state,
-      action: PayloadAction<{
-        itemId: number;
-        type: "ingredients" | "products";
-      }>,
-    ) => {
-      const { itemId, type } = action.payload;
-      state.shoppingList[type] = state.shoppingList[type].filter(
-        (item) => item.id !== itemId,
-      );
-    },
-    itemQuantitySetted: (
-      state,
-      action: PayloadAction<{
-        itemId: number;
-        type: "ingredients" | "products";
-        quantityField: "quantityNeeded" | "quantityBuyed";
-        delta: number;
-      }>,
-    ) => {
-      const { itemId, type, quantityField, delta } = action.payload;
-      const index = state.shoppingList[type].findIndex(
-        (item) => item.id === itemId,
+  },
+  extraReducers: (builder) => {
+    // fetchShoppingListThunk
+    builder
+      .addCase(fetchShoppingListThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchShoppingListThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            ingredients: ShoppingListIngredients;
+            products: ShoppingListProducts;
+          }>,
+        ) => {
+          state.loading = false;
+          const { ingredients, products } = action.payload;
+          if (Object.keys(state.ingredientsShopping).length === 0) {
+            state.ingredientsShopping = ingredients;
+          }
+          if (Object.keys(state.productsShopping).length === 0) {
+            state.productsShopping = products;
+          }
+        },
+      )
+      .addCase(
+        fetchShoppingListThunk.rejected,
+        (state, action: ReturnType<typeof fetchShoppingListThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
       );
 
-      if (index !== -1) {
-        const newQuantity = Math.max(
-          0,
-          delta !== -1 && delta !== 1
-            ? delta
-            : state.shoppingList[type][index][quantityField] + delta,
-        );
+    // addItemToShoppingThunk
+    builder
+      .addCase(addItemToShoppingThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        addItemToShoppingThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            newItem: ShoppingListIngredients | ShoppingListProducts;
+            type: "ingredients" | "products";
+          }>,
+        ) => {
+          state.loading = false;
 
-        state.shoppingList[type][index] = {
-          ...state.shoppingList[type][index],
-          [quantityField]: newQuantity,
-        };
-      }
-    },
+          const { newItem, type } = action.payload;
+
+          const [itemIdStr] = Object.keys(newItem);
+          const itemId = Number(itemIdStr);
+
+          if (state[`${type}Shopping`][itemId])
+            state[`${type}Shopping`][itemId].quantityNeeded++;
+          else state[`${type}Shopping`][itemId] = newItem[itemId];
+        },
+      )
+      .addCase(
+        addItemToShoppingThunk.rejected,
+        (state, action: ReturnType<typeof addItemToShoppingThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
+
+    // removeItemToShoppingThunk
+    builder
+      .addCase(removeItemToShoppingThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        removeItemToShoppingThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            itemId: number;
+            type: "ingredients" | "products";
+          }>,
+        ) => {
+          state.loading = false;
+
+          const { itemId, type } = action.payload;
+          delete state[`${type}Shopping`][itemId];
+        },
+      )
+      .addCase(
+        removeItemToShoppingThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof removeItemToShoppingThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
+
+    // setShoppingListItemQuantityThunk
+    builder
+      .addCase(setShoppingListItemQuantityThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        setShoppingListItemQuantityThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            itemId: number;
+            type: "ingredients" | "products";
+            quantityNeeded: number;
+            quantityBuyed: number;
+          }>,
+        ) => {
+          state.loading = false;
+          const { itemId, type, quantityNeeded, quantityBuyed } =
+            action.payload;
+          state[`${type}Shopping`][itemId].quantityBuyed = quantityBuyed;
+          state[`${type}Shopping`][itemId].quantityNeeded = quantityNeeded;
+        },
+      )
+      .addCase(
+        setShoppingListItemQuantityThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof setShoppingListItemQuantityThunk.rejected>,
+        ) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
   },
 });
 
-export const {
-  setShoppingList,
-  itemAdded,
-  itemRemoved,
-  itemQuantitySetted,
-  resetShoppingList,
-} = shoppingListSlice.actions;
+export const { resetShoppingList } = shoppingListSlice.actions;
 export default shoppingListSlice.reducer;

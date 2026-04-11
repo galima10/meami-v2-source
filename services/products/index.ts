@@ -1,5 +1,6 @@
 import { getDb } from "@database/database";
 import type { Product, Products } from "@stores/features/products";
+import { toDbNumber } from "helpers/dbHelpers";
 
 export interface ProductRaw {
   product_id: number;
@@ -36,7 +37,7 @@ export async function UpdateProductService(newProduct: Products) {
   const db = await getDb();
   const [productIdStr] = Object.keys(newProduct);
   const productId = Number(productIdStr);
-  const [values] = Object.values(newProduct);
+  const [values] = Object.values(newProduct) as Product[];
   await db.runAsync(
     `
     UPDATE
@@ -47,7 +48,7 @@ export async function UpdateProductService(newProduct: Products) {
     WHERE
       id_products = ?;
   `,
-    [values.name, values.stockQuantity, productId],
+    [values.name, toDbNumber(values.stockQuantity), productId],
   );
 }
 
@@ -60,7 +61,7 @@ export async function CreateProductService(newProduct: Product) {
     VALUES
       (?, MAX(0, ?));
   `,
-    [newProduct.name, newProduct.stockQuantity],
+    [newProduct.name, toDbNumber(newProduct.stockQuantity)],
   );
   const id = result.lastInsertRowId;
   return {

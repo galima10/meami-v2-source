@@ -11,45 +11,51 @@ import {
   fetchRecipesThunk,
   updateRecipeThunk,
 } from "@stores/thunks/recipes";
+import {
+  fetchAllMenusThunk,
+  fetchWeeklyMenuThunk,
+  addIngredientToMenuThunk,
+} from "@stores/thunks/weeklyMenu";
 import { fetchStorageInfosThunk } from "@stores/thunks/storageInfos";
 import { fetchUnitsThunk } from "@stores/thunks/units";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
 
 import { fetchCookingInfosThunk } from "@stores/thunks/cookingInfos";
 import { fetchCookingUstensilsThunk } from "@stores/thunks/cookingUstensils";
 import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
 import {
-  fetchWeeklyMenuThunk,
-  fetchAllMenusThunk,
-  addIngredientToMenuThunk,
-  addRecipeToMenuThunk,
-  removeIngredientToMenuThunk,
-  removeMenuThunk,
-  removeWeeklyMenuThunk,
-} from "@stores/thunks/weeklyMenu";
-import type {
-  WeeklyMenu,
-  MenuIngredients,
-  IngredientMenu,
-} from "@stores/features/weeklyMenu";
-import type { Recipe } from "@stores/features/recipes";
+  LoadShoppingListService,
+  ResetShoppingListService,
+} from "@services/shoppingList";
+import {
+  fetchShoppingListThunk,
+  addItemToShoppingThunk,
+  removeItemToShoppingThunk,
+  setShoppingListItemQuantityThunk,
+} from "@stores/thunks/shoppingList";
 import {
   weeklyMenuToUi,
   MomentUi,
   MenuUi,
 } from "@utils/dataToUi/weeklyMenuToUi";
 import type { IngredientInsert } from "@stores/thunks/weeklyMenu";
-
-const ingredient: IngredientInsert = {
-  menuCategoryId: 4,
-  ingredientId: 13,
-  quantity: 1,
-  unitId: 1,
-};
+import type {
+  ShoppingListIngredient,
+  ShoppingListProduct,
+} from "@stores/features/shoppingList";
+import { resetShoppingList } from "@stores/features/shoppingList";
 
 export default function Splash() {
   const dispatch = useAppDispatch();
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { products } = useAppSelector((state) => state.product);
+  const { ingredientCategories } = useAppSelector(
+    (state) => state.ingredientCategory,
+  );
+  const { ingredientsShopping, productsShopping } = useAppSelector(
+    (state) => state.shoppingList,
+  );
   const { moments, days, menuCategories } = useAppSelector(
     (state) => state.seed,
   );
@@ -59,10 +65,20 @@ export default function Splash() {
   async function handleAdd() {
     try {
       // const result = await dispatch(
-      //   addRecipeToMenuThunk({ recipeId: 3, menuId: 1 }),
+      //   setShoppingListItemQuantityThunk({
+      //     itemId: 1,
+      //     type: "products",
+      //     quantityNeeded: 2,
+      //     quantityBuyed: 1,
+      //   }),
       // ).unwrap();
+
       // const result = await dispatch(
-      //   addIngredientToMenuThunk({ newIngredient: ingredient, menuId: 2 }),
+      //   addItemToShoppingThunk({
+      //     newItemId: 1,
+      //     quantityNeeded: 1,
+      //     type: "products",
+      //   }),
       // ).unwrap();
     } catch (err) {
       console.error("Thunk rejected:", err);
@@ -71,7 +87,11 @@ export default function Splash() {
 
   async function handleDelete() {
     try {
-      // const result = await dispatch(removeWeeklyMenuThunk()).unwrap();
+      // const result = await dispatch(
+      //   removeItemToShoppingThunk({ itemId: 1, type: "ingredients" }),
+      // ).unwrap();
+      await ResetShoppingListService();
+      dispatch(resetShoppingList());
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -82,8 +102,10 @@ export default function Splash() {
       // const result = await dispatch(
       //   updateIngredientThunk(newIngredient1),
       // ).unwrap();
+      await LoadShoppingListService();
+      await dispatch(fetchShoppingListThunk());
     } catch (err) {
-      console.error("Thunk rejected:", err);
+      console.error(err);
     }
   }
 
@@ -97,12 +119,22 @@ export default function Splash() {
     dispatch(fetchProductsThunk());
     dispatch(fetchIngredientsThunk());
     dispatch(fetchRecipesThunk());
+    dispatch(fetchShoppingListThunk());
     async function fetchMenus() {
       await dispatch(fetchAllMenusThunk());
       await dispatch(fetchWeeklyMenuThunk());
     }
     fetchMenus();
   }, []);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "ingredients",
+  //     ingredientsShopping,
+  //     "products",
+  //     productsShopping,
+  //   );
+  // }, [ingredientsShopping, productsShopping]);
 
   return (
     <View style={styles.container}>
@@ -116,7 +148,7 @@ export default function Splash() {
         <Text style={styles.button}>Supprimer</Text>
       </Pressable>
       <Pressable onPress={() => handleUpdate()}>
-        <Text style={styles.button}>Modifier</Text>
+        <Text style={styles.button}>Loader</Text>
       </Pressable>
       <View style={styles.infosContainer}>
         {/* {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
@@ -151,7 +183,8 @@ export default function Splash() {
                                       {
                                         ingredients[Number(item?.ingredientId)]
                                           ?.name
-                                      }
+                                      }{" "}
+                                      - quantité : {item.quantity}
                                     </Text>
                                   );
                                 })}
@@ -167,6 +200,37 @@ export default function Splash() {
             );
           },
         )} */}
+        {(
+          Object.entries(ingredientsShopping) as [
+            string,
+            ShoppingListIngredient,
+          ][]
+        ).map(([key, values]) => {
+          return (
+            <View key={key}>
+              <Text>
+                {ingredients[Number(key)]?.name}
+              </Text>
+              <Text>
+                {values.quantityBuyed} / {values.quantityNeeded}
+              </Text>
+            </View>
+          );
+        })}
+        {(
+          Object.entries(productsShopping) as [string, ShoppingListProduct][]
+        ).map(([key, values]) => {
+          return (
+            <View key={key}>
+              <Text>
+                {products[Number(key)]?.name}
+              </Text>
+              <Text>
+                {values.quantityBuyed} / {values.quantityNeeded}
+              </Text>
+            </View>
+          );
+        })}
       </View>
     </View>
   );

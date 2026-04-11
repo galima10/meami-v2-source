@@ -6,14 +6,15 @@ import type {
 } from "@stores/features/cookingInfos";
 import type { WithRequiredId } from "@app-types/NameId";
 import type { SQLiteDatabase } from "expo-sqlite";
+import { toDbNumberOrNull } from "helpers/dbHelpers";
 
 export interface CookingInfoRaw {
   cooking_info_id: number;
   ingredient_id: number;
   preparation_type: string;
   cooking_duration_id: number;
-  duration: number;
-  temperature: number;
+  duration: number | null;
+  temperature: number | null;
   ustensil_id: number;
 }
 
@@ -99,7 +100,7 @@ async function CreateCookingDurationService(
       id_cooking_infos
     ) VALUES (?, ?, ?, ?)
     `,
-    [duration, temperature, ustensilId, cookingInfoId],
+    [toDbNumberOrNull(duration), toDbNumberOrNull(temperature), ustensilId, cookingInfoId],
   );
 
   return {

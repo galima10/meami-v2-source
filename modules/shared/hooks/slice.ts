@@ -75,16 +75,19 @@ export const insertMockData = async (dispatch: AppDispatch) => {
   for (const ingredient of mockIngredients) {
     await dispatch(createIngredientThunk(ingredient)).unwrap();
   }
-  for (const recipe of mockRecipes) {
-    await dispatch(createRecipeThunk(recipe)).unwrap();
-  }
   for (const product of mockProducts) {
     await dispatch(createProductThunk(product)).unwrap();
+  }
+  for (const recipe of mockRecipes) {
+    await dispatch(createRecipeThunk(recipe)).unwrap();
   }
   for (const recipe of mockWeeklyRecipes) {
     await dispatch(addRecipeToMenuThunk(recipe)).unwrap();
   }
-  // for (const ingredient of mockWeeklyIngredients) {
-  //   await dispatch(addIngredientToMenuThunk(ingredient)).unwrap();
-  // }
+  for (const ingredient of mockWeeklyIngredients) {
+    await dispatch(addIngredientToMenuThunk(ingredient)).unwrap();
+  }
+  
+  
+  
 };
