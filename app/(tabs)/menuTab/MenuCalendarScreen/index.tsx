@@ -1,12 +1,15 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { AppText } from "@modules/shared/components/atoms/AppText";
+import { typography } from "@constants/styles";
+import theme from "@constants/themes";
 
-export default function MenuCalendarScreen(){
+export default function MenuCalendarScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Menu Calendar Screen</Text>
+      <AppText style={styles.text}>Menu Calendar Screen</AppText>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -16,8 +19,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: typography.h4,
+    fontWeight: theme.properties.bold,
   },
 });

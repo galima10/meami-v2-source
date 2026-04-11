@@ -3,7 +3,6 @@ import { useRouter } from "expo-router";
 import { AppText } from "@modules/shared/components/atoms/AppText";
 import theme from "@constants/themes";
 import { typography } from "@constants/styles";
-import AppIcon from "@modules/shared/components/atoms/AppIcon";
 
 export default function Splash() {
   const router = useRouter();
