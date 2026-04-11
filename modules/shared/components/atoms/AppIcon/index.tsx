@@ -11,7 +11,7 @@ interface AppIconProps extends SvgProps {
 }
 export default function AppIcon({
   name,
-  size = 24,
+  size = 40,
   color = theme.properties.brown,
   ...props
 }: AppIconProps) {
