@@ -47,6 +47,24 @@
             ]
           }
         }
+      ],
+      [
+        "expo-font",
+        {
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "SN",
+                "fontDefinitions": [
+                  { "path": "./assets/fonts/SN_Regular.ttf", "weight": 400 },
+                  { "path": "./assets/fonts/SN_Medium.ttf", "weight": 500 },
+                  { "path": "./assets/fonts/SN_SemiBold.ttf", "weight": 600 },
+                  { "path": "./assets/fonts/SN_Bold.ttf", "weight": 700 }
+                ]
+              }
+            ]
+          }
+        }
       ]
     ],
     "updates": {
