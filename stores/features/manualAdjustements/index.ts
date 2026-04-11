@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   fetchShoppingManualChecksThunk,
   fetchStockManualChecksThunk,
-  setIngredientShoppingCheckThunk,
+  setIngredientCheckThunk,
 } from "@stores/thunks/manualAdjustements";
 
 export interface ManualAdjustementItem {
@@ -86,14 +86,14 @@ export const manualAdjustementSlice = createSlice({
         },
       );
 
-    // setIngredientShoppingCheckThunk
+    // setIngredientCheckThunk
     builder
-      .addCase(setIngredientShoppingCheckThunk.pending, (state) => {
+      .addCase(setIngredientCheckThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        setIngredientShoppingCheckThunk.fulfilled,
+        setIngredientCheckThunk.fulfilled,
         (
           state,
           action: PayloadAction<{
@@ -109,10 +109,10 @@ export const manualAdjustementSlice = createSlice({
         },
       )
       .addCase(
-        setIngredientShoppingCheckThunk.rejected,
+        setIngredientCheckThunk.rejected,
         (
           state,
-          action: ReturnType<typeof setIngredientShoppingCheckThunk.rejected>,
+          action: ReturnType<typeof setIngredientCheckThunk.rejected>,
         ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";

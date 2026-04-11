@@ -57,6 +57,7 @@ import {
 import {
   addRecipeToMenuThunk,
   addIngredientToMenuThunk,
+  setMenuDoneThunk,
 } from "@stores/thunks/weeklyMenu";
 
 import { LoadShoppingListService } from "@services/shoppingList";
@@ -104,6 +105,10 @@ export const insertMockData = async (dispatch: AppDispatch) => {
   }
   for (const ingredient of mockIngredientsBuyed) {
     await dispatch(setShoppingListItemQuantityThunk(ingredient)).unwrap();
+  }
+
+  for (let i = 1; i <= 21; i++) {
+    await dispatch(setMenuDoneThunk({ menuId: i, done: true }));
   }
 };
 

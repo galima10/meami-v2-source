@@ -45,14 +45,17 @@ import {
 import {
   fetchShoppingManualChecksThunk,
   fetchStockManualChecksThunk,
-  setIngredientShoppingCheckThunk,
+  setIngredientCheckThunk,
 } from "@stores/thunks/manualAdjustements";
 import {
   LoadShoppingManualChecksService,
+  LoadStockManualChecksService,
   ResetShoppingManualChecksService,
+  ResetStockManualChecksService,
 } from "@services/manualAdjustements";
 import {
   resetShoppingAdjustements,
+  resetStockAdjustements,
   ManualAdjustementItem,
 } from "@stores/features/manualAdjustements";
 import type {
@@ -84,7 +87,7 @@ export default function Splash() {
 
   async function handleAdd() {
     try {
-      const result = await dispatch(updateStockThunk("menu")).unwrap();
+      // const result = await dispatch(updateStockThunk("menu")).unwrap();
       // const result = await dispatch(
       //   addItemToShoppingThunk({
       //     newItemId: 1,
@@ -92,7 +95,7 @@ export default function Splash() {
       //     type: "ingredients",
       //   }),
       // ).unwrap();
-      console.log("test")
+      console.log("test");
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -101,12 +104,18 @@ export default function Splash() {
   async function handleDelete() {
     try {
       // const result = await dispatch(
-      //   removeItemToShoppingThunk({ itemId: 1, type: "ingredients" }),
+      //   setIngredientCheckThunk({
+      //     ingredientId: 1,
+      //     checked: true,
+      //     type: "stock",
+      //   }),
       // ).unwrap();
       // await ResetShoppingListService();
       // dispatch(resetShoppingList());
       // await ResetShoppingManualChecksService();
       // dispatch(resetShoppingAdjustements());
+      await ResetStockManualChecksService();
+      dispatch(resetStockAdjustements());
     } catch (err) {
       console.error("Thunk rejected:", err);
     }
@@ -119,8 +128,10 @@ export default function Splash() {
       // ).unwrap();
       // await LoadShoppingListService();
       // await dispatch(fetchShoppingListThunk());
-      await LoadShoppingManualChecksService();
-      await dispatch(fetchShoppingManualChecksThunk());
+      // await LoadShoppingManualChecksService();
+      // await dispatch(fetchShoppingManualChecksThunk());
+      await LoadStockManualChecksService();
+      await dispatch(fetchStockManualChecksThunk());
     } catch (err) {
       console.error(err);
     }
@@ -143,6 +154,7 @@ export default function Splash() {
     }
     fetchMenus();
     dispatch(fetchShoppingManualChecksThunk());
+    dispatch(fetchStockManualChecksThunk());
   }, []);
 
   // useEffect(() => {
@@ -152,7 +164,7 @@ export default function Splash() {
   return (
     <View style={styles.container}>
       <View style={styles.infosContainer}>
-        {(Object.entries(ingredients) as [string, Ingredient][]).map(
+        {/* {(Object.entries(ingredients) as [string, Ingredient][]).map(
           ([key, values]) => {
             return (
               <Text key={`ingredient-${key}`}>
@@ -161,7 +173,7 @@ export default function Splash() {
               </Text>
             );
           },
-        )}
+        )} */}
         {/* {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
           ([keyDay, moment], dayIndex) => {
             return (
@@ -173,7 +185,9 @@ export default function Splash() {
                       return (
                         <View key={`moment-${momentIndex}`}>
                           <Text style={styles.littleText}>{keyMoment}</Text>
-                          <Text style={styles.littleText}>{menu.id}</Text>
+                          <Text style={styles.littleText}>
+                            {menu.id} - {menu.done ? "Fait" : "Pas fait"}
+                          </Text>
                           {(
                             Object.entries(menu.ingredients) as [
                               string,
@@ -222,6 +236,18 @@ export default function Splash() {
             </Text>
           );
         })} */}
+        {(Object.entries(stockChecks) as [string, ManualAdjustementItem][]).map(
+          ([key, values]) => {
+            return (
+              <Text key={`check-${key}`}>
+                {ingredients[Number(key)]?.name} ID : {key} -{" "}
+                {values.usageCount} fois -{" "}
+                {units[ingredients[Number(key)]?.unitId]?.abbreviation} -{" "}
+                {values.checked ? "fait" : "pas fait"}
+              </Text>
+            );
+          },
+        )}
         {/* {(
           Object.entries(ingredientsShopping) as [
             string,

@@ -24,7 +24,7 @@ export const fetchStockManualChecksThunk = createAsyncThunk<
   return formatManualAdjustements(data);
 });
 
-export const setIngredientShoppingCheckThunk = createAsyncThunk<
+export const setIngredientCheckThunk = createAsyncThunk<
   {
     ingredientId: number;
     checked: boolean;
@@ -36,7 +36,7 @@ export const setIngredientShoppingCheckThunk = createAsyncThunk<
     type: "shopping" | "stock";
   }
 >(
-  "manualAdjustements/setIngredientShoppingCheck",
+  "manualAdjustements/setIngredientCheck",
   async ({ ingredientId, checked, type }) => {
     if (type === "shopping")
       await SetIngredientShoppingCheckService(ingredientId, checked);
