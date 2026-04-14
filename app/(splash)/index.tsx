@@ -1,8 +1,8 @@
-import { View, StyleSheet, Pressable } from "react-native";
-import { useRouter } from "expo-router";
-import { AppText } from "@modules/shared/components/atoms/AppText";
-import theme from "@constants/themes";
 import { typography } from "@constants/styles";
+import theme from "@constants/themes";
+import { AppText } from "@modules/shared/components/atoms/appElements/AppText";
+import { useRouter } from "expo-router";
+import { StyleSheet, View } from "react-native";
 import { useEffect } from "react";
 
 export default function Splash() {
@@ -10,10 +10,11 @@ export default function Splash() {
   // useEffect(() => {
   //   const timer = setTimeout(() => {
   //     router.replace("/(tabs)/menuTab/MenuCalendarScreen");
-  //   }, 5000);
+  //   }, 3000);
 
   //   return () => clearTimeout(timer);
   // }, []);
+
   return (
     <View style={styles.container}>
       <AppText style={styles.text}>Splash Screen</AppText>

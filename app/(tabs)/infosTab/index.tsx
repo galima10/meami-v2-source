@@ -1,7 +1,7 @@
-import { View, StyleSheet } from "react-native";
-import { AppText } from "@modules/shared/components/atoms/AppText";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
+import { AppText } from "@modules/shared/components/atoms/appElements/AppText";
+import { StyleSheet, View } from "react-native";
 
 export default function InfosDefaultScreen() {
   return (
