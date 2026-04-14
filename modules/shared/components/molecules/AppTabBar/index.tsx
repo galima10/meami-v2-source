@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import theme from "@constants/themes";
 import { FONT_BASE } from "@constants/general";
-import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import TabButton from "../../atoms/buttons/TabButton";
 
 export default function AppTabBar({
