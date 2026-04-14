@@ -4,6 +4,9 @@ import { AppText } from "@modules/shared/components/atoms/appElements/AppText";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { useEffect } from "react";
+import { Image } from "expo-image";
+import WaveText from "@modules/shared/components/atoms/animated/WaveText";
+import BounceSpring from "@modules/shared/components/atoms/animated/BounceSpring";
 
 export default function Splash() {
   const router = useRouter();
@@ -17,7 +20,15 @@ export default function Splash() {
 
   return (
     <View style={styles.container}>
-      <AppText style={styles.text}>Splash Screen</AppText>
+      <BounceSpring>
+        <Image
+          source={require("@assets/images/precharged/logos/logo.png")}
+          style={styles.icon}
+        />
+      </BounceSpring>
+      <View style={styles.titleContainer}>
+        <WaveText text="Ton meilleur ami pour cooky !" style={styles.title} />
+      </View>
     </View>
   );
 }
@@ -28,16 +39,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: theme.properties.darkOrange,
-    gap: 16,
   },
-  text: {
-    fontSize: typography.h3,
+  icon: {
+    width: 300,
+    height: 300,
+  },
+  title: {
+    textAlign: "center",
+    fontSize: 28,
+    color: theme.properties.beige,
     fontWeight: theme.properties.bold,
-    color: theme.properties.beige,
   },
-  button: {
-    fontSize: typography.h5,
-    fontFamily: theme.properties.fontFamily,
-    color: theme.properties.beige,
+  titleContainer: {
+    paddingHorizontal: 50,
+    marginTop: 40,
   },
 });

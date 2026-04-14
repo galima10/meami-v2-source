@@ -2,6 +2,7 @@ import React from "react";
 import { Text, TextProps } from "react-native";
 import Animated from "react-native-reanimated";
 import theme from "@constants/themes";
+import type { AppTextStyleType } from "@utils/appElements/AppTextStyleType";
 
 const defaultStyle = {
   fontFamily: theme.properties.fontFamily,
@@ -9,20 +10,20 @@ const defaultStyle = {
 };
 
 type Props = Omit<TextProps, "style"> & {
-  style?: TextProps["style"] | object;
+  style?: AppTextStyleType;
   children?: React.ReactNode;
 };
 
 export const AppText = ({ style, ...props }: Props) => (
   <Text
     {...props}
-    style={[defaultStyle, style] as any}
+    style={[defaultStyle, style]}
   />
 );
 
 export const AnimatedAppText = ({ style, ...props }: Props) => (
   <Animated.Text
     {...props}
-    style={[defaultStyle, style] as any}
+    style={[defaultStyle, style]}
   />
 );

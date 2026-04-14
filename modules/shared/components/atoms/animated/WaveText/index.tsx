@@ -8,10 +8,11 @@ import {
   TextStyle,
   View,
 } from "react-native";
+import { AppTextStyleType } from "@utils/appElements/AppTextStyleType";
 
 type WaveTextProps = TextProps & {
   text: string;
-  style?: StyleProp<TextStyle>;
+  style?: AppTextStyleType;
 };
 
 export default function WaveText({ text, style, ...rest }: WaveTextProps) {
