@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
+import AppTabBar from "@modules/shared/components/molecules/AppTabBar";
 
 export default function TabLayout() {
   return (
@@ -7,6 +8,7 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
       }}
+      tabBar={(props) => <AppTabBar {...props} />}
     >
       <Tabs.Screen
         name="menuTab"
