@@ -8,7 +8,7 @@ export default function MenuTabLayout() {
   return (
     <Stack
       screenOptions={{
-        header: (props) => (
+        header: () => (
           <AppTopBar
             left={
               <>
@@ -21,7 +21,6 @@ export default function MenuTabLayout() {
                 <TopButton icon="calendarIcon" route={MENU_ROUTES.modify} />
               </>
             }
-            {...props}
           />
         ),
       }}

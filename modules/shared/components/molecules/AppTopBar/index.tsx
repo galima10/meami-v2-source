@@ -4,16 +4,12 @@ import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FONT_BASE } from "@constants/general";
 
-interface AppTopBarProps extends NativeStackHeaderProps {
+interface AppTopBarProps {
   left?: React.ReactNode;
   right?: React.ReactNode;
 }
 
 export default function AppTopBar({
-  navigation,
-  route,
-  options,
-  back,
   left,
   right,
 }: AppTopBarProps) {
