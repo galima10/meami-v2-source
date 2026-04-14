@@ -5,16 +5,17 @@ import { useEffect } from "react";
 import { Image } from "expo-image";
 import WaveText from "@modules/shared/components/atoms/animated/WaveText";
 import BounceSpring from "@modules/shared/components/atoms/animated/BounceSpring";
+import { SPLASH_SCREEN_DELAY } from "@constants/general";
 
 export default function Splash() {
   const router = useRouter();
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     router.replace("/(tabs)/menuTab/MenuCalendarScreen");
-  //   }, 3000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace("/(tabs)/menuTab/MenuCalendarScreen");
+    }, SPLASH_SCREEN_DELAY * 1000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <View style={styles.container}>
