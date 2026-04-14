@@ -1,9 +1,9 @@
-import AppIcon from "../../appElements/AppIcon";
-import { Pressable, StyleSheet } from "react-native";
-import { AppText } from "../../appElements/AppText";
+import { FONT_BASE } from "@constants/general";
 import { tabiconsMap } from "@constants/mappings/icons/tabIconsMap";
 import theme from "@constants/themes";
-import { FONT_BASE } from "@constants/general";
+import { Pressable, StyleSheet } from "react-native";
+import AppIcon from "../../../primitives/AppIcon";
+import { AppText } from "../../../primitives/AppText";
 
 interface TabButtonProps {
   isFocused: boolean;

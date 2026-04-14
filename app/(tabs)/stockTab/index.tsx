@@ -1,6 +1,6 @@
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { AppText } from "@modules/shared/components/atoms/appElements/AppText";
+import { AppText } from "@modules/shared/components/primitives/AppText";
 import { StyleSheet, View } from "react-native";
 
 export default function StockDefaultScreen() {

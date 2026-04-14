@@ -1,14 +1,8 @@
-import { AnimatedAppText } from "../../appElements/AppText";
 import { useWaveText } from "@modules/shared/hooks/atoms/animated/useWaveText";
-import React from "react";
-import {
-  StyleProp,
-  StyleSheet,
-  TextProps,
-  TextStyle,
-  View,
-} from "react-native";
 import { AppTextStyleType } from "@utils/appElements/AppTextStyleType";
+import React from "react";
+import { StyleSheet, TextProps, View } from "react-native";
+import { AnimatedAppText } from "../../../primitives/AppText";
 
 type WaveTextProps = TextProps & {
   text: string;

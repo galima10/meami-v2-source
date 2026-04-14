@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import { StyleSheet, ViewStyle } from "react-native";
 import type { StyleProp } from "react-native";
 import { useBounceSpring } from "@modules/shared/hooks/atoms/animated/useBounceSpring";
-import AnimatedAppView from "../../appElements/AnimatedAppView";
+import AnimatedAppView from "../../../primitives/AnimatedAppView";
 
 type Props = PropsWithChildren<{}>;
 
