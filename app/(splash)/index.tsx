@@ -1,6 +1,4 @@
-import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { AppText } from "@modules/shared/components/atoms/appElements/AppText";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { useEffect } from "react";

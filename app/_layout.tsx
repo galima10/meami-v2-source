@@ -20,7 +20,7 @@ function InitData() {
     }
 
     initDBAndFetch();
-  }, [dispatch]);
+  }, []);
 
   return null;
 }
