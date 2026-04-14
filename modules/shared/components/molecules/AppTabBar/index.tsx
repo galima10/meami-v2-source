@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingHorizontal: FONT_BASE * 1.5,
+    paddingHorizontal: FONT_BASE,
     boxShadow: theme.properties.bigShadow,
     borderTopWidth: 1,
     borderColor: theme.properties.beigeBorder,
