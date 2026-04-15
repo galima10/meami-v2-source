@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import theme from "@constants/themes";
 import AppIcon from "@modules/shared/components/primitives/AppIcon";
 import { FONT_BASE } from "@constants/general";
-import { useRouter, type Href, usePathname } from "expo-router";
+import { type Href, usePathname } from "expo-router";
 import { useAppNavigation } from "@modules/shared/hooks/useAppNavigation";
 
 interface TopButtonProps {
@@ -12,6 +12,7 @@ interface TopButtonProps {
   routeAction?: "replace" | "push" | "back";
   action?: () => void;
   disabled?: boolean;
+  togglable?: boolean;
 }
 
 export default function TopButton({
@@ -21,8 +22,8 @@ export default function TopButton({
   routeAction = "replace",
   action,
   disabled,
+  togglable = true,
 }: TopButtonProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const { handleNavigate } = useAppNavigation(routeAction);
   function handlePress() {
@@ -36,7 +37,11 @@ export default function TopButton({
     color === "green" && greenButtonStyle.base,
     color === "red" && redButtonStyle.base,
     !color &&
-      (pathname === route ? normalButtonStyle.active : normalButtonStyle.base),
+      (togglable
+        ? pathname === route
+          ? normalButtonStyle.active
+          : normalButtonStyle.base
+        : normalButtonStyle.active),
     color === "info" && infoButtonStyle.base,
     disabled && styles.disabled,
   ];
@@ -50,6 +55,7 @@ export default function TopButton({
           color === "info" ? theme.properties.brown : theme.properties.beige
         }
       />
+      {color === "info" && <View style={styles.notification} />}
     </Pressable>
   );
 }
@@ -61,9 +67,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: FONT_BASE,
+    position: "relative",
   },
   disabled: {
     opacity: 0.5,
+  },
+  notification: {
+    width: FONT_BASE,
+    height: FONT_BASE,
+    backgroundColor: theme.properties.darkRed,
+    position: "absolute",
+    top: -FONT_BASE / 3,
+    left: -FONT_BASE / 3,
+    borderRadius: "50%",
+    borderWidth: 0.5,
+    borderColor: theme.properties.redBorder,
+    boxShadow: theme.properties.littleShadow,
   },
 });
 
@@ -100,7 +119,7 @@ const infoButtonStyle = StyleSheet.create({
   base: {
     backgroundColor: theme.properties.white,
     borderColor: theme.properties.whiteBorder,
-    borderWidth: 1,
+    borderWidth: 0.5,
     boxShadow: theme.properties.littleShadow,
   },
 });

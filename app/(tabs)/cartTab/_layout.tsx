@@ -14,15 +14,36 @@ export default function CartTabLayout() {
           <AppTopBar
             left={
               <>
-                {pathname !== "/cartTab" && (
+                {pathname === CART_ROUTES.list && (
                   <TopButton icon="addStockIcon" color="green" disabled />
+                )}
+                {pathname === CART_ROUTES.modify && (
+                  <TopButton icon="addIcon" togglable={false} />
                 )}
               </>
             }
             right={
               <>
-                {pathname !== "/cartTab" && (
-                  <TopButton icon="modifyIcon" color="green" />
+                {pathname === CART_ROUTES.list && (
+                  <>
+                    <TopButton
+                      icon="infosIcon"
+                      color="info"
+                      route={CART_ROUTES.modify}
+                    />
+                    <TopButton
+                      icon="modifyIcon"
+                      color="green"
+                      route={CART_ROUTES.modify}
+                    />
+                  </>
+                )}
+                {pathname === CART_ROUTES.modify && (
+                  <TopButton
+                    icon="validateIcon"
+                    color="green"
+                    route={CART_ROUTES.list}
+                  />
                 )}
               </>
             }
