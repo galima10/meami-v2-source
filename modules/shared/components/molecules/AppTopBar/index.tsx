@@ -1,6 +1,5 @@
 import { View, StyleSheet } from "react-native";
 import theme from "@constants/themes";
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FONT_BASE } from "@constants/general";
 

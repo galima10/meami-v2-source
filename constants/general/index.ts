@@ -21,4 +21,15 @@ export const ROUTES: {
     list: "/menuTab/MenuListScreen",
     modify: "/menuTab/MenuModifyScreen",
   },
+  cart: {
+    default: "/cartTab",
+    list: "/cartTab/CartListScreen",
+    modify: "/cartTab/CartModifyScreen",
+  },
+  stock: {
+    default: "/stockTab",
+    recipesList: "/stockTab/StockRecipesScreen",
+    ingredientsList: "/stockTab/StockIngredientsScreen",
+    productsList: "/stockTab/StockProductsScreen",
+  },
 };

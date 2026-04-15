@@ -1,4 +1,4 @@
-import { useAppIcon, IconName } from "@modules/shared/hooks/atoms/appElements/useAppIcon";
+import { useAppIcon, IconName } from "@modules/shared/hooks/primitives/useAppIcon";
 import React from "react";
 import { SvgProps } from "react-native-svg";
 import theme from "@constants/themes";

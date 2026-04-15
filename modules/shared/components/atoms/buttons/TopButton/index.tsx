@@ -3,6 +3,7 @@ import theme from "@constants/themes";
 import AppIcon from "@modules/shared/components/primitives/AppIcon";
 import { FONT_BASE } from "@constants/general";
 import { useRouter, type Href, usePathname } from "expo-router";
+import { useAppNavigation } from "@modules/shared/hooks/useAppNavigation";
 
 interface TopButtonProps {
   icon: string;
@@ -10,6 +11,7 @@ interface TopButtonProps {
   color?: "red" | "green" | "info";
   routeAction?: "replace" | "push" | "back";
   action?: () => void;
+  disabled?: boolean;
 }
 
 export default function TopButton({
@@ -18,15 +20,15 @@ export default function TopButton({
   color,
   routeAction = "replace",
   action,
+  disabled,
 }: TopButtonProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const { handleNavigate } = useAppNavigation(routeAction);
   function handlePress() {
     action?.();
-    if (!route || pathname === route) return;
-    if (routeAction === "push") router.push(route);
-    else if (routeAction === "back") router.back();
-    else router.replace(route);
+    if (pathname === route) return;
+    handleNavigate(route);
   }
 
   const buttonStyle = [
@@ -36,6 +38,7 @@ export default function TopButton({
     !color &&
       (pathname === route ? normalButtonStyle.active : normalButtonStyle.base),
     color === "info" && infoButtonStyle.base,
+    disabled && styles.disabled,
   ];
 
   return (
@@ -58,6 +61,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: FONT_BASE,
+  },
+  disabled: {
+    opacity: 0.5,
   },
 });
 
