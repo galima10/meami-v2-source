@@ -1,0 +1,12 @@
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleProp, ViewStyle } from "react-native";
+
+interface Props {
+  colors: readonly [string, string, ...string[]];
+  locations?: readonly [number, number, ...number[]];
+  style?: StyleProp<ViewStyle>;
+}
+
+export default function AppLinearGradient(props: Props) {
+  return <LinearGradient {...props} />;
+}
