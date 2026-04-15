@@ -9,6 +9,7 @@ interface TopButtonProps {
   route?: Href;
   color?: "red" | "green" | "info";
   routeAction?: "replace" | "push" | "back";
+  action?: () => void;
 }
 
 export default function TopButton({
@@ -16,12 +17,13 @@ export default function TopButton({
   route,
   color,
   routeAction = "replace",
+  action,
 }: TopButtonProps) {
   const router = useRouter();
   const pathname = usePathname();
   function handlePress() {
-    if (!route) return;
-    if (pathname === route) return;
+    action?.();
+    if (!route || pathname === route) return;
     if (routeAction === "push") router.push(route);
     else if (routeAction === "back") router.back();
     else router.replace(route);
