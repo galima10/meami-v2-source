@@ -6,7 +6,7 @@ export default function DayCardCalendar() {
   return (
     <View style={styles.container}>
       <MenuContainer />
-      <MomentBand />
+      <MomentBand moment="midi" day="mardi" />
     </View>
   );
 }

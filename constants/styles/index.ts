@@ -11,5 +11,5 @@ export const typography = {
   h4: typeScale(3),
   h3: typeScale(4),
   h2: typeScale(5),
+  h1: typeScale(6),
 };
-
