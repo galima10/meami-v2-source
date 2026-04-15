@@ -29,12 +29,12 @@ export default function CartTabLayout() {
                     <TopButton
                       icon="infosIcon"
                       color="info"
-                      route={CART_ROUTES.modify}
                     />
                     <TopButton
                       icon="modifyIcon"
                       color="green"
                       route={CART_ROUTES.modify}
+                      routeAction="push"
                     />
                   </>
                 )}
@@ -42,7 +42,7 @@ export default function CartTabLayout() {
                   <TopButton
                     icon="validateIcon"
                     color="green"
-                    route={CART_ROUTES.list}
+                    routeAction="back"
                   />
                 )}
               </>

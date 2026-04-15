@@ -7,11 +7,36 @@ import TopButton from "@modules/shared/components/atoms/buttons/TopButton";
 export default function StockTabLayout() {
   const pathname = usePathname();
   const STOCK_TAB = ROUTES.stock;
+  
   function stockAddRoute() {
     if (pathname === STOCK_TAB.recipesList) return STOCK_TAB.recipeForm;
     else if (pathname === STOCK_TAB.ingredientsList)
       return STOCK_TAB.ingredientForm;
     else if (pathname === STOCK_TAB.productsList) return STOCK_TAB.productForm;
+  }
+
+  function topLeftButton() {
+    if (
+      pathname === STOCK_TAB.recipesList ||
+      pathname === STOCK_TAB.ingredientsList ||
+      pathname === STOCK_TAB.productsList
+    ) {
+      return (
+        <TopButton
+          icon="addIcon"
+          color="green"
+          route={stockAddRoute()}
+          routeAction="push"
+        />
+      );
+    }
+    if (
+      pathname === STOCK_TAB.recipeForm ||
+      pathname === STOCK_TAB.ingredientForm ||
+      pathname === STOCK_TAB.productForm
+    ) {
+      return <TopButton icon="returnIcon" color="green" routeAction="back" />;
+    }
   }
   return (
     <Stack
@@ -28,17 +53,7 @@ export default function StockTabLayout() {
                 <TopButton icon="productIcon" route={STOCK_TAB.productsList} />
               </>
             }
-            right={
-              <>
-                {pathname !== STOCK_TAB.default && (
-                  <TopButton
-                    icon="addIcon"
-                    color="green"
-                    route={stockAddRoute()}
-                  />
-                )}
-              </>
-            }
+            right={<>{topLeftButton()}</>}
           />
         ),
       }}

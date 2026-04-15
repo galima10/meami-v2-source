@@ -21,21 +21,23 @@ export default function MenuTabLayout() {
             right={
               <>
                 {pathname === MENU_ROUTES.modify && (
+                  <>
+                    <TopButton icon="binIcon" color="red" />
+                    <TopButton
+                      icon="validateIcon"
+                      color="green"
+                      routeAction="back"
+                    />
+                  </>
+                )}
+                {pathname !== MENU_ROUTES.modify && (
                   <TopButton
-                    icon="binIcon"
+                    icon="modifyIcon"
+                    color="green"
+                    routeAction="push"
                     route={MENU_ROUTES.modify}
-                    color="red"
                   />
                 )}
-                <TopButton
-                  icon={
-                    pathname === MENU_ROUTES.modify
-                      ? "validateIcon"
-                      : "modifyIcon"
-                  }
-                  route={MENU_ROUTES.modify}
-                  color="green"
-                />
               </>
             }
           />

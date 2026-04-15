@@ -11,6 +11,27 @@ export default function InfosTabLayout() {
     if (pathname === INFOS_TAB.cookingList) return INFOS_TAB.cookingForm;
     else if (pathname === INFOS_TAB.storageList) return INFOS_TAB.storageForm;
   }
+  function topLeftButton() {
+    if (
+      pathname === INFOS_TAB.cookingList ||
+      pathname === INFOS_TAB.storageList
+    ) {
+      return (
+        <TopButton
+          icon="addIcon"
+          color="green"
+          route={infosAddRoute()}
+          routeAction="push"
+        />
+      );
+    }
+    if (
+      pathname === INFOS_TAB.cookingForm ||
+      pathname === INFOS_TAB.storageForm
+    ) {
+      return <TopButton icon="returnIcon" color="green" routeAction="back" />;
+    }
+  }
   return (
     <Stack
       screenOptions={{
@@ -22,17 +43,7 @@ export default function InfosTabLayout() {
                 <TopButton icon="closetIcon" route={INFOS_TAB.storageList} />
               </>
             }
-            right={
-              <>
-                {pathname !== INFOS_TAB.default && (
-                  <TopButton
-                    icon="addIcon"
-                    color="green"
-                    route={infosAddRoute()}
-                  />
-                )}
-              </>
-            }
+            right={<>{topLeftButton()}</>}
           />
         ),
       }}

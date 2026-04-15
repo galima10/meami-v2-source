@@ -2,11 +2,16 @@ import { View, StyleSheet } from "react-native";
 import MomentBand from "../../molecules/MomentBand";
 import MenuContainer from "../../molecules/MenuContainer";
 
-export default function DayCardCalendar() {
+interface DayCardCalendarProps {
+  moment: string;
+  day: string;
+}
+
+export default function DayCardCalendar({ moment, day }: DayCardCalendarProps) {
   return (
     <View style={styles.container}>
-      <MenuContainer />
-      <MomentBand moment="midi" day="mardi" />
+      <MenuContainer day={day} />
+      <MomentBand moment={moment} day={day} />
     </View>
   );
 }

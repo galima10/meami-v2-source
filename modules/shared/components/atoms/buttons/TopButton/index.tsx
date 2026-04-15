@@ -25,11 +25,11 @@ export default function TopButton({
   togglable = true,
 }: TopButtonProps) {
   const pathname = usePathname();
-  const { handleNavigate } = useAppNavigation(routeAction);
+  const { handleNavigate } = useAppNavigation();
   function handlePress() {
     action?.();
     if (pathname === route) return;
-    handleNavigate(route);
+    handleNavigate(route, routeAction);
   }
 
   const buttonStyle = [
