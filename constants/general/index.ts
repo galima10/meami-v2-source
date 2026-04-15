@@ -29,7 +29,22 @@ export const ROUTES: {
   stock: {
     default: "/stockTab",
     recipesList: "/stockTab/StockRecipesScreen",
+    recipeInfos: "/stockTab/StockRecipesScreen/StockInfosRecipeScreen",
+    recipeForm: "/stockTab/StockRecipesScreen/StockRecipeFormScreen",
     ingredientsList: "/stockTab/StockIngredientsScreen",
+    ingredientInfos:
+      "/stockTab/StockIngredientsScreen/StockInfosIngredientScreen",
+    ingredientForm:
+      "/stockTab/StockIngredientsScreen/StockIngredientFormScreen",
     productsList: "/stockTab/StockProductsScreen",
+    productInfos: "/stockTab/StockProductsScreen/StockInfosProductScreen",
+    productForm: "/stockTab/StockProductsScreen/StockProductFormScreen",
+  },
+  infos: {
+    default: "/infosTab",
+    cookingList: "/infosTab/InfosCookingScreen",
+    cookingForm: "/infosTab/InfosCookingScreen/InfosCookingFormScreen",
+    storageList: "/infosTab/InfosStorageScreen",
+    storageForm: "/infosTab/InfosStorageScreen/InfosStorageFormScreen",
   },
 };
