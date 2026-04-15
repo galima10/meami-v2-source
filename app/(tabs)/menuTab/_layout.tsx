@@ -18,7 +18,11 @@ export default function MenuTabLayout() {
             }
             right={
               <>
-                <TopButton icon="calendarIcon" route={MENU_ROUTES.modify} />
+                <TopButton
+                  icon="modifyIcon"
+                  route={MENU_ROUTES.modify}
+                  color="green"
+                />
               </>
             }
           />
