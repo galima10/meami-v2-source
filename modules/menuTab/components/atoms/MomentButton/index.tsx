@@ -23,7 +23,7 @@ export default function MomentButton({
       onPress={() => setSelectedMoment(frMoments[moment])}
     >
       <View style={styles.icon}>
-        <AppIcon name={momentIconsMap[moment]} size={FONT_BASE * 2.125} />
+        <AppIcon name={momentIconsMap[moment]} size={FONT_BASE * 2.5} />
       </View>
     </Pressable>
   );
@@ -31,8 +31,8 @@ export default function MomentButton({
 
 const styles = StyleSheet.create({
   button: {
-    width: FONT_BASE * 2.5,
-    height: FONT_BASE * 2.5,
+    width: FONT_BASE * 3,
+    height: FONT_BASE * 3,
     borderRadius: FONT_BASE * 0.75,
     borderWidth: 1,
     alignItems: "center",
@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     backgroundColor: theme.properties.redBorder,
-    borderRadius: FONT_BASE * 0.575,
-    width: FONT_BASE * 2.125,
-    height: FONT_BASE * 2.125,
+    borderRadius: FONT_BASE * 0.5,
+    width: FONT_BASE * 2.5,
+    height: FONT_BASE * 2.5,
     overflow: "hidden",
   },
   active: {

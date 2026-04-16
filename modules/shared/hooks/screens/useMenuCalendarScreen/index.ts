@@ -66,6 +66,14 @@ export function useMenuCalendarScreen() {
     ]),
   );
 
+  function handleGoToday() {
+    if (currentIndex !== todayIndex || selectedMoment !== actualDayMoment) {
+      setCurrentIndex(todayIndex);
+      setSelectedMoment(actualDayMoment);
+      goToSlideDay(todayIndex);
+    }
+  }
+
   return {
     weeklyMenuUi,
     selectedMoment,
@@ -76,5 +84,6 @@ export function useMenuCalendarScreen() {
     todayIndex,
     actualDayMoment,
     goToSlideDay,
+    handleGoToday,
   };
 }

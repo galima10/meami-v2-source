@@ -5,6 +5,8 @@ import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalend
 import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@helpers/getScreenDimensions";
+import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
+import { FONT_BASE } from "@constants/general";
 
 export default function MenuCalendarScreen() {
   const {
@@ -16,6 +18,7 @@ export default function MenuCalendarScreen() {
     setCurrentIndex,
     scrollRef,
     actualDayMoment,
+    handleGoToday,
   } = useMenuCalendarScreen();
 
   return (
@@ -48,6 +51,11 @@ export default function MenuCalendarScreen() {
           },
         )}
       </ScrollView>
+      <AppIconButton
+        type="today"
+        style={styles.todayButton}
+        action={handleGoToday}
+      />
     </View>
   );
 }
@@ -55,9 +63,15 @@ export default function MenuCalendarScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: "relative",
   },
   text: {
     fontSize: typography.h4,
     fontWeight: theme.properties.bold,
+  },
+  todayButton: {
+    position: "absolute",
+    bottom: FONT_BASE * 3,
+    left: FONT_BASE * 1.15,
   },
 });

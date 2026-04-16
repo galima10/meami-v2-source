@@ -114,8 +114,6 @@ const styles = StyleSheet.create({
   menuContainer: {
     flex: 3.5,
     backgroundColor: theme.properties.beige,
-    borderLeftWidth: 1,
-    borderColor: theme.properties.beigeBorder,
   },
   gradient: {
     flex: 1,
