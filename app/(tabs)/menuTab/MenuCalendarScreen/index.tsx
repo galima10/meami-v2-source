@@ -13,6 +13,7 @@ import {
   MenuUi,
   MomentUi,
 } from "@utils/dataToUi/weeklyMenuToUi";
+import { FocusGate } from "@modules/shared/components/screens/FocusGate";
 
 export default function MenuCalendarScreen() {
   const dispatch = useAppDispatch();
@@ -26,24 +27,30 @@ export default function MenuCalendarScreen() {
       await dispatch(fetchAllMenusThunk());
       await dispatch(fetchWeeklyMenuThunk());
     }
-    fetchMenus();
+    if (Object.keys(weeklyMenu).length === 0) {
+      fetchMenus();
+    }
   }, []);
   return (
-    <View style={styles.container}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-      >
-        {/* <DayCardCalendar moment="matin" day="samedi" />
-        <DayCardCalendar moment="matin" day="dimanche" /> */}
-        {(Object.keys(weeklyMenuUi) as string[]).map((day) => {
-          return (
-            <DayCardCalendar key={day} moment="matin" day={day.toLowerCase()} />
-          );
-        })}
-      </ScrollView>
-    </View>
+    <FocusGate>
+      <View style={styles.container}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+        >
+          {(Object.keys(weeklyMenuUi) as string[]).map((day) => {
+            return (
+              <DayCardCalendar
+                key={day}
+                moment="matin"
+                day={day.toLowerCase()}
+              />
+            );
+          })}
+        </ScrollView>
+      </View>
+    </FocusGate>
   );
 }
 

@@ -3,6 +3,7 @@ import { ROUTES } from "@constants/general";
 import AppTopBar from "@modules/shared/components/molecules/AppTopBar";
 import TopButton from "@modules/shared/components/atoms/buttons/TopButton";
 import { usePathname } from "expo-router";
+import { FocusGate } from "@modules/shared/components/screens/FocusGate";
 
 export default function InfosTabLayout() {
   const pathname = usePathname();
@@ -33,20 +34,22 @@ export default function InfosTabLayout() {
     }
   }
   return (
-    <Stack
-      screenOptions={{
-        header: () => (
-          <AppTopBar
-            left={
-              <>
-                <TopButton icon="cookingIcon" route={INFOS_TAB.cookingList} />
-                <TopButton icon="closetIcon" route={INFOS_TAB.storageList} />
-              </>
-            }
-            right={<>{topLeftButton()}</>}
-          />
-        ),
-      }}
-    />
+    <FocusGate>
+      <Stack
+        screenOptions={{
+          header: () => (
+            <AppTopBar
+              left={
+                <>
+                  <TopButton icon="cookingIcon" route={INFOS_TAB.cookingList} />
+                  <TopButton icon="closetIcon" route={INFOS_TAB.storageList} />
+                </>
+              }
+              right={<>{topLeftButton()}</>}
+            />
+          ),
+        }}
+      />
+    </FocusGate>
   );
 }

@@ -7,6 +7,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        lazy: true,
       }}
       tabBar={(props) => <AppTabBar {...props} />}
     >
@@ -14,24 +15,28 @@ export default function TabLayout() {
         name="menuTab"
         options={{
           title: "Menu",
+          freezeOnBlur: true,
         }}
       />
       <Tabs.Screen
         name="cartTab"
         options={{
           title: "Courses",
+          freezeOnBlur: true,
         }}
       />
       <Tabs.Screen
         name="stockTab"
         options={{
           title: "Stock",
+          freezeOnBlur: true,
         }}
       />
       <Tabs.Screen
         name="infosTab"
         options={{
           title: "Infos",
+          freezeOnBlur: true,
         }}
       />
     </Tabs>
