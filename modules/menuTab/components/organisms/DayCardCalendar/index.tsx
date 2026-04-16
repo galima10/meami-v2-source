@@ -1,6 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import MomentBand from "../../molecules/MomentBand";
 import MenuContainer from "../../molecules/MenuContainer";
+import { getScreenWidth } from "@helpers/getScreenDimensions";
 
 interface DayCardCalendarProps {
   moment: string;
@@ -18,6 +19,7 @@ export default function DayCardCalendar({ moment, day }: DayCardCalendarProps) {
 
 const styles = StyleSheet.create({
   container: {
+    width: getScreenWidth(),
     flex: 1,
     flexDirection: "row-reverse",
   },
