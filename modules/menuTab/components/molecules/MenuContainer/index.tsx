@@ -1,18 +1,18 @@
-import {
-  StyleSheet,
-  ImageBackground,
-  type ViewStyle,
-  View,
-} from "react-native";
-import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
-import theme from "@constants/themes";
+import { FONT_BASE } from "@constants/general";
 import { dayColors } from "@constants/mappings/colors/dayColors";
 import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
-import { enDays } from "@constants/mappings/traductors/enDays";
+import { enDays } from "@constants/mappings/traductors/days";
+import { typography } from "@constants/styles";
+import theme from "@constants/themes";
+import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import { AppText } from "@modules/shared/components/primitives/AppText";
 import { toCapitalize } from "@utils/toCapitalize";
-import { typography } from "@constants/styles";
-import { FONT_BASE } from "@constants/general";
+import {
+  ImageBackground,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from "react-native";
 
 interface MenuContainerProps {
   day: string;

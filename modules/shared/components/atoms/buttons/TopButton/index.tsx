@@ -50,7 +50,7 @@ export default function TopButton({
     <Pressable style={buttonStyle} onPress={handlePress}>
       <AppIcon
         name={icon}
-        size={28}
+        size={FONT_BASE * 1.75}
         color={
           color === "info" ? theme.properties.brown : theme.properties.beige
         }

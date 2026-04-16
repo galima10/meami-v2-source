@@ -68,8 +68,7 @@ export type IconName =
   | "sortIcon"
   | "stockIcon"
   | "validateIcon"
-  | "warmIcon"
-  | string;
+  | "warmIcon";
 
 const ICONS: Record<IconName, React.FC<SvgProps & { withStroke?: boolean }>> = {
   accompaniementIcon: SvgAccompaniementIcon,

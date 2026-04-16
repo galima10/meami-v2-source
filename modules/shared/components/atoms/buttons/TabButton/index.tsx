@@ -31,7 +31,7 @@ export default function TabButton({
     >
       <AppIcon
         name={tabiconsMap[icon]}
-        size={32}
+        size={FONT_BASE * 2}
         color={
           isFocused
             ? theme.properties.vibrantOrange

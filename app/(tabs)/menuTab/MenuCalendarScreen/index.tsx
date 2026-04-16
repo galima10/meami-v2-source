@@ -7,7 +7,9 @@ import { FocusGate } from "@modules/shared/components/screens/FocusGate";
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 
 export default function MenuCalendarScreen() {
-  const { weeklyMenuUi } = useMenuCalendarScreen();
+  const { weeklyMenuUi, selectedMoment, setSelectedMoment } =
+    useMenuCalendarScreen();
+
   return (
     <FocusGate>
       <View style={styles.container}>
@@ -20,8 +22,10 @@ export default function MenuCalendarScreen() {
             return (
               <DayCardCalendar
                 key={day}
-                moment="matin"
+                moment={selectedMoment}
                 day={day.toLowerCase()}
+                setSelectedMoment={setSelectedMoment}
+                selectedMoment={selectedMoment}
               />
             );
           })}
