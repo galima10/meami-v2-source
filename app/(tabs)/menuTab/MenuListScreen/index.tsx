@@ -1,12 +1,29 @@
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
+import DayCardList from "@modules/menuTab/components/atoms/DayCardList";
+import { FONT_BASE } from "@constants/general";
+import { useMemo } from "react";
+import { weeklyMenuToUi } from "@utils/dataToUi/weeklyMenuToUi";
+import { useAppSelector } from "@modules/shared/hooks/redux";
+import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
 
 export default function MenuListScreen() {
+  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
+  const { moments, days } = useAppSelector((state) => state.seed);
+  const weeklyMenuUi = useMemo(
+    () => weeklyMenuToUi(weeklyMenu, days, moments),
+    [weeklyMenu, days, moments],
+  );
   return (
     <View style={styles.container}>
-      <AppText style={styles.text}>Menu List Screen</AppText>
+      <ScrollView contentContainerStyle={styles.days}>
+        {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
+          ([day, moments]) => {
+            return <DayCardList key={day} day={day} />;
+          },
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -18,8 +35,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
   },
-  text: {
-    fontSize: typography.h4,
-    fontWeight: theme.properties.bold,
+  days: {
+    padding: FONT_BASE,
   },
 });

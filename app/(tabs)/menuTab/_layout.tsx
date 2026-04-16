@@ -2,10 +2,32 @@ import { ROUTES } from "@constants/mappings/routes";
 import TopButton from "@modules/shared/components/atoms/buttons/TopButton";
 import AppTopBar from "@modules/shared/components/molecules/AppTopBar";
 import { Stack, usePathname } from "expo-router";
+import {
+  fetchAllMenusThunk,
+  fetchWeeklyMenuThunk,
+} from "@stores/thunks/weeklyMenu";
+import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
+import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
+import { useEffect } from "react";
 
 export default function MenuTabLayout() {
   const MENU_ROUTES = ROUTES.menu;
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
+  const { ingredients } = useAppSelector((state) => state.ingredient);
+  useEffect(() => {
+    async function fetchMenus() {
+      await dispatch(fetchAllMenusThunk());
+      await dispatch(fetchWeeklyMenuThunk());
+    }
+    if (Object.keys(weeklyMenu).length === 0) {
+      fetchMenus();
+    }
+    if (Object.keys(ingredients).length === 0) {
+      dispatch(fetchIngredientsThunk());
+    }
+  }, []);
   return (
     <Stack
       screenOptions={{
