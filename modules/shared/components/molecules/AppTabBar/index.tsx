@@ -3,6 +3,10 @@ import theme from "@constants/themes";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { StyleSheet, View } from "react-native";
 import TabButton from "../../atoms/buttons/TabButton";
+import type { IconName } from "@modules/shared/hooks/primitives/useAppIcon";
+import { useRouter, usePathname, type Href } from "expo-router";
+import { TAB_ROUTES } from "@constants/mappings/routes";
+import type { TabKey } from "@app-types/TabKey";
 
 export default function AppTabBar({
   state,
@@ -10,6 +14,8 @@ export default function AppTabBar({
   navigation,
   insets,
 }: BottomTabBarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   return (
     <View
       style={[
@@ -21,7 +27,8 @@ export default function AppTabBar({
       ]}
     >
       {state.routes.map((route, index) => {
-        const isFocused = state.index === index;
+        const routeName = route.name as TabKey;
+        const isFocused = pathname.startsWith(TAB_ROUTES[routeName]);
 
         const onPress = () => {
           const event = navigation.emit({
@@ -31,7 +38,7 @@ export default function AppTabBar({
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            router.replace(TAB_ROUTES[routeName] as Href);
           }
         };
 
@@ -43,7 +50,7 @@ export default function AppTabBar({
             isFocused={isFocused}
             text={label}
             onPress={onPress}
-            icon={route.name}
+            icon={route.name as IconName}
           />
         );
       })}

@@ -2,7 +2,6 @@ import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import { StyleSheet, View, ScrollView } from "react-native";
 import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalendar";
-import { FocusGate } from "@modules/shared/components/screens/FocusGate";
 import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@helpers/getScreenDimensions";

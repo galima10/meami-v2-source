@@ -1,0 +1,1 @@
+export type TabKey = "menuTab" | "cartTab" | "stockTab" | "infosTab";

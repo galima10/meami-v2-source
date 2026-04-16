@@ -4,9 +4,10 @@ import AppIcon from "@modules/shared/components/primitives/AppIcon";
 import { FONT_BASE } from "@constants/general";
 import { type Href, usePathname } from "expo-router";
 import { useAppNavigation } from "@modules/shared/hooks/useAppNavigation";
+import type { IconName } from "@modules/shared/hooks/primitives/useAppIcon";
 
 interface TopButtonProps {
-  icon: string;
+  icon: IconName;
   route?: Href;
   color?: "red" | "green" | "info";
   routeAction?: "replace" | "push" | "back";

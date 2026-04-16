@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { getDateInfo } from "@utils/getDateInfo";
 import { daysOrder } from "@constants/mappings/orders/daysOrder";
@@ -11,9 +11,6 @@ export function useDate() {
       setDateInfo(getDateInfo());
     }, []),
   );
-  useEffect(() => {
-    console.log(dateInfo);
-  }, [dateInfo]);
 
   const todayIndex = useMemo(() => {
     return daysOrder.findIndex((day) => day === dateInfo.dayOfWeek);

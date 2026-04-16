@@ -1,9 +1,9 @@
+import { ROUTES } from "@constants/mappings/routes";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import { AppText } from "@modules/shared/components/primitives/AppText";
-import { StyleSheet, View, Pressable } from "react-native";
 import { useAppNavigation } from "@modules/shared/hooks/useAppNavigation";
-import { ROUTES } from "@constants/general";
+import { Pressable, StyleSheet, View } from "react-native";
 
 export default function CartDefaultScreen() {
   const { handleNavigate } = useAppNavigation();

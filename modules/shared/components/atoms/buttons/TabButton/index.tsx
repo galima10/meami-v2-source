@@ -4,12 +4,13 @@ import theme from "@constants/themes";
 import { Pressable, StyleSheet } from "react-native";
 import AppIcon from "../../../primitives/AppIcon";
 import { AppText } from "../../../primitives/AppText";
+import type { IconName } from "@modules/shared/hooks/primitives/useAppIcon";
 
 interface TabButtonProps {
   isFocused: boolean;
   text: string;
   onPress: () => void;
-  icon: string;
+  icon: IconName;
 }
 
 export default function TabButton({

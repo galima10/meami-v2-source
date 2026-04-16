@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import AppTopBar from "@modules/shared/components/molecules/AppTopBar";
 import TopButton from "@modules/shared/components/atoms/buttons/TopButton";
-import { ROUTES } from "@constants/general";
+import { ROUTES } from "@constants/mappings/routes";
 import { usePathname } from "expo-router";
 
 export default function CartTabLayout() {
@@ -26,10 +26,7 @@ export default function CartTabLayout() {
               <>
                 {pathname === CART_ROUTES.list && (
                   <>
-                    <TopButton
-                      icon="infosIcon"
-                      color="info"
-                    />
+                    <TopButton icon="infosIcon" color="info" />
                     <TopButton
                       icon="modifyIcon"
                       color="green"

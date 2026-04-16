@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import { Image } from "expo-image";
 import WaveText from "@modules/shared/components/atoms/animated/WaveText";
 import BounceSpring from "@modules/shared/components/atoms/animated/BounceSpring";
-import { SPLASH_SCREEN_DELAY, ROUTES } from "@constants/general";
+import { SPLASH_SCREEN_DELAY } from "@constants/general";
+import { ROUTES } from "@constants/mappings/routes";
 
 export default function Splash() {
   const router = useRouter();

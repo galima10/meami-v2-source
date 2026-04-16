@@ -1,9 +1,8 @@
-import { Stack } from "expo-router";
-import { ROUTES } from "@constants/general";
-import AppTopBar from "@modules/shared/components/molecules/AppTopBar";
+import { ROUTES } from "@constants/mappings/routes";
 import TopButton from "@modules/shared/components/atoms/buttons/TopButton";
-import { usePathname } from "expo-router";
+import AppTopBar from "@modules/shared/components/molecules/AppTopBar";
 import { FocusGate } from "@modules/shared/components/screens/FocusGate";
+import { Stack, usePathname } from "expo-router";
 
 export default function InfosTabLayout() {
   const pathname = usePathname();
