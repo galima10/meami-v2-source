@@ -29,7 +29,6 @@ export function weeklyMenuToUi(
     const momentName = moments[menu.momentId]?.name;
 
     if (!dayName || !momentName) {
-      // console.warn("Menu with unknown day or moment:", menu);
       continue;
     }
 
