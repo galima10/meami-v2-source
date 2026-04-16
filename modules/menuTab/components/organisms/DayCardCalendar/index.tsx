@@ -1,29 +1,24 @@
+import { FONT_BASE } from "@constants/general";
+import { dayColors } from "@constants/mappings/colors/dayColors";
+import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
+import { enDays } from "@constants/mappings/traductors/daysTraductor";
+import { typography } from "@constants/styles";
+import theme from "@constants/themes";
+import { getScreenWidth } from "@helpers/getScreenDimensions";
+import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
+import { AppText } from "@modules/shared/components/primitives/AppText";
+import { useAppSelector } from "@modules/shared/hooks/redux";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
+import { toCapitalize } from "@utils/toCapitalize";
+import React, { Dispatch, SetStateAction } from "react";
 import {
-  View,
-  StyleSheet,
   ImageBackground,
-  ScrollView,
+  StyleSheet,
+  View,
   type ViewStyle,
 } from "react-native";
-import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import MomentBand from "../../molecules/MomentBand";
-import { getScreenWidth } from "@helpers/getScreenDimensions";
-import { Dispatch, SetStateAction } from "react";
-import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
-import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
-import { enDays } from "@constants/mappings/traductors/days";
-import { toCapitalize } from "@utils/toCapitalize";
-import { dayColors } from "@constants/mappings/colors/dayColors";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import type {
-  MenuIngredients,
-  IngredientMenu,
-} from "@stores/features/weeklyMenu";
-import theme from "@constants/themes";
-import { FONT_BASE } from "@constants/general";
-import { typography } from "@constants/styles";
-import { useAppSelector } from "@modules/shared/hooks/redux";
-import React from "react";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";

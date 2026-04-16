@@ -1,10 +1,10 @@
-import AppIcon from "@modules/shared/components/primitives/AppIcon";
-import { Pressable, StyleSheet, View } from "react-native";
 import { FONT_BASE } from "@constants/general";
-import theme from "@constants/themes";
 import { momentIconsMap } from "@constants/mappings/icons/momentIconsMap";
+import { frMoments } from "@constants/mappings/traductors/momentsTraductor";
+import theme from "@constants/themes";
+import AppIcon from "@modules/shared/components/primitives/AppIcon";
 import { Dispatch, SetStateAction } from "react";
-import { frMoments } from "@constants/mappings/traductors/moments";
+import { Pressable, StyleSheet, View } from "react-native";
 
 interface MomentButtonProps {
   moment: "morning" | "noon" | "evening";

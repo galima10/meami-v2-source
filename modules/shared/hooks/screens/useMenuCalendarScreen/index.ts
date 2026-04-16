@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
 import {
   fetchAllMenusThunk,
@@ -6,8 +6,15 @@ import {
 } from "@stores/thunks/weeklyMenu";
 import { weeklyMenuToUi } from "@utils/dataToUi/weeklyMenuToUi";
 import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
+import { ScrollView } from "react-native";
+import { useDate } from "@modules/shared/hooks/useDate";
+import { useFocusEffect } from "expo-router";
+import { useDayMoment } from "../../useDayMoment";
+import { getScreenWidth } from "@helpers/getScreenDimensions";
 
 export function useMenuCalendarScreen() {
+  const { todayIndex, dayOfWeek, rawDateInfo } = useDate();
+  const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
   const dispatch = useAppDispatch();
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { ingredients } = useAppSelector((state) => state.ingredient);
@@ -19,6 +26,10 @@ export function useMenuCalendarScreen() {
   const [selectedMoment, setSelectedMoment] = useState<
     "matin" | "midi" | "soir"
   >("matin");
+  const scrollRef = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(
+    todayIndex !== -1 ? todayIndex : 0,
+  );
   useEffect(() => {
     async function fetchMenus() {
       await dispatch(fetchAllMenusThunk());
@@ -32,5 +43,38 @@ export function useMenuCalendarScreen() {
     }
   }, []);
 
-  return { weeklyMenuUi, selectedMoment, setSelectedMoment };
+  function goToSlideDay(index: number) {
+    setCurrentIndex(index);
+
+    scrollRef.current?.scrollTo({
+      x: getScreenWidth() * index,
+      animated: true,
+    });
+
+    setSelectedMoment(actualDayMoment);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      goToSlideDay(todayIndex);
+    }, [
+      scrollRef,
+      setCurrentIndex,
+      setSelectedMoment,
+      dayOfWeek,
+      actualDayMoment,
+    ]),
+  );
+
+  return {
+    weeklyMenuUi,
+    selectedMoment,
+    setSelectedMoment,
+    scrollRef,
+    currentIndex,
+    setCurrentIndex,
+    todayIndex,
+    actualDayMoment,
+    goToSlideDay,
+  };
 }

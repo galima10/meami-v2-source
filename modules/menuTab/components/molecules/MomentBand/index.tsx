@@ -1,7 +1,7 @@
 import { FONT_BASE } from "@constants/general";
 import { momentBandsMap } from "@constants/mappings/images/momentBandsMap";
-import { enDays } from "@constants/mappings/traductors/days";
-import { enMoments } from "@constants/mappings/traductors/moments";
+import { enDays } from "@constants/mappings/traductors/daysTraductor";
+import { enMoments } from "@constants/mappings/traductors/momentsTraductor";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import { AppText } from "@modules/shared/components/primitives/AppText";
