@@ -5,8 +5,11 @@ import AppIconButton from "../../atoms/buttons/AppIconButton";
 import SorterSearchBar from "../../molecules/SorterSearchBar";
 import { FONT_BASE } from "@constants/general";
 import theme from "@constants/themes";
+import { PropsWithChildren } from "react";
 
-export default function ListContainer() {
+interface ListContainer extends PropsWithChildren {}
+
+export default function ListContainer({ children }: PropsWithChildren) {
   return (
     <View style={styles.container}>
       <SorterSearchBar />
