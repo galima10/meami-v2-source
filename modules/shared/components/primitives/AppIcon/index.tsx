@@ -1,4 +1,7 @@
-import { useAppIcon, IconName } from "@modules/shared/hooks/primitives/useAppIcon";
+import {
+  useAppIcon,
+  IconName,
+} from "@modules/shared/hooks/primitives/useAppIcon";
 import React from "react";
 import { SvgProps } from "react-native-svg";
 import theme from "@constants/themes";
@@ -19,5 +22,12 @@ export default function AppIcon({
 
   if (!SvgComponent) return;
 
-  return <SvgComponent width={size} height={size} color={color} {...props} />;
+  return (
+    <SvgComponent
+      width={size}
+      height={size}
+      color={color}
+      {...props}
+    />
+  );
 }
