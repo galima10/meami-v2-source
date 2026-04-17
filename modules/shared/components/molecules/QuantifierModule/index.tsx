@@ -18,7 +18,9 @@ interface QuantifierModuleProps {
   value: string;
   style?: StyleProp<ViewStyle>;
   onValidateEntry?: (value: number) => void;
-  onChangeQuantity: Dispatch<SetStateAction<string>>;
+  setQuantityState: Dispatch<SetStateAction<string>>;
+  handleOnChange: (value: string) => void;
+  normalize: (v: string) => string;
 }
 
 export default function QuantifierModule({
@@ -27,8 +29,19 @@ export default function QuantifierModule({
   value,
   style,
   onValidateEntry,
-  onChangeQuantity,
+  handleOnChange,
+  setQuantityState,
+  normalize,
 }: QuantifierModuleProps) {
+  function validateValue(raw: string) {
+    const normalized = normalize(raw);
+    const num = Number(normalized);
+
+    const safe = raw === "" || isNaN(num) || num < 1 ? "1" : raw;
+
+    setQuantityState(safe);
+    onValidateEntry?.(Number(normalize(safe)));
+  }
   return (
     <View style={[styles.container, style as object]}>
       <Pressable
@@ -40,16 +53,12 @@ export default function QuantifierModule({
       <TextInput
         style={styles.input}
         keyboardType="numeric"
-        onChangeText={onChangeQuantity}
+        onChangeText={handleOnChange}
         value={value}
         maxLength={value.includes(".") ? 3 : 2}
         selection={{ start: value.length, end: value.length }}
-        onBlur={() => {
-          if (value === "" || isNaN(Number(value)) || Number(value) < 0) {
-            onChangeQuantity("0");
-          }
-          onValidateEntry?.(Number(value));
-        }}
+        onBlur={() => validateValue(value)}
+        onSubmitEditing={() => validateValue(value)}
       />
       <Pressable
         style={({ pressed }) => [styles.button, pressed && styles.buttonActive]}

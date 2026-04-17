@@ -130,6 +130,7 @@ export default function DayCardCalendar({
                           key={ingredient.ingredientId}
                           ingredient={ingredient}
                           ingredients={ingredients}
+                          menuId={menu?.id}
                         />
                       ))}
                     </View>

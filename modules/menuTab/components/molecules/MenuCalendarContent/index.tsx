@@ -6,6 +6,8 @@ import { View, StyleSheet } from "react-native";
 import { AppText } from "@modules/shared/components/primitives/AppText";
 import type { Ingredients } from "@stores/features/ingredients";
 import theme from "@constants/themes";
+import { useAppSelector } from "@modules/shared/hooks/redux";
+import { typography } from "@constants/styles";
 
 interface MenuCalendarContentProps {
   menu: MenuUi;
@@ -18,6 +20,7 @@ export default function MenuCalendarContent({
   setChecked,
   ingredients,
 }: MenuCalendarContentProps) {
+  const { units } = useAppSelector((state) => state.unit);
   return (
     <>
       {(Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]).map(
@@ -40,9 +43,21 @@ export default function MenuCalendarContent({
                 >
                   {menuIngredients?.map((ingredient, index) => {
                     return (
-                      <AppText key={`ingredient-${index}`}>
-                        {ingredients[ingredient.ingredientId]?.name}
-                      </AppText>
+                      <View
+                        key={`ingredient-${index}`}
+                        style={styles.ingredientContainer}
+                      >
+                        <AppText>
+                          {ingredients[ingredient.ingredientId]?.name}
+                        </AppText>
+                        {ingredient?.unitId && (
+                          <AppText style={styles.quantity}>
+                            {" | "}
+                            {ingredient?.quantity}{" "}
+                            {units[ingredient?.unitId].abbreviation}
+                          </AppText>
+                        )}
+                      </View>
                     );
                   })}
                 </View>
@@ -72,8 +87,17 @@ const styles = StyleSheet.create({
     paddingVertical: FONT_BASE * 2,
   },
   separator: {
-    width: "75%",
+    width: "65%",
     height: 1,
     backgroundColor: theme.properties.brown,
+  },
+  ingredientContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+    flexWrap: "wrap",
+  },
+  quantity: {
+    color: theme.properties.transparentBrown,
   },
 });

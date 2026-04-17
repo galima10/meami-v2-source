@@ -14,14 +14,24 @@ import { useMenuIngredientCard } from "@modules/menuTab/hooks/molecules/useMenuI
 interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
   ingredients: Ingredients;
+  menuId: number;
 }
 
 function MenuIngredientCard({
   ingredient,
   ingredients,
+  menuId,
 }: MenuIngredientCardProps) {
-  const { isQuantifiable, handleQuantifiable, quantity, onChangeQuantity } =
-    useMenuIngredientCard(ingredient);
+  const {
+    isQuantifiable,
+    handleQuantifiable,
+    quantity,
+    handleOnChange,
+    updateQuantity,
+    normalize,
+    setQuantityState,
+    handleIncrementDecrementQuantity,
+  } = useMenuIngredientCard(ingredient, menuId);
   return (
     <View style={styles.container}>
       <AppText style={styles.title}>
@@ -43,7 +53,12 @@ function MenuIngredientCard({
           >
             <QuantifierModule
               value={quantity}
-              onChangeQuantity={onChangeQuantity}
+              handleOnChange={handleOnChange}
+              onValidateEntry={updateQuantity}
+              setQuantityState={setQuantityState}
+              normalize={normalize}
+              addAction={() => handleIncrementDecrementQuantity(1)}
+              removeAction={() => handleIncrementDecrementQuantity(-1)}
             />
             <AppButton label="unité ↺" type="primary" color="orange" />
           </View>
