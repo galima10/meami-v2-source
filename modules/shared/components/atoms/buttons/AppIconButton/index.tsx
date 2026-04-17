@@ -16,6 +16,7 @@ interface AppIconButtonProps {
   icon?: IconName;
   type?: "green" | "red" | "outline" | "today";
   action?: () => void;
+  smallBin?: boolean;
 }
 
 export default function AppIconButton({
@@ -23,6 +24,7 @@ export default function AppIconButton({
   icon,
   type,
   action,
+  smallBin,
 }: AppIconButtonProps) {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   return (
@@ -40,6 +42,11 @@ export default function AppIconButton({
           (type === "green"
             ? styles.greenActive
             : (type === "red" || type === "today") && styles.redActive),
+        type === "outline" &&
+          smallBin && {
+            width: FONT_BASE * 2,
+            height: FONT_BASE * 2,
+          },
         style as object,
       ]}
     >
@@ -56,7 +63,13 @@ export default function AppIconButton({
                   ? theme.properties.lightRed
                   : theme.properties.darkRed
             }
-            size={type === "outline" ? FONT_BASE * 2.75 : FONT_BASE * 1.75}
+            size={
+              type === "outline"
+                ? smallBin
+                  ? FONT_BASE * 1.75
+                  : FONT_BASE * 2.75
+                : FONT_BASE * 1.75
+            }
           />
         )
       )}

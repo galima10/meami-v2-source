@@ -28,6 +28,7 @@ import {
   noonEveningMenuCategoriesOrder,
 } from "@constants/mappings/orders/menuCategoriesOrder";
 import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
+import MenuIngredientCard from "../../molecules/MenuIngredientCard";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -113,6 +114,7 @@ export default function DayCardCalendar({
                       <AppText style={modifyStyles.categoryTitle}>
                         {toCapitalize(name)}
                       </AppText>
+                      <MenuIngredientCard />
                       <AppButton
                         label="Ajouter un ingrédient +"
                         type="primary"
@@ -193,6 +195,7 @@ const modifyStyles = StyleSheet.create({
     alignItems: "center",
     padding: FONT_BASE,
     position: "relative",
+    paddingBottom: FONT_BASE * 6,
   },
   categoryTitle: {
     fontSize: typography.h6,
