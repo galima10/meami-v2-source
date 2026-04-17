@@ -35,6 +35,7 @@ export default function MenuCalendarScreen() {
         onMomentumScrollEnd={(e) => {
           const offsetX = e.nativeEvent.contentOffset.x;
           const newIndex = Math.round(offsetX / getScreenWidth());
+          if (newIndex === currentIndex) return;
           setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
           handleCloseOverlay();
           if (newIndex === todayIndex) setSelectedMoment(actualDayMoment);

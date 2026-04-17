@@ -64,6 +64,7 @@ export default function DayCardCalendar({
     ready,
     categories,
     ingredientsByCategory,
+    handleRemoveMenu,
   } = useDayCardCalendar(selectedMoment, moments, moment);
 
   if (modify && !ready) return null;
@@ -94,7 +95,11 @@ export default function DayCardCalendar({
               />
             ) : (
               <View style={modifyStyles.modifyButtons}>
-                <AppIconButton icon="binIcon" type="outline" />
+                <AppIconButton
+                  icon="binIcon"
+                  type="outline"
+                  action={handleRemoveMenu}
+                />
                 <AppIconButton icon="recipeIcon" type="green" />
               </View>
             )}

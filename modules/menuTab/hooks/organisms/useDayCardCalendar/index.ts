@@ -6,11 +6,12 @@ import {
   morningMenuCategoriesOrder,
   noonEveningMenuCategoriesOrder,
 } from "@constants/mappings/orders/menuCategoriesOrder";
+import { removeMenuThunk } from "@stores/thunks/weeklyMenu";
 
 export function useDayCardCalendar(
   selectedMoment: "matin" | "midi" | "soir",
   moments: MomentUi,
-  moment: "matin" | "midi" | "soir"
+  moment: "matin" | "midi" | "soir",
 ) {
   const menu = moments[selectedMoment.toUpperCase()];
   const { ingredients } = useAppSelector((state) => state.ingredient);
@@ -23,21 +24,36 @@ export function useDayCardCalendar(
   }
 
   const categories = Object.entries(
-      moment === "matin"
-        ? morningMenuCategoriesOrder
-        : noonEveningMenuCategoriesOrder,
-    ) as [string, string][];
-    const ingredientsByCategory = useMemo(() => {
-      return menu?.ingredients ?? {};
-    }, [menu]);
-    const [ready, setReady] = useState(false);
-  
-    useEffect(() => {
-      const id = requestAnimationFrame(() => {
-        setReady(true);
-      });
-  
-      return () => cancelAnimationFrame(id);
-    }, []);
-  return { ingredients, handleCheckMenu, menu, checked, setChecked, ready, categories, ingredientsByCategory };
+    moment === "matin"
+      ? morningMenuCategoriesOrder
+      : noonEveningMenuCategoriesOrder,
+  ) as [string, string][];
+  const ingredientsByCategory = useMemo(() => {
+    return menu?.ingredients ?? {};
+  }, [menu]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setReady(true);
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  function handleRemoveMenu() {
+    dispatch(removeMenuThunk(menu?.id));
+  }
+
+  return {
+    ingredients,
+    handleCheckMenu,
+    menu,
+    checked,
+    setChecked,
+    ready,
+    categories,
+    ingredientsByCategory,
+    handleRemoveMenu,
+  };
 }

@@ -22,7 +22,7 @@ export default function MenuModifyScreen() {
     isOverlayOpen,
     handleCloseOverlay,
   } = useMenuCalendarScreen(false);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.container}>
@@ -45,6 +45,8 @@ export default function MenuModifyScreen() {
             if (Math.abs(diff) > threshold) {
               newIndex = diff > 0 ? currentIndex + 1 : currentIndex - 1;
             }
+
+            if (newIndex === currentIndex) return;
 
             setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
             setSelectedMoment("matin");

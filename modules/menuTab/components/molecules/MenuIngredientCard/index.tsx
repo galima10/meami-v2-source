@@ -31,6 +31,7 @@ function MenuIngredientCard({
     normalize,
     setQuantityState,
     handleIncrementDecrementQuantity,
+    handleRemoveIngredientToMenu,
   } = useMenuIngredientCard(ingredient, menuId);
   return (
     <View style={styles.container}>
@@ -38,7 +39,12 @@ function MenuIngredientCard({
         {ingredients[ingredient?.ingredientId].name}
       </AppText>
       <View style={styles.elements}>
-        <AppIconButton icon="binIcon" type="outline" smallBin />
+        <AppIconButton
+          icon="binIcon"
+          type="outline"
+          smallBin
+          action={handleRemoveIngredientToMenu}
+        />
         <View style={styles.quantityContainer}>
           <AppCheckBox
             style={styles.checkbox}

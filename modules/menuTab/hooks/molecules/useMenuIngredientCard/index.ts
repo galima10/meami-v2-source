@@ -1,7 +1,10 @@
 import { useState } from "react";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import { useAppDispatch } from "@modules/shared/hooks/redux";
-import { setIngredientMenuQuantityThunk } from "@stores/thunks/weeklyMenu";
+import {
+  setIngredientMenuQuantityThunk,
+  removeIngredientToMenuThunk,
+} from "@stores/thunks/weeklyMenu";
 
 export function useMenuIngredientCard(
   ingredient: IngredientMenu,
@@ -86,6 +89,15 @@ export function useMenuIngredientCard(
     );
   }
 
+  function handleRemoveIngredientToMenu() {
+    dispatch(
+      removeIngredientToMenuThunk({
+        ingredientId: ingredient?.ingredientId,
+        menuId: menuId,
+      }),
+    );
+  }
+
   return {
     isQuantifiable,
     handleQuantifiable,
@@ -95,5 +107,6 @@ export function useMenuIngredientCard(
     normalize,
     setQuantityState,
     handleIncrementDecrementQuantity,
+    handleRemoveIngredientToMenu,
   };
 }

@@ -16,7 +16,7 @@ export default function MenuListScreen() {
     >
       <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.days}>
         {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
-          ([day, moments]) => {
+          ([day, _]) => {
             return (
               <DayCardList
                 key={day}

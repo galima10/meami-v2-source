@@ -50,7 +50,7 @@ export default function MenuTabLayout() {
                   <>
                     <TopButton icon="binIcon" color="red" />
                     <TopButton
-                      icon="validateIcon"
+                      icon="returnIcon"
                       color="green"
                       routeAction="back"
                     />

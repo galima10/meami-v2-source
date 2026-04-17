@@ -23,56 +23,60 @@ export default function MenuCalendarContent({
   const { units } = useAppSelector((state) => state.unit);
   return (
     <>
-      {(Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]).map(
-        ([menuCategoryId, menuIngredients]) => {
-          setChecked(menu?.done);
-          if (Number(menuCategoryId) !== 8 && menuIngredients.length !== 0) {
-            return (
-              <React.Fragment key={`group-${menu?.id}-${menuCategoryId}`}>
-                <View
-                  key={menuCategoryId}
-                  style={[
-                    styles.menuCategories,
-                    Number(menuCategoryId) === 5 && {
-                      paddingBottom: FONT_BASE * 0.75,
-                    },
-                    Number(menuCategoryId) === 6 && {
-                      paddingTop: FONT_BASE * 0.75,
-                    },
-                  ]}
-                >
-                  {menuIngredients?.map((ingredient, index) => {
-                    return (
-                      <View
-                        key={`ingredient-${index}`}
-                        style={styles.ingredientContainer}
-                      >
-                        <AppText>
-                          {ingredients[ingredient.ingredientId]?.name}
-                        </AppText>
-                        {ingredient?.unitId && (
-                          <AppText style={styles.quantity}>
-                            {" | "}
-                            {ingredient?.quantity}{" "}
-                            {units[ingredient?.unitId].abbreviation}
+      {Object.values(menu?.ingredients).length > 0 ? (
+        (Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]).map(
+          ([menuCategoryId, menuIngredients]) => {
+            setChecked(menu?.done);
+            if (Number(menuCategoryId) !== 8 && menuIngredients.length !== 0) {
+              return (
+                <React.Fragment key={`group-${menu?.id}-${menuCategoryId}`}>
+                  <View
+                    key={menuCategoryId}
+                    style={[
+                      styles.menuCategories,
+                      Number(menuCategoryId) === 5 && {
+                        paddingBottom: FONT_BASE * 0.75,
+                      },
+                      Number(menuCategoryId) === 6 && {
+                        paddingTop: FONT_BASE * 0.75,
+                      },
+                    ]}
+                  >
+                    {menuIngredients?.map((ingredient, index) => {
+                      return (
+                        <View
+                          key={`ingredient-${index}`}
+                          style={styles.ingredientContainer}
+                        >
+                          <AppText>
+                            {ingredients[ingredient.ingredientId]?.name}
                           </AppText>
-                        )}
-                      </View>
-                    );
-                  })}
-                </View>
-                {Number(menuCategoryId) !== 5 &&
-                  Number(menuCategoryId) !== 3 &&
-                  Number(menuCategoryId) !== 7 && (
-                    <View
-                      key={`separator-${menuCategoryId}`}
-                      style={styles.separator}
-                    />
-                  )}
-              </React.Fragment>
-            );
-          }
-        },
+                          {ingredient?.unitId && (
+                            <AppText style={styles.quantity}>
+                              {" | "}
+                              {ingredient?.quantity}{" "}
+                              {units[ingredient?.unitId].abbreviation}
+                            </AppText>
+                          )}
+                        </View>
+                      );
+                    })}
+                  </View>
+                  {Number(menuCategoryId) !== 5 &&
+                    Number(menuCategoryId) !== 3 &&
+                    Number(menuCategoryId) !== 7 && (
+                      <View
+                        key={`separator-${menuCategoryId}`}
+                        style={styles.separator}
+                      />
+                    )}
+                </React.Fragment>
+              );
+            }
+          },
+        )
+      ) : (
+        <AppText style={styles.emptyText}>Non renseingé</AppText>
       )}
     </>
   );
@@ -99,5 +103,10 @@ const styles = StyleSheet.create({
   },
   quantity: {
     color: theme.properties.transparentBrown,
+  },
+  emptyText: {
+    fontSize: typography.h6,
+    marginTop: FONT_BASE * 4,
+    fontWeight: theme.properties.semibold,
   },
 });

@@ -28,26 +28,28 @@ export default function DayCardList({ day, today, moments }: DayCardListProps) {
             <AppText style={styles.momentLabel}>
               {toCapitalize(moment)} :
             </AppText>{" "}
-            {Object.entries(menu.ingredients)
-              .flatMap(([menuCategoryId, menuIngredients]) =>
-                menuIngredients.map((ingredient: IngredientMenu) => ({
-                  ingredient,
-                  menuCategoryId,
-                })),
-              )
-              .map(({ ingredient, menuCategoryId }, index, array) => {
-                const isLast = index === array.length - 1;
+            {Object.values(menu?.ingredients).length > 0
+              ? Object.entries(menu.ingredients)
+                  .flatMap(([menuCategoryId, menuIngredients]) =>
+                    menuIngredients.map((ingredient: IngredientMenu) => ({
+                      ingredient,
+                      menuCategoryId,
+                    })),
+                  )
+                  .map(({ ingredient, menuCategoryId }, index, array) => {
+                    const isLast = index === array.length - 1;
 
-                return (
-                  <AppText
-                    key={`ingredient-${index}`}
-                    style={{ color: categoryColor(Number(menuCategoryId)) }}
-                  >
-                    {ingredients[ingredient.ingredientId]?.name}
-                    {!isLast && " • "}
-                  </AppText>
-                );
-              })}
+                    return (
+                      <AppText
+                        key={`ingredient-${index}`}
+                        style={{ color: categoryColor(Number(menuCategoryId)) }}
+                      >
+                        {ingredients[ingredient.ingredientId]?.name}
+                        {!isLast && " • "}
+                      </AppText>
+                    );
+                  })
+              : "----"}
           </AppText>
         );
       })}
