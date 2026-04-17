@@ -7,16 +7,20 @@ import {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { useMemo, useEffect } from "react";
+import { useAppSelector } from "@modules/shared/hooks/redux";
 
 export function useMenuCalendarOtherOverlay(
   handleCloseOverlay: (bool: boolean) => void,
   isOverlayOpen: boolean,
 ) {
+  const { units } = useAppSelector((state) => state.unit);
+  const { ingredients } = useAppSelector((state) => state.ingredient);
   const SCREEN_WIDTH = useMemo(() => getScreenWidth(), []);
   const overlayWidth = useMemo(
     () => getFlexWidth(SCREEN_WIDTH, 3.5, 1 + 3.5),
     [SCREEN_WIDTH],
   );
+  
 
   const hiddenX = useMemo(() => overlayWidth - FONT_BASE * 2, [overlayWidth]);
 
@@ -44,5 +48,5 @@ export function useMenuCalendarOtherOverlay(
       transform: [{ translateX: translateX.value }],
     };
   });
-  return { toggleOverlay, animatedStyle };
+  return { toggleOverlay, animatedStyle, units, ingredients };
 }

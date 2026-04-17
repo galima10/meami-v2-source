@@ -9,6 +9,7 @@ import {
 import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
 import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
 import { useEffect } from "react";
+import { fetchUnitsThunk } from "@stores/thunks/units";
 
 export default function MenuTabLayout() {
   const MENU_ROUTES = ROUTES.menu;
@@ -16,6 +17,7 @@ export default function MenuTabLayout() {
   const dispatch = useAppDispatch();
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { units } = useAppSelector((state) => state.unit);
   useEffect(() => {
     async function fetchMenus() {
       await dispatch(fetchAllMenusThunk());
@@ -26,6 +28,9 @@ export default function MenuTabLayout() {
     }
     if (Object.keys(ingredients).length === 0) {
       dispatch(fetchIngredientsThunk());
+    }
+    if (Object.keys(units).length === 0) {
+      dispatch(fetchUnitsThunk());
     }
   }, []);
   return (

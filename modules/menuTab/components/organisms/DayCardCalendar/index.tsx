@@ -104,10 +104,14 @@ export default function DayCardCalendar({
               }
             })}
           </View>
-          <MenuCalendarOtherOverlay
-            isOverlayOpen={isOverlayOpen}
-            handleCloseOverlay={handleCloseOverlay}
-          />
+          {moment !== "matin" && (
+            <MenuCalendarOtherOverlay
+              isOverlayOpen={isOverlayOpen}
+              handleCloseOverlay={handleCloseOverlay}
+              othersIngredients={menu?.ingredients?.[8]}
+              checked={checked}
+            />
+          )}
         </AppLinearGradient>
       </ImageBackground>
       <MomentBand

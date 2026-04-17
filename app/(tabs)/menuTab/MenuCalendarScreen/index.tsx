@@ -35,7 +35,7 @@ export default function MenuCalendarScreen() {
         onMomentumScrollEnd={(e) => {
           const offsetX = e.nativeEvent.contentOffset.x;
           const newIndex = Math.round(offsetX / getScreenWidth());
-          setCurrentIndex(newIndex);
+          setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
           handleCloseOverlay();
           if (newIndex === todayIndex) setSelectedMoment(actualDayMoment);
           else setSelectedMoment("matin");
@@ -68,6 +68,7 @@ export default function MenuCalendarScreen() {
           days={Object.keys(weeklyMenuUi)}
           currentIndex={currentIndex}
           action={goToSlideDay}
+          handleCloseOverlay={handleCloseOverlay}
         />
       </View>
     </View>

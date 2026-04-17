@@ -6,20 +6,26 @@ import theme from "@constants/themes";
 import { getFlexWidth } from "@helpers/getFlexWidth";
 import AnimatedAppView from "@modules/shared/components/primitives/AnimatedAppView";
 import { useMenuCalendarOtherOverlay } from "@modules/menuTab/hooks/molecules/useMenuCalendarOtherOverlay";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import { typography } from "@constants/styles";
+import React from "react";
 
 interface MenuCalendarOtherOverlayProps {
   isOverlayOpen: boolean;
   handleCloseOverlay: (bool: boolean) => void;
+  othersIngredients: IngredientMenu[];
+  checked: boolean;
 }
 
 export default function MenuCalendarOtherOverlay({
   isOverlayOpen,
   handleCloseOverlay,
+  othersIngredients,
+  checked,
 }: MenuCalendarOtherOverlayProps) {
-  const { toggleOverlay, animatedStyle } = useMenuCalendarOtherOverlay(
-    handleCloseOverlay,
-    isOverlayOpen,
-  );
+  const { toggleOverlay, animatedStyle, ingredients, units } =
+    useMenuCalendarOtherOverlay(handleCloseOverlay, isOverlayOpen);
+  if (!othersIngredients || othersIngredients.length === 0) return null;
   return (
     <View style={styles.container}>
       {isOverlayOpen && (
@@ -29,13 +35,35 @@ export default function MenuCalendarOtherOverlay({
         <Pressable
           style={({ pressed }) => [
             styles.button,
-            pressed && styles.buttonActive,
+            !checked
+              ? pressed && styles.buttonActive
+              : { pointerEvents: "none", opacity: 0.5 },
           ]}
           onPress={toggleOverlay}
         >
           <AppText style={styles.textButton}>Autres</AppText>
         </Pressable>
-        <View style={styles.content}></View>
+        <View style={styles.content}>
+          {othersIngredients?.map((ingredient, index, array) => {
+            const isLast = index === array.length - 1;
+            return (
+              <React.Fragment key={index}>
+                <AppText key={index} style={styles.text}>
+                  {ingredients[ingredient?.ingredientId]?.name}
+                </AppText>
+                {ingredient?.quantity && (
+                  <AppText style={[styles.text, styles.quantity]}>
+                    {" | "}
+                    {ingredient?.quantity && ingredient?.quantity}{" "}
+                    {ingredient?.unitId &&
+                      units[ingredient?.unitId].abbreviation}
+                  </AppText>
+                )}
+                <AppText style={styles.text}>{!isLast && " • "}</AppText>
+              </React.Fragment>
+            );
+          })}
+        </View>
       </AnimatedAppView>
     </View>
   );
@@ -57,7 +85,6 @@ const styles = StyleSheet.create({
   },
   overlay: {
     width: getFlexWidth(getScreenWidth(), 3.5, 1 + 3.5),
-    height: FONT_BASE * 4,
     position: "absolute",
     bottom: FONT_BASE * 2,
     right: 0,
@@ -75,9 +102,13 @@ const styles = StyleSheet.create({
     boxShadow: theme.properties.bigShadow,
     borderTopLeftRadius: FONT_BASE,
     borderBottomLeftRadius: FONT_BASE,
-    padding: FONT_BASE * 1.5,
+    padding: FONT_BASE * 0.75,
     flex: 1,
     height: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   button: {
     width: FONT_BASE * 2,
@@ -101,5 +132,13 @@ const styles = StyleSheet.create({
   buttonActive: {
     backgroundColor: theme.properties.lightGreen,
     borderColor: theme.properties.lightGreenBorder,
+  },
+  text: {
+    fontSize: typography.small,
+    fontWeight: theme.properties.semibold,
+  },
+  quantity: {
+    color: theme.properties.vibrantOrange,
+    fontWeight: theme.properties.regular,
   },
 });

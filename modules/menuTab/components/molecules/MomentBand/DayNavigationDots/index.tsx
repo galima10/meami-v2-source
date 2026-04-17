@@ -6,12 +6,14 @@ interface DayNavigationDotsProps {
   days: string[];
   currentIndex: number;
   action: (index: number) => void;
+  handleCloseOverlay: () => void;
 }
 
 export default function DayNavigationDots({
   days,
   currentIndex,
   action,
+  handleCloseOverlay,
 }: DayNavigationDotsProps) {
   return (
     <View style={styles.container}>
@@ -20,6 +22,7 @@ export default function DayNavigationDots({
           style={[styles.dotButton]}
           key={index}
           onPress={() => {
+            handleCloseOverlay();
             if (currentIndex !== index) {
               action(index);
             }

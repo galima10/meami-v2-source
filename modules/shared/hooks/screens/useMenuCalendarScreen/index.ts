@@ -21,9 +21,7 @@ export function useMenuCalendarScreen() {
     "matin" | "midi" | "soir"
   >("matin");
   const scrollRef = useRef<React.ComponentRef<typeof ScrollView>>(null);
-  const [currentIndex, setCurrentIndex] = useState<number>(
-    todayIndex !== -1 ? todayIndex : 0,
-  );
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   function goToSlideDay(index: number) {
     setCurrentIndex(index);
@@ -38,6 +36,7 @@ export function useMenuCalendarScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      if (todayIndex === -1) return;
       goToSlideDay(todayIndex);
     }, [
       scrollRef,
@@ -45,6 +44,7 @@ export function useMenuCalendarScreen() {
       setSelectedMoment,
       dayOfWeek,
       actualDayMoment,
+      todayIndex,
     ]),
   );
 
