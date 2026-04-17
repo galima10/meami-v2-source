@@ -2,11 +2,12 @@ import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import { AppText } from "@modules/shared/components/primitives/AppText";
 import { StyleSheet, View } from "react-native";
+import ListContainer from "@modules/shared/components/organims/ListContainer";
 
 export default function CartListScreen() {
   return (
     <View style={styles.container}>
-      <AppText style={styles.text}>Cart List Screen</AppText>
+      <ListContainer />
     </View>
   );
 }

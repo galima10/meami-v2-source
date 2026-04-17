@@ -42,6 +42,7 @@ export function useDayCardCalendar(
   }, []);
 
   function handleRemoveMenu() {
+    if (Object.values(menu?.ingredients).length === 0) return;
     dispatch(removeMenuThunk(menu?.id));
   }
 

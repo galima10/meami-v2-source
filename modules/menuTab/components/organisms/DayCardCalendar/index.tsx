@@ -14,9 +14,7 @@ import {
   ImageBackground,
   StyleSheet,
   View,
-  ScrollView,
   type ViewStyle,
-  FlatList,
 } from "react-native";
 import MomentBand from "../../molecules/MomentBand";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
@@ -24,15 +22,10 @@ import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardC
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import {
-  morningMenuCategoriesOrder,
-  noonEveningMenuCategoriesOrder,
-} from "@constants/mappings/orders/menuCategoriesOrder";
 import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 import MenuIngredientCard from "../../molecules/MenuIngredientCard";
 import { IngredientMenu } from "@stores/features/weeklyMenu";
 import { FlashList } from "@shopify/flash-list";
-import { useMemo, useState, useEffect } from "react";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
