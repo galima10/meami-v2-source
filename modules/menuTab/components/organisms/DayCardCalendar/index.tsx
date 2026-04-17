@@ -7,7 +7,6 @@ import theme from "@constants/themes";
 import { getScreenWidth } from "@helpers/getScreenDimensions";
 import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import { AppText } from "@modules/shared/components/primitives/AppText";
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
 import { toCapitalize } from "@utils/toCapitalize";
 import React, { Dispatch, SetStateAction } from "react";
@@ -22,6 +21,7 @@ import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
+import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -58,14 +58,24 @@ export default function DayCardCalendar({
           locations={[0.5, 1]}
           style={styles.gradient as ViewStyle}
         >
-          <View style={styles.titleContainer}>
+          <View
+            style={[
+              styles.titleContainer,
+              modify && { justifyContent: "space-between" },
+            ]}
+          >
             <AppText style={styles.dayTitle}>{toCapitalize(day)}</AppText>
-            {!modify && (
+            {!modify ? (
               <AppCheckBox
                 style={styles.checkbox}
                 checked={checked}
                 action={handleCheckMenu}
               />
+            ) : (
+              <View style={styles.modifyButtons}>
+                <AppIconButton icon="binIcon" type="outline" />
+                <AppIconButton icon="recipeIcon" type="green" />
+              </View>
             )}
           </View>
           <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
@@ -131,4 +141,8 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   checkbox: { paddingTop: FONT_BASE / 2 },
+  modifyButtons: {
+    flexDirection: "row",
+    gap: FONT_BASE * 0.5,
+  },
 });

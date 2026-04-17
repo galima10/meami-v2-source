@@ -56,7 +56,7 @@ export default function AppIconButton({
                   ? theme.properties.lightRed
                   : theme.properties.darkRed
             }
-            size={type === "outline" ? FONT_BASE * 2.75 : FONT_BASE * 2}
+            size={type === "outline" ? FONT_BASE * 2.75 : FONT_BASE * 1.75}
           />
         )
       )}
