@@ -29,7 +29,8 @@ interface DayCardCalendarProps {
   selectedMoment: "matin" | "midi" | "soir";
   moments: MomentUi;
   isOverlayOpen: boolean;
-  handleCloseOverlay: (bool: boolean) => void;
+  handleCloseOverlay?: (bool: boolean) => void;
+  modify?: boolean;
 }
 
 export default function DayCardCalendar({
@@ -40,6 +41,7 @@ export default function DayCardCalendar({
   moments,
   isOverlayOpen,
   handleCloseOverlay,
+  modify = false,
 }: DayCardCalendarProps) {
   const { ingredients, menu, handleCheckMenu, checked, setChecked } =
     useDayCardCalendar(selectedMoment, moments);
@@ -57,11 +59,13 @@ export default function DayCardCalendar({
         >
           <View style={styles.titleContainer}>
             <AppText style={styles.dayTitle}>{toCapitalize(day)}</AppText>
-            <AppCheckBox
-              style={styles.checkbox}
-              checked={checked}
-              action={handleCheckMenu}
-            />
+            {!modify && (
+              <AppCheckBox
+                style={styles.checkbox}
+                checked={checked}
+                action={handleCheckMenu}
+              />
+            )}
           </View>
           <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
             {(
@@ -104,7 +108,7 @@ export default function DayCardCalendar({
               }
             })}
           </View>
-          {moment !== "matin" && (
+          {!modify && moment !== "matin" && (
             <MenuCalendarOtherOverlay
               isOverlayOpen={isOverlayOpen}
               handleCloseOverlay={handleCloseOverlay}

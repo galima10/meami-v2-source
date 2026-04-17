@@ -12,7 +12,7 @@ import React from "react";
 
 interface MenuCalendarOtherOverlayProps {
   isOverlayOpen: boolean;
-  handleCloseOverlay: (bool: boolean) => void;
+  handleCloseOverlay?: (bool: boolean) => void;
   othersIngredients: IngredientMenu[];
   checked: boolean;
 }
@@ -24,7 +24,7 @@ export default function MenuCalendarOtherOverlay({
   checked,
 }: MenuCalendarOtherOverlayProps) {
   const { toggleOverlay, animatedStyle, ingredients, units } =
-    useMenuCalendarOtherOverlay(handleCloseOverlay, isOverlayOpen);
+    useMenuCalendarOtherOverlay(isOverlayOpen, handleCloseOverlay);
   if (!othersIngredients || othersIngredients.length === 0) return null;
   return (
     <View style={styles.container}>

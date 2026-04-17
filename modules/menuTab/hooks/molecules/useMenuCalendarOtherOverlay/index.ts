@@ -10,8 +10,8 @@ import { useMemo, useEffect } from "react";
 import { useAppSelector } from "@modules/shared/hooks/redux";
 
 export function useMenuCalendarOtherOverlay(
-  handleCloseOverlay: (bool: boolean) => void,
   isOverlayOpen: boolean,
+  handleCloseOverlay?: (bool: boolean) => void,
 ) {
   const { units } = useAppSelector((state) => state.unit);
   const { ingredients } = useAppSelector((state) => state.ingredient);
@@ -20,7 +20,6 @@ export function useMenuCalendarOtherOverlay(
     () => getFlexWidth(SCREEN_WIDTH, 3.5, 1 + 3.5),
     [SCREEN_WIDTH],
   );
-  
 
   const hiddenX = useMemo(() => overlayWidth - FONT_BASE * 2, [overlayWidth]);
 
@@ -32,7 +31,7 @@ export function useMenuCalendarOtherOverlay(
       duration: 250,
     });
 
-    handleCloseOverlay(!isOverlayOpen);
+    handleCloseOverlay?.(!isOverlayOpen);
   }
 
   useEffect(() => {
