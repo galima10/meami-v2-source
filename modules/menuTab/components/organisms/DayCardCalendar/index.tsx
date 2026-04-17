@@ -7,7 +7,6 @@ import theme from "@constants/themes";
 import { getScreenWidth } from "@helpers/getScreenDimensions";
 import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import { AppText } from "@modules/shared/components/primitives/AppText";
-import { useAppSelector } from "@modules/shared/hooks/redux";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
 import { toCapitalize } from "@utils/toCapitalize";
@@ -19,6 +18,8 @@ import {
   type ViewStyle,
 } from "react-native";
 import MomentBand from "../../molecules/MomentBand";
+import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
+import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -35,9 +36,8 @@ export default function DayCardCalendar({
   selectedMoment,
   moments,
 }: DayCardCalendarProps) {
-  const menu = moments[selectedMoment.toUpperCase()];
-  const { ingredients } = useAppSelector((state) => state.ingredient);
-
+  const { ingredients, menu, handleCheckMenu, checked, setChecked } =
+    useDayCardCalendar(selectedMoment, moments);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -52,11 +52,13 @@ export default function DayCardCalendar({
         >
           <View style={styles.titleContainer}>
             <AppText style={styles.dayTitle}>{toCapitalize(day)}</AppText>
+            <AppCheckBox checked={checked} action={handleCheckMenu} />
           </View>
           <View style={styles.menuContent}>
             {(
               Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]
             ).map(([menuCategoryId, menuIngredients]) => {
+              setChecked(menu?.done);
               if (Number(menuCategoryId) !== 8) {
                 return (
                   <React.Fragment key={`group-${menu?.id}-${menuCategoryId}`}>
@@ -124,11 +126,12 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: FONT_BASE,
     borderBottomWidth: 1,
     borderColor: theme.properties.brown,
     padding: FONT_BASE,
     width: "100%",
+    alignItems: "center",
   },
   menuContent: {
     paddingTop: FONT_BASE * 3.5,
