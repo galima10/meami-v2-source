@@ -55,26 +55,17 @@ export default function DayCardCalendar({
   handleCloseOverlay,
   modify = false,
 }: DayCardCalendarProps) {
-  const { ingredients, menu, handleCheckMenu, checked, setChecked } =
-    useDayCardCalendar(selectedMoment, moments);
+  const {
+    ingredients,
+    menu,
+    handleCheckMenu,
+    checked,
+    setChecked,
+    ready,
+    categories,
+    ingredientsByCategory,
+  } = useDayCardCalendar(selectedMoment, moments, moment);
 
-  const categories = Object.entries(
-    moment === "matin"
-      ? morningMenuCategoriesOrder
-      : noonEveningMenuCategoriesOrder,
-  ) as [string, string][];
-  const ingredientsByCategory = useMemo(() => {
-    return menu?.ingredients ?? {};
-  }, [menu]);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setReady(true);
-    });
-
-    return () => cancelAnimationFrame(id);
-  }, []);
   if (modify && !ready) return null;
   return (
     <View style={styles.container}>

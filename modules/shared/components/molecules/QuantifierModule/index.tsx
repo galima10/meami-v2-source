@@ -9,15 +9,16 @@ import {
 import { AppText } from "../../primitives/AppText";
 import theme from "@constants/themes";
 import { FONT_BASE } from "@constants/general";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { typography } from "@constants/styles";
 
 interface QuantifierModuleProps {
   addAction?: () => void;
   removeAction?: () => void;
-  value: number;
+  value: string;
   style?: StyleProp<ViewStyle>;
   onValidateEntry?: (value: number) => void;
+  onChangeQuantity: Dispatch<SetStateAction<string>>;
 }
 
 export default function QuantifierModule({
@@ -26,8 +27,8 @@ export default function QuantifierModule({
   value,
   style,
   onValidateEntry,
+  onChangeQuantity,
 }: QuantifierModuleProps) {
-  const [number, onChangeNumber] = useState(value.toString());
   return (
     <View style={[styles.container, style as object]}>
       <Pressable
@@ -39,15 +40,15 @@ export default function QuantifierModule({
       <TextInput
         style={styles.input}
         keyboardType="numeric"
-        onChangeText={onChangeNumber}
-        value={number}
-        maxLength={number.includes(".") ? 3 : 2}
-        selection={{ start: number.length, end: number.length }}
+        onChangeText={onChangeQuantity}
+        value={value}
+        maxLength={value.includes(".") ? 3 : 2}
+        selection={{ start: value.length, end: value.length }}
         onBlur={() => {
-          if (number === "" || isNaN(Number(number)) || Number(number) < 0) {
-            onChangeNumber("0");
+          if (value === "" || isNaN(Number(value)) || Number(value) < 0) {
+            onChangeQuantity("0");
           }
-          onValidateEntry?.(Number(number));
+          onValidateEntry?.(Number(value));
         }}
       />
       <Pressable

@@ -9,6 +9,7 @@ import QuantifierModule from "@modules/shared/components/molecules/QuantifierMod
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { Ingredients } from "@stores/features/ingredients";
 import React from "react";
+import { useMenuIngredientCard } from "@modules/menuTab/hooks/molecules/useMenuIngredientCard";
 
 interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
@@ -19,6 +20,8 @@ function MenuIngredientCard({
   ingredient,
   ingredients,
 }: MenuIngredientCardProps) {
+  const { isQuantifiable, handleQuantifiable, quantity, onChangeQuantity } =
+    useMenuIngredientCard(ingredient);
   return (
     <View style={styles.container}>
       <AppText style={styles.title}>
@@ -26,10 +29,24 @@ function MenuIngredientCard({
       </AppText>
       <View style={styles.elements}>
         <AppIconButton icon="binIcon" type="outline" smallBin />
-        <View style={styles.quantityModule}>
-          <AppCheckBox style={styles.checkbox} />
-          <QuantifierModule value={1} />
-          <AppButton label="unité ↺" type="primary" color="orange" />
+        <View style={styles.quantityContainer}>
+          <AppCheckBox
+            style={styles.checkbox}
+            checked={isQuantifiable}
+            action={handleQuantifiable}
+          />
+          <View
+            style={[
+              styles.quantifierModule,
+              !isQuantifiable && styles.disabled,
+            ]}
+          >
+            <QuantifierModule
+              value={quantity}
+              onChangeQuantity={onChangeQuantity}
+            />
+            <AppButton label="unité ↺" type="primary" color="orange" />
+          </View>
         </View>
       </View>
     </View>
@@ -52,11 +69,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  quantityModule: {
+  disabled: {
+    pointerEvents: "none",
+    opacity: 0.5,
+  },
+  quantityContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  quantifierModule: {
+    flexDirection: "row",
     gap: FONT_BASE,
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     marginRight: FONT_BASE * 1.75,

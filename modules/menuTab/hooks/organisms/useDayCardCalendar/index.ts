@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
 import { setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
 import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
+import {
+  morningMenuCategoriesOrder,
+  noonEveningMenuCategoriesOrder,
+} from "@constants/mappings/orders/menuCategoriesOrder";
 
 export function useDayCardCalendar(
   selectedMoment: "matin" | "midi" | "soir",
   moments: MomentUi,
+  moment: "matin" | "midi" | "soir"
 ) {
   const menu = moments[selectedMoment.toUpperCase()];
   const { ingredients } = useAppSelector((state) => state.ingredient);
@@ -16,5 +21,23 @@ export function useDayCardCalendar(
     setChecked(newValue);
     await dispatch(setMenuDoneThunk({ menuId: menu?.id, done: newValue }));
   }
-  return { ingredients, handleCheckMenu, menu, checked, setChecked };
+
+  const categories = Object.entries(
+      moment === "matin"
+        ? morningMenuCategoriesOrder
+        : noonEveningMenuCategoriesOrder,
+    ) as [string, string][];
+    const ingredientsByCategory = useMemo(() => {
+      return menu?.ingredients ?? {};
+    }, [menu]);
+    const [ready, setReady] = useState(false);
+  
+    useEffect(() => {
+      const id = requestAnimationFrame(() => {
+        setReady(true);
+      });
+  
+      return () => cancelAnimationFrame(id);
+    }, []);
+  return { ingredients, handleCheckMenu, menu, checked, setChecked, ready, categories, ingredientsByCategory };
 }

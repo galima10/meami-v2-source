@@ -23,7 +23,7 @@ export default function MenuCalendarContent({
       {(Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]).map(
         ([menuCategoryId, menuIngredients]) => {
           setChecked(menu?.done);
-          if (Number(menuCategoryId) !== 8) {
+          if (Number(menuCategoryId) !== 8 && menuIngredients.length !== 0) {
             return (
               <React.Fragment key={`group-${menu?.id}-${menuCategoryId}`}>
                 <View
