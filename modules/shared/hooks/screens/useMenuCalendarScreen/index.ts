@@ -40,15 +40,8 @@ export function useMenuCalendarScreen() {
       goToSlideDay(todayIndex);
       return () => {
         setIsOverlayOpen(false);
-      }
-    }, [
-      scrollRef,
-      setCurrentIndex,
-      setSelectedMoment,
-      dayOfWeek,
-      actualDayMoment,
-      todayIndex,
-    ]),
+      };
+    }, [todayIndex]),
   );
 
   function handleGoToday() {
