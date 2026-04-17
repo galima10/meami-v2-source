@@ -14,6 +14,7 @@ import {
   ImageBackground,
   StyleSheet,
   View,
+  ScrollView,
   type ViewStyle,
 } from "react-native";
 import MomentBand from "../../molecules/MomentBand";
@@ -22,6 +23,10 @@ import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardC
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
+import {
+  morningMenuCategoriesOrder,
+  noonEveningMenuCategoriesOrder,
+} from "@constants/mappings/orders/menuCategoriesOrder";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -44,8 +49,14 @@ export default function DayCardCalendar({
   handleCloseOverlay,
   modify = false,
 }: DayCardCalendarProps) {
-  const { ingredients, menu, handleCheckMenu, checked, setChecked } =
-    useDayCardCalendar(selectedMoment, moments);
+  const {
+    ingredients,
+    menu,
+    handleCheckMenu,
+    checked,
+    setChecked,
+    menuCategories,
+  } = useDayCardCalendar(selectedMoment, moments);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -72,21 +83,47 @@ export default function DayCardCalendar({
                 action={handleCheckMenu}
               />
             ) : (
-              <View style={styles.modifyButtons}>
+              <View style={modifyStyles.modifyButtons}>
                 <AppIconButton icon="binIcon" type="outline" />
                 <AppIconButton icon="recipeIcon" type="green" />
               </View>
             )}
           </View>
-          <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
-            {!modify ? (
+          {!modify ? (
+            <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
               <MenuCalendarContent
                 menu={menu}
                 setChecked={setChecked}
                 ingredients={ingredients}
               />
-            ) : null}
-          </View>
+            </View>
+          ) : (
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={modifyStyles.menuContent}
+            >
+              <View style={modifyStyles.menuCategories}>
+                {(
+                  Object.entries(
+                    moment === "matin"
+                      ? morningMenuCategoriesOrder
+                      : noonEveningMenuCategoriesOrder,
+                  ) as [string, string][]
+                ).map(([menuCategoryId, name]) => {
+                  return (
+                    <View
+                      key={menuCategoryId}
+                      style={modifyStyles.menuCategory}
+                    >
+                      <AppText style={modifyStyles.categoryTitle}>
+                        {toCapitalize(name)}
+                      </AppText>
+                    </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          )}
           {!modify && moment !== "matin" && (
             <MenuCalendarOtherOverlay
               isOverlayOpen={isOverlayOpen}
@@ -135,14 +172,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   menuContent: {
-    paddingTop: FONT_BASE * 3.5,
     alignItems: "center",
+    paddingTop: FONT_BASE * 3.5,
     paddingHorizontal: FONT_BASE * 2.5,
     position: "relative",
   },
   checkbox: { paddingTop: FONT_BASE / 2 },
+});
+
+const modifyStyles = StyleSheet.create({
   modifyButtons: {
     flexDirection: "row",
     gap: FONT_BASE * 0.5,
+  },
+  menuCategories: {
+    width: "100%",
+    gap: FONT_BASE * 1.5,
+  },
+  menuContent: {
+    alignItems: "center",
+    padding: FONT_BASE,
+    position: "relative",
+  },
+  categoryTitle: {
+    fontSize: typography.h6,
+    fontWeight: theme.properties.semibold,
+  },
+  menuCategory: {
+    backgroundColor: "red",
   },
 });

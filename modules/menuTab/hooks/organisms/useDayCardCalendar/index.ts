@@ -9,6 +9,7 @@ export function useDayCardCalendar(
 ) {
   const menu = moments[selectedMoment.toUpperCase()];
   const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { menuCategories } = useAppSelector((state) => state.seed);
   const [checked, setChecked] = useState(menu?.done);
   const dispatch = useAppDispatch();
   async function handleCheckMenu() {
@@ -16,5 +17,5 @@ export function useDayCardCalendar(
     setChecked(newValue);
     await dispatch(setMenuDoneThunk({ menuId: menu?.id, done: newValue }));
   }
-  return { ingredients, handleCheckMenu, menu, checked, setChecked };
+  return { ingredients, handleCheckMenu, menu, checked, setChecked, menuCategories };
 }
