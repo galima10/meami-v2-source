@@ -8,10 +8,11 @@ import { useDayMoment } from "../../useDayMoment";
 import { getScreenWidth } from "@helpers/getScreenDimensions";
 
 export function useMenuCalendarScreen() {
-  const { todayIndex, dayOfWeek, rawDateInfo } = useDate();
+  const { todayIndex, dayOfWeek, rawDateInfo, refreshDateInfo } = useDate();
   const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { moments, days } = useAppSelector((state) => state.seed);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const weeklyMenuUi = useMemo(
     () => weeklyMenuToUi(weeklyMenu, days, moments),
     [weeklyMenu, days, moments],
@@ -48,11 +49,17 @@ export function useMenuCalendarScreen() {
   );
 
   function handleGoToday() {
+    refreshDateInfo();
+    setIsOverlayOpen(false);
     if (currentIndex !== todayIndex || selectedMoment !== actualDayMoment) {
       setCurrentIndex(todayIndex);
       setSelectedMoment(actualDayMoment);
       goToSlideDay(todayIndex);
     }
+  }
+
+  function handleCloseOverlay(bool: boolean = false) {
+    setIsOverlayOpen(bool);
   }
 
   return {
@@ -66,5 +73,7 @@ export function useMenuCalendarScreen() {
     actualDayMoment,
     goToSlideDay,
     handleGoToday,
+    isOverlayOpen,
+    handleCloseOverlay,
   };
 }

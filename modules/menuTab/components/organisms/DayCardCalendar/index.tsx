@@ -20,6 +20,7 @@ import {
 import MomentBand from "../../molecules/MomentBand";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
+import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -27,6 +28,8 @@ interface DayCardCalendarProps {
   setSelectedMoment: Dispatch<SetStateAction<"matin" | "midi" | "soir">>;
   selectedMoment: "matin" | "midi" | "soir";
   moments: MomentUi;
+  isOverlayOpen: boolean;
+  handleCloseOverlay: (bool: boolean) => void;
 }
 
 export default function DayCardCalendar({
@@ -35,6 +38,8 @@ export default function DayCardCalendar({
   setSelectedMoment,
   selectedMoment,
   moments,
+  isOverlayOpen,
+  handleCloseOverlay,
 }: DayCardCalendarProps) {
   const { ingredients, menu, handleCheckMenu, checked, setChecked } =
     useDayCardCalendar(selectedMoment, moments);
@@ -58,7 +63,7 @@ export default function DayCardCalendar({
               action={handleCheckMenu}
             />
           </View>
-          <View style={styles.menuContent}>
+          <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
             {(
               Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]
             ).map(([menuCategoryId, menuIngredients]) => {
@@ -99,6 +104,10 @@ export default function DayCardCalendar({
               }
             })}
           </View>
+          <MenuCalendarOtherOverlay
+            isOverlayOpen={isOverlayOpen}
+            handleCloseOverlay={handleCloseOverlay}
+          />
         </AppLinearGradient>
       </ImageBackground>
       <MomentBand
@@ -116,6 +125,7 @@ const styles = StyleSheet.create({
     width: getScreenWidth(),
     flex: 1,
     flexDirection: "row-reverse",
+    overflow: "hidden",
   },
   menuContainer: {
     flex: 3.5,
@@ -141,6 +151,7 @@ const styles = StyleSheet.create({
     paddingTop: FONT_BASE * 3.5,
     alignItems: "center",
     paddingHorizontal: FONT_BASE * 2.5,
+    position: "relative",
   },
   menuCategories: {
     marginBottom: 2,

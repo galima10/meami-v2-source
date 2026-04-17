@@ -20,7 +20,9 @@ export default function MenuCalendarScreen() {
     scrollRef,
     actualDayMoment,
     handleGoToday,
-    currentIndex
+    currentIndex,
+    isOverlayOpen,
+    handleCloseOverlay,
   } = useMenuCalendarScreen();
 
   return (
@@ -34,6 +36,7 @@ export default function MenuCalendarScreen() {
           const offsetX = e.nativeEvent.contentOffset.x;
           const newIndex = Math.round(offsetX / getScreenWidth());
           setCurrentIndex(newIndex);
+          handleCloseOverlay();
           if (newIndex === todayIndex) setSelectedMoment(actualDayMoment);
           else setSelectedMoment("matin");
         }}
@@ -48,6 +51,8 @@ export default function MenuCalendarScreen() {
                 setSelectedMoment={setSelectedMoment}
                 selectedMoment={selectedMoment}
                 moments={moments}
+                isOverlayOpen={isOverlayOpen}
+                handleCloseOverlay={handleCloseOverlay}
               />
             );
           },
@@ -59,7 +64,11 @@ export default function MenuCalendarScreen() {
         action={handleGoToday}
       />
       <View style={styles.dotsContainer}>
-        <DayNavigationDots days={Object.keys(weeklyMenuUi)} currentIndex={currentIndex} action={goToSlideDay} />
+        <DayNavigationDots
+          days={Object.keys(weeklyMenuUi)}
+          currentIndex={currentIndex}
+          action={goToSlideDay}
+        />
       </View>
     </View>
   );
