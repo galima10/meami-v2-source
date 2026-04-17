@@ -14,6 +14,8 @@ const theme = {
     darkPurple: "#8983D7",
     darkPink: "#E68FBC",
 
+    yellowDarker: "#D8BA40",
+
     lightOrange: "#EEAA83",
     lightRed: "#D45068",
     lightGreen: "#B8C990",
@@ -38,6 +40,7 @@ const theme = {
     bold: "700",
 
     transparentBrown: "#491b1e80",
+    border: "#491b1e40",
 
     beigeBorder: "#D1BFB4",
     greenBorder: "#807D59",
@@ -107,10 +110,12 @@ export interface ThemeType {
   lightPurpleBorder: string;
   purpleBorder: string;
   pinkBorder: string;
+  border: string;
   yellowBorder: string;
   vibrantBeigeBorder: string;
   littleShadow: string;
   bigShadow: string;
+  yellowDarker: string;
 }
 
 type FontWeightType =

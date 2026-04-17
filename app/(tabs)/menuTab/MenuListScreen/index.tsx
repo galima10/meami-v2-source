@@ -1,41 +1,44 @@
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, ImageBackground } from "react-native";
 import DayCardList from "@modules/menuTab/components/atoms/DayCardList";
 import { FONT_BASE } from "@constants/general";
-import { useMemo } from "react";
-import { weeklyMenuToUi } from "@utils/dataToUi/weeklyMenuToUi";
-import { useAppSelector } from "@modules/shared/hooks/redux";
 import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
+import { useMenuListScreen } from "@modules/shared/hooks/screens/useMenuListScreen";
 
 export default function MenuListScreen() {
-  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
-  const { moments, days } = useAppSelector((state) => state.seed);
-  const weeklyMenuUi = useMemo(
-    () => weeklyMenuToUi(weeklyMenu, days, moments),
-    [weeklyMenu, days, moments],
-  );
+  const { weeklyMenuUi, today } = useMenuListScreen();
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.days}>
+    <ImageBackground
+      resizeMode="cover"
+      source={require("@assets/images/precharged/background/background_menu_3x.jpg")}
+      style={styles.container}
+    >
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.days}>
         {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
           ([day, moments]) => {
-            return <DayCardList key={day} day={day} />;
+            return (
+              <DayCardList
+                key={day}
+                day={day}
+                today={today}
+                moments={weeklyMenuUi[day]}
+              />
+            );
           },
         )}
       </ScrollView>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
   },
   days: {
-    padding: FONT_BASE,
+    padding: FONT_BASE * 1.5,
+    gap: FONT_BASE * 1.5,
+    // paddingBottom: FONT_BASE * 5,
   },
 });
