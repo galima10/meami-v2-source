@@ -45,3 +45,10 @@ export const TAB_ROUTES: Record<TabKey, string> = {
   stockTab: "/stockTab",
   infosTab: "/infosTab",
 };
+
+export const TAB_FOCUS: Record<TabKey, string> = {
+  menuTab: "/menuTab",
+  cartTab: "/cartTab",
+  stockTab: "/stockTab",
+  infosTab: "/infosTab",
+};

@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import TabButton from "../../atoms/buttons/TabButton";
 import type { IconName } from "@modules/shared/hooks/primitives/useAppIcon";
 import { useRouter, usePathname, type Href } from "expo-router";
-import { TAB_ROUTES } from "@constants/mappings/routes";
+import { TAB_ROUTES, TAB_FOCUS } from "@constants/mappings/routes";
 import type { TabKey } from "@app-types/TabKey";
 
 export default function AppTabBar({
@@ -28,7 +28,7 @@ export default function AppTabBar({
     >
       {state.routes.map((route, index) => {
         const routeName = route.name as TabKey;
-        const isFocused = pathname.startsWith(TAB_ROUTES[routeName]);
+        const isFocused = pathname.startsWith(TAB_FOCUS[routeName]);
 
         const onPress = () => {
           const event = navigation.emit({

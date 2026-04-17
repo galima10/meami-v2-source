@@ -27,6 +27,7 @@ import {
   morningMenuCategoriesOrder,
   noonEveningMenuCategoriesOrder,
 } from "@constants/mappings/orders/menuCategoriesOrder";
+import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -49,14 +50,8 @@ export default function DayCardCalendar({
   handleCloseOverlay,
   modify = false,
 }: DayCardCalendarProps) {
-  const {
-    ingredients,
-    menu,
-    handleCheckMenu,
-    checked,
-    setChecked,
-    menuCategories,
-  } = useDayCardCalendar(selectedMoment, moments);
+  const { ingredients, menu, handleCheckMenu, checked, setChecked } =
+    useDayCardCalendar(selectedMoment, moments);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -118,6 +113,11 @@ export default function DayCardCalendar({
                       <AppText style={modifyStyles.categoryTitle}>
                         {toCapitalize(name)}
                       </AppText>
+                      <AppButton
+                        label="Ajouter un ingrédient +"
+                        type="primary"
+                        color="green"
+                      />
                     </View>
                   );
                 })}
@@ -199,6 +199,8 @@ const modifyStyles = StyleSheet.create({
     fontWeight: theme.properties.semibold,
   },
   menuCategory: {
-    backgroundColor: "red",
+    width: "100%",
+    alignItems: "flex-start",
+    gap: FONT_BASE,
   },
 });
