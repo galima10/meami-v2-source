@@ -7,8 +7,8 @@ import { useFocusEffect } from "expo-router";
 import { useDayMoment } from "../../useDayMoment";
 import { getScreenWidth } from "@helpers/getScreenDimensions";
 
-export function useMenuCalendarScreen() {
-  const { todayIndex, dayOfWeek, rawDateInfo, refreshDateInfo } = useDate();
+export function useMenuCalendarScreen(getDate: boolean = true) {
+  const { todayIndex, rawDateInfo, refreshDateInfo } = useDate();
   const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { moments, days } = useAppSelector((state) => state.seed);
@@ -31,16 +31,18 @@ export function useMenuCalendarScreen() {
       animated: true,
     });
 
-    setSelectedMoment(actualDayMoment);
+    if (getDate) setSelectedMoment(actualDayMoment);
   }
 
   useFocusEffect(
     useCallback(() => {
-      if (todayIndex === -1) return;
-      goToSlideDay(todayIndex);
-      return () => {
-        setIsOverlayOpen(false);
-      };
+      if (getDate) {
+        if (todayIndex === -1) return;
+        goToSlideDay(todayIndex);
+        return () => {
+          setIsOverlayOpen(false);
+        };
+      }
     }, [todayIndex]),
   );
 

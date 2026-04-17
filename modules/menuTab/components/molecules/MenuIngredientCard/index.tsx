@@ -6,11 +6,24 @@ import { AppText } from "@modules/shared/components/primitives/AppText";
 import { FONT_BASE } from "@constants/general";
 import theme from "@constants/themes";
 import QuantifierModule from "@modules/shared/components/molecules/QuantifierModule";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import type { Ingredients } from "@stores/features/ingredients";
+import React from "react";
 
-export default function MenuIngredientCard() {
+interface MenuIngredientCardProps {
+  ingredient: IngredientMenu;
+  ingredients: Ingredients;
+}
+
+function MenuIngredientCard({
+  ingredient,
+  ingredients,
+}: MenuIngredientCardProps) {
   return (
     <View style={styles.container}>
-      <AppText style={styles.title}>Ingrédient fzfzfev</AppText>
+      <AppText style={styles.title}>
+        {ingredients[ingredient?.ingredientId].name}
+      </AppText>
       <View style={styles.elements}>
         <AppIconButton icon="binIcon" type="outline" smallBin />
         <View style={styles.quantityModule}>
@@ -54,3 +67,5 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
 });
+
+export default React.memo(MenuIngredientCard);

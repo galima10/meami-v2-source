@@ -16,6 +16,7 @@ import {
   View,
   ScrollView,
   type ViewStyle,
+  FlatList,
 } from "react-native";
 import MomentBand from "../../molecules/MomentBand";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
@@ -29,6 +30,9 @@ import {
 } from "@constants/mappings/orders/menuCategoriesOrder";
 import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 import MenuIngredientCard from "../../molecules/MenuIngredientCard";
+import { IngredientMenu } from "@stores/features/weeklyMenu";
+import { FlashList } from "@shopify/flash-list";
+import { useMemo, useState, useEffect } from "react";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -53,6 +57,25 @@ export default function DayCardCalendar({
 }: DayCardCalendarProps) {
   const { ingredients, menu, handleCheckMenu, checked, setChecked } =
     useDayCardCalendar(selectedMoment, moments);
+
+  const categories = Object.entries(
+    moment === "matin"
+      ? morningMenuCategoriesOrder
+      : noonEveningMenuCategoriesOrder,
+  ) as [string, string][];
+  const ingredientsByCategory = useMemo(() => {
+    return menu?.ingredients ?? {};
+  }, [menu]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setReady(true);
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, []);
+  if (modify && !ready) return null;
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -94,37 +117,41 @@ export default function DayCardCalendar({
               />
             </View>
           ) : (
-            <ScrollView
-              style={{ flex: 1 }}
+            <FlashList
+              data={categories}
               contentContainerStyle={modifyStyles.menuContent}
-            >
-              <View style={modifyStyles.menuCategories}>
-                {(
-                  Object.entries(
-                    moment === "matin"
-                      ? morningMenuCategoriesOrder
-                      : noonEveningMenuCategoriesOrder,
-                  ) as [string, string][]
-                ).map(([menuCategoryId, name]) => {
-                  return (
-                    <View
-                      key={menuCategoryId}
-                      style={modifyStyles.menuCategory}
-                    >
-                      <AppText style={modifyStyles.categoryTitle}>
-                        {toCapitalize(name)}
-                      </AppText>
-                      <MenuIngredientCard />
-                      <AppButton
-                        label="Ajouter un ingrédient +"
-                        type="primary"
-                        color="green"
-                      />
+              keyExtractor={([menuCategoryId]) => menuCategoryId}
+              renderItem={({ item: [menuCategoryId, name] }) => {
+                const menuIngredients =
+                  (ingredientsByCategory?.[
+                    Number(menuCategoryId)
+                  ] as IngredientMenu[]) ?? [];
+
+                return (
+                  <View style={modifyStyles.menuCategory}>
+                    <AppText style={modifyStyles.categoryTitle}>
+                      {toCapitalize(name)}
+                    </AppText>
+
+                    <View style={modifyStyles.menuIngredients}>
+                      {menuIngredients.map((ingredient) => (
+                        <MenuIngredientCard
+                          key={ingredient.ingredientId}
+                          ingredient={ingredient}
+                          ingredients={ingredients}
+                        />
+                      ))}
                     </View>
-                  );
-                })}
-              </View>
-            </ScrollView>
+
+                    <AppButton
+                      label="Ajouter un ingrédient +"
+                      type="primary"
+                      color="green"
+                    />
+                  </View>
+                );
+              }}
+            />
           )}
           {!modify && moment !== "matin" && (
             <MenuCalendarOtherOverlay
@@ -187,14 +214,8 @@ const modifyStyles = StyleSheet.create({
     flexDirection: "row",
     gap: FONT_BASE * 0.5,
   },
-  menuCategories: {
-    width: "100%",
-    gap: FONT_BASE * 1.5,
-  },
   menuContent: {
-    alignItems: "center",
     padding: FONT_BASE,
-    position: "relative",
     paddingBottom: FONT_BASE * 6,
   },
   categoryTitle: {
@@ -204,6 +225,11 @@ const modifyStyles = StyleSheet.create({
   menuCategory: {
     width: "100%",
     alignItems: "flex-start",
+    gap: FONT_BASE,
+    marginBottom: FONT_BASE * 1.5,
+  },
+  menuIngredients: {
+    width: "100%",
     gap: FONT_BASE,
   },
 });

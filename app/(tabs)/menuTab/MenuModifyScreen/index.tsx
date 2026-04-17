@@ -18,12 +18,10 @@ export default function MenuModifyScreen() {
     todayIndex,
     setCurrentIndex,
     scrollRef,
-    actualDayMoment,
-    handleGoToday,
     currentIndex,
     isOverlayOpen,
     handleCloseOverlay,
-  } = useMenuCalendarScreen();
+  } = useMenuCalendarScreen(false);
   return (
     <View style={styles.container}>
       <View style={styles.container}>
@@ -36,9 +34,7 @@ export default function MenuModifyScreen() {
             const offsetX = e.nativeEvent.contentOffset.x;
             const newIndex = Math.round(offsetX / getScreenWidth());
             setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
-            handleCloseOverlay();
-            if (newIndex === todayIndex) setSelectedMoment(actualDayMoment);
-            else setSelectedMoment("matin");
+            setSelectedMoment("matin");
           }}
         >
           {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
@@ -58,11 +54,6 @@ export default function MenuModifyScreen() {
             },
           )}
         </ScrollView>
-        <AppIconButton
-          type="today"
-          style={styles.todayButton}
-          action={handleGoToday}
-        />
         <View style={styles.dotsContainer}>
           <DayNavigationDots
             days={Object.keys(weeklyMenuUi)}
@@ -80,6 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
+    backgroundColor: theme.properties.beige,
   },
   text: {
     fontSize: typography.h4,
