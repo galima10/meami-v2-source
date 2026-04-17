@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   overlay: {
     width: getFlexWidth(getScreenWidth(), 3.5, 1 + 3.5),
     position: "absolute",
-    bottom: FONT_BASE * 2,
+    bottom: FONT_BASE * 3,
     right: 0,
     flexDirection: "row",
     minHeight: FONT_BASE * 6.75,
@@ -102,12 +102,13 @@ const styles = StyleSheet.create({
     boxShadow: theme.properties.bigShadow,
     borderTopLeftRadius: FONT_BASE,
     borderBottomLeftRadius: FONT_BASE,
-    padding: FONT_BASE * 0.75,
+    padding: FONT_BASE * 0.5,
     flex: 1,
     height: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    alignContent: "center",
     flexWrap: "wrap",
   },
   button: {
