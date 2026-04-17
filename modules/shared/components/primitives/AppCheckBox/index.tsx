@@ -1,15 +1,26 @@
-import { Pressable, View, StyleSheet } from "react-native";
+import {
+  Pressable,
+  View,
+  StyleSheet,
+  type ViewStyle,
+  type StyleProp,
+} from "react-native";
 import theme from "@constants/themes";
 import { FONT_BASE } from "@constants/general";
 
 interface AppCheckBoxProps {
   checked?: boolean;
   action?: () => void;
+  style?: StyleProp<ViewStyle> | object;
 }
 
-export default function AppCheckBox({ checked, action }: AppCheckBoxProps) {
+export default function AppCheckBox({
+  checked,
+  action,
+  style,
+}: AppCheckBoxProps) {
   return (
-    <Pressable onPress={() => action?.()} style={styles.container}>
+    <Pressable onPress={() => action?.()} style={[styles.container, style]}>
       <View style={styles.box}>{checked && <View style={styles.dot} />}</View>
     </Pressable>
   );

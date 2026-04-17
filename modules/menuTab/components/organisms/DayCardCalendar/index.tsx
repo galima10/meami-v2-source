@@ -52,7 +52,11 @@ export default function DayCardCalendar({
         >
           <View style={styles.titleContainer}>
             <AppText style={styles.dayTitle}>{toCapitalize(day)}</AppText>
-            <AppCheckBox checked={checked} action={handleCheckMenu} />
+            <AppCheckBox
+              style={styles.checkbox}
+              checked={checked}
+              action={handleCheckMenu}
+            />
           </View>
           <View style={styles.menuContent}>
             {(
@@ -150,4 +154,5 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: theme.properties.brown,
   },
+  checkbox: { paddingTop: FONT_BASE / 2 },
 });
