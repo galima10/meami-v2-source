@@ -21,6 +21,7 @@ import MomentBand from "../../molecules/MomentBand";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
+import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -68,45 +69,13 @@ export default function DayCardCalendar({
             )}
           </View>
           <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
-            {(
-              Object.entries(menu?.ingredients) as [string, IngredientMenu[]][]
-            ).map(([menuCategoryId, menuIngredients]) => {
-              setChecked(menu?.done);
-              if (Number(menuCategoryId) !== 8) {
-                return (
-                  <React.Fragment key={`group-${menu?.id}-${menuCategoryId}`}>
-                    <View
-                      key={menuCategoryId}
-                      style={[
-                        styles.menuCategories,
-                        Number(menuCategoryId) === 5 && {
-                          paddingBottom: FONT_BASE * 0.75,
-                        },
-                        Number(menuCategoryId) === 6 && {
-                          paddingTop: FONT_BASE * 0.75,
-                        },
-                      ]}
-                    >
-                      {menuIngredients?.map((ingredient, index) => {
-                        return (
-                          <AppText key={`ingredient-${index}`}>
-                            {ingredients[ingredient.ingredientId]?.name}
-                          </AppText>
-                        );
-                      })}
-                    </View>
-                    {Number(menuCategoryId) !== 5 &&
-                      Number(menuCategoryId) !== 3 &&
-                      Number(menuCategoryId) !== 7 && (
-                        <View
-                          key={`separator-${menuCategoryId}`}
-                          style={styles.separator}
-                        />
-                      )}
-                  </React.Fragment>
-                );
-              }
-            })}
+            {!modify ? (
+              <MenuCalendarContent
+                menu={menu}
+                setChecked={setChecked}
+                ingredients={ingredients}
+              />
+            ) : null}
           </View>
           {!modify && moment !== "matin" && (
             <MenuCalendarOtherOverlay
@@ -160,18 +129,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: FONT_BASE * 2.5,
     position: "relative",
-  },
-  menuCategories: {
-    marginBottom: 2,
-    alignItems: "center",
-    gap: FONT_BASE * 0.5,
-    width: "100%",
-    paddingVertical: FONT_BASE * 2,
-  },
-  separator: {
-    width: "75%",
-    height: 1,
-    backgroundColor: theme.properties.brown,
   },
   checkbox: { paddingTop: FONT_BASE / 2 },
 });
