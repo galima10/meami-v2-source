@@ -1,13 +1,13 @@
-import { View, StyleSheet, type ViewStyle } from "react-native";
-import { typography } from "@constants/styles";
 import { FONT_BASE } from "@constants/general";
+import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import { toCapitalize } from "@utils/toCapitalize";
-import type { MomentUi, MenuUi } from "@utils/dataToUi/weeklyMenuToUi";
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import React from "react";
+import type { MenuUi, MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import { useDayCardList } from "@modules/menuTab/hooks/atoms/useDayCardList";
+import { AppText } from "@modules/shared/components/primitives/AppText";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import { toCapitalize } from "@utils/toCapitalize";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 interface DayCardListProps {
   day: string;

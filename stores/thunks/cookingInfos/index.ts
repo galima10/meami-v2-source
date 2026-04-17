@@ -1,12 +1,12 @@
-import type { CookingInfo } from "@stores/features/cookingInfos";
+import type { WithRequiredId } from "@app-types/WithRequiredId";
+import { formatCookingInfos } from "@mappers/formatData/formatCookingInfos";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { formatCookingInfos } from "@utils/formatData/formatCookingInfos";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { CookingInfo } from "@stores/features/cookingInfos";
 
 import {
-  SetCookingInfoService,
-  RemoveCookingInfoService,
-  FetchCookingInfosService,
+    FetchCookingInfosService,
+    RemoveCookingInfoService,
+    SetCookingInfoService,
 } from "@services/cookingInfos";
 
 export const removeCookingInfoThunk = createAsyncThunk<number, number>(

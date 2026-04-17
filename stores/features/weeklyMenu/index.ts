@@ -1,17 +1,16 @@
+import type { Operation } from "@app-types/DbQuantity";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  fetchWeeklyMenuThunk,
-  fetchAllMenusThunk,
-  setMenuDoneThunk,
-  addIngredientToMenuThunk,
-  addRecipeToMenuThunk,
-  removeIngredientToMenuThunk,
-  removeMenuThunk,
-  removeWeeklyMenuThunk,
-  setIngredientMenuQuantityThunk,
+    addIngredientToMenuThunk,
+    addRecipeToMenuThunk,
+    fetchAllMenusThunk,
+    fetchWeeklyMenuThunk,
+    removeIngredientToMenuThunk,
+    removeMenuThunk,
+    removeWeeklyMenuThunk,
+    setIngredientMenuQuantityThunk,
+    setMenuDoneThunk,
 } from "@stores/thunks/weeklyMenu";
-import type { Operation } from "@app-types/DbQuantity";
-import { applyOperation } from "@utils/applyOperation";
 
 export interface WeeklyMenuIngredients {
   [menuId: number]: MenuIngredients;

@@ -1,28 +1,28 @@
-import type {
-  IngredientMenu,
-  WeeklyMenu,
-  MenuIngredients,
-  WeeklyMenuIngredients,
-} from "@stores/features/weeklyMenu";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { Operation } from "@app-types/DbQuantity";
 import {
-  FetchWeeklyMenuService,
-  FetchAllMenusService,
-  SetMenuDoneService,
+  formatAllMenus,
+  formatWeeklyMenu,
+} from "@mappers/formatData/formatWeeklyMenu";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { UpdateQuantityGenericService } from "@services/shared";
+import {
   AddIngredientToMenuService,
   AddRecipeToMenuService,
+  FetchAllMenusService,
+  FetchWeeklyMenuService,
   RemoveIngredientToMenuService,
   RemoveMenuService,
   RemoveWeeklyMenuService,
+  SetMenuDoneService,
 } from "@services/weeklyMenu";
-import {
-  formatWeeklyMenu,
-  formatAllMenus,
-} from "@utils/formatData/formatWeeklyMenu";
-import type { RootState } from "@stores/index";
 import type { Recipe } from "@stores/features/recipes";
-import type { Operation } from "@app-types/DbQuantity";
-import { UpdateQuantityGenericService } from "@services/shared";
+import type {
+  IngredientMenu,
+  MenuIngredients,
+  WeeklyMenu,
+  WeeklyMenuIngredients,
+} from "@stores/features/weeklyMenu";
+import type { RootState } from "@stores/index";
 
 export interface IngredientInsert extends IngredientMenu {
   menuCategoryId: number;

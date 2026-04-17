@@ -1,10 +1,10 @@
-import type { WithRequiredId } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/WithRequiredId";
 import { getDb } from "@database/database";
 import { toDbNumberOrNull } from "@helpers/dbHelpers";
 import { getDbContext } from "@helpers/getDbContext";
 import type {
-  CookingDuration,
-  CookingInfo,
+    CookingDuration,
+    CookingInfo,
 } from "@stores/features/cookingInfos";
 import type { SQLiteDatabase } from "expo-sqlite";
 

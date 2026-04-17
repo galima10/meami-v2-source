@@ -1,6 +1,5 @@
-import type { CookingUstensils } from "@stores/features/cookingUstensils";
 import type { CookingUstensilRaw } from "@services/cookingUstensils";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { CookingUstensils } from "@stores/features/cookingUstensils";
 
 export function formatCookingUstensils(
   rawData: CookingUstensilRaw[],

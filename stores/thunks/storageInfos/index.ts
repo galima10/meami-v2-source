@@ -1,12 +1,12 @@
-import type { StorageInfo } from "@stores/features/storageInfos";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/WithRequiredId";
+import { formatStorageInfos } from "@mappers/formatData/formatStorageInfos";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  FetchStorageInfosService,
-  SetStorageInfoService,
-  RemoveStorageInfoService,
+    FetchStorageInfosService,
+    RemoveStorageInfoService,
+    SetStorageInfoService,
 } from "@services/storageInfos";
-import { formatStorageInfos } from "@utils/formatData/formatStorageInfos";
+import type { StorageInfo } from "@stores/features/storageInfos";
 
 export const removeStorageInfoThunk = createAsyncThunk<number, number>(
   "storageInfos/removeStorageInfo",

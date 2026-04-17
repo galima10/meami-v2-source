@@ -1,17 +1,17 @@
-import type {
-  ShoppingListIngredients,
-  ShoppingListProducts,
-} from "@stores/features/shoppingList";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { formatShoppingList } from "@utils/formatData/formatShoppingList";
-import {
-  FetchShoppingListService,
-  AddItemToShoppingService,
-  RemoveItemToShoppingService,
-} from "@services/shoppingList";
-import type { RootState } from "@stores/index";
 import type { Operation, QuantityField } from "@app-types/DbQuantity";
+import { formatShoppingList } from "@mappers/formatData/formatShoppingList";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UpdateQuantityGenericService } from "@services/shared";
+import {
+    AddItemToShoppingService,
+    FetchShoppingListService,
+    RemoveItemToShoppingService,
+} from "@services/shoppingList";
+import type {
+    ShoppingListIngredients,
+    ShoppingListProducts,
+} from "@stores/features/shoppingList";
+import type { RootState } from "@stores/index";
 
 export const fetchShoppingListThunk = createAsyncThunk<
   { ingredients: ShoppingListIngredients; products: ShoppingListProducts },

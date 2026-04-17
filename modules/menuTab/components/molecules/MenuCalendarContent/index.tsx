@@ -1,13 +1,13 @@
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import type { MenuUi } from "@utils/dataToUi/weeklyMenuToUi";
-import React, { Dispatch, SetStateAction } from "react";
 import { FONT_BASE } from "@constants/general";
-import { View, StyleSheet } from "react-native";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import type { Ingredients } from "@stores/features/ingredients";
-import theme from "@constants/themes";
-import { useAppSelector } from "@modules/shared/hooks/redux";
 import { typography } from "@constants/styles";
+import theme from "@constants/themes";
+import type { MenuUi } from "@mappers/dataToUi/weeklyMenuToUi";
+import { AppText } from "@modules/shared/components/primitives/AppText";
+import { useAppSelector } from "@modules/shared/hooks/redux";
+import type { Ingredients } from "@stores/features/ingredients";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import React, { Dispatch, SetStateAction } from "react";
+import { StyleSheet, View } from "react-native";
 
 interface MenuCalendarContentProps {
   menu: MenuUi;

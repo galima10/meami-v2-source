@@ -1,4 +1,4 @@
-import type { WithRequiredId } from "@app-types/NameId";
+import type { WithRequiredId } from "@app-types/WithRequiredId";
 import { fromDbNumberOrNull } from "@helpers/dbHelpers";
 import type { StorageInfoRaw } from "@services/storageInfos";
 import type {

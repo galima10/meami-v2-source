@@ -1,13 +1,13 @@
-import { getFlexWidth } from "@helpers/getFlexWidth";
-import { getScreenWidth } from "@helpers/getScreenDimensions";
 import { FONT_BASE } from "@constants/general";
+import { useAppSelector } from "@modules/shared/hooks/redux";
+import { getFlexWidth } from "@utils/getFlexWidth";
+import { getScreenWidth } from "@core/getScreenDimensions";
+import { useEffect, useMemo } from "react";
 import {
+  useAnimatedStyle,
   useSharedValue,
   withTiming,
-  useAnimatedStyle,
 } from "react-native-reanimated";
-import { useMemo, useEffect } from "react";
-import { useAppSelector } from "@modules/shared/hooks/redux";
 
 export function useMenuCalendarOtherOverlay(
   isOverlayOpen: boolean,

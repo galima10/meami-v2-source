@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  fetchUnitsThunk,
-  createUnitThunk,
-  updateUnitThunk,
-  deleteUnitThunk,
+    createUnitThunk,
+    deleteUnitThunk,
+    fetchUnitsThunk,
+    updateUnitThunk,
 } from "@stores/thunks/units";
-import type { WithRequiredId } from "@app-types/NameId";
 
 export interface Unit {
   name: string;

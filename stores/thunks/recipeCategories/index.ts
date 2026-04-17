@@ -1,11 +1,14 @@
-import type { RecipeCategories, RecipeCategory } from "@stores/features/recipeCategories";
+import { formatRecipeCategories } from "@mappers/formatData/formatRecipeCategories";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { formatRecipeCategories } from "@utils/formatData/formatRecipeCategories";
 import {
-  FetchRecipeCategoriesService,
-  DeleteRecipeCategoryService,
-  CreateRecipeCategoryService,
+    CreateRecipeCategoryService,
+    DeleteRecipeCategoryService,
+    FetchRecipeCategoriesService,
 } from "@services/recipeCategories";
+import type {
+    RecipeCategories,
+    RecipeCategory,
+} from "@stores/features/recipeCategories";
 
 export const fetchRecipeCategoriesThunk = createAsyncThunk<
   RecipeCategories,
@@ -18,14 +21,11 @@ export const fetchRecipeCategoriesThunk = createAsyncThunk<
 export const createRecipeCategoryThunk = createAsyncThunk<
   RecipeCategories,
   RecipeCategory
->(
-  "recipeCategories/createRecipeCategory",
-  async (newRecipeCategory) => {
-    const createdRecipeCategory =
-      await CreateRecipeCategoryService(newRecipeCategory);
-    return createdRecipeCategory;
-  },
-);
+>("recipeCategories/createRecipeCategory", async (newRecipeCategory) => {
+  const createdRecipeCategory =
+    await CreateRecipeCategoryService(newRecipeCategory);
+  return createdRecipeCategory;
+});
 
 export const deleteRecipeCategoryThunk = createAsyncThunk<number, number>(
   "recipeCategories/deleteRecipeCategory",

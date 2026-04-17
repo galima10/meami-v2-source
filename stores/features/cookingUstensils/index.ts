@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { WithRequiredId } from "@app-types/NameId";
 import {
-  fetchCookingUstensilsThunk,
-  createUstensilThunk,
-  deleteUstensilThunk,
+    createUstensilThunk,
+    deleteUstensilThunk,
+    fetchCookingUstensilsThunk,
 } from "@stores/thunks/cookingUstensils";
 
 export interface CookingUstensil {

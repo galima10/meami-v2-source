@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  fetchIngredientCategoriesThunk,
-  createIngredientCategoryThunk,
-  deleteIngredientCategoryThunk,
+    createIngredientCategoryThunk,
+    deleteIngredientCategoryThunk,
+    fetchIngredientCategoriesThunk,
 } from "@stores/thunks/ingredientCategories";
-import type { WithRequiredId } from "@app-types/NameId";
 
 export interface IngredientCategory {
   id?: number;

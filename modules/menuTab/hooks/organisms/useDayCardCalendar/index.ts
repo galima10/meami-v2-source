@@ -1,12 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
-import { setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
-import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
 import {
   morningMenuCategoriesOrder,
   noonEveningMenuCategoriesOrder,
 } from "@constants/mappings/orders/menuCategoriesOrder";
-import { removeMenuThunk } from "@stores/thunks/weeklyMenu";
+import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
+import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
+import { removeMenuThunk, setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
+import { useEffect, useMemo, useState } from "react";
 
 export function useDayCardCalendar(
   selectedMoment: "matin" | "midi" | "soir",

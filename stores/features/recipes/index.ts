@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { WithRequiredId } from "@app-types/NameId";
 import {
-  fetchRecipesThunk,
-  updateRecipeThunk,
-  deleteRecipeThunk,
-  createRecipeThunk,
+    createRecipeThunk,
+    deleteRecipeThunk,
+    fetchRecipesThunk,
+    updateRecipeThunk,
 } from "@stores/thunks/recipes";
 
 export interface Recipe {

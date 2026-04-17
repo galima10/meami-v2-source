@@ -1,4 +1,3 @@
-import type { WithRequiredId } from "@app-types/NameId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchInitialDataThunk } from "@stores/thunks/seeds";
 

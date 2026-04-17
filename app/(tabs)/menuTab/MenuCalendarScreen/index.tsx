@@ -1,12 +1,12 @@
 import { FONT_BASE } from "@constants/general";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { getScreenWidth } from "@helpers/getScreenDimensions";
+import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import DayNavigationDots from "@modules/menuTab/components/molecules/DayNavigationDots";
 import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalendar";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
-import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
+import { getScreenWidth } from "@core/getScreenDimensions";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 export default function MenuCalendarScreen() {

@@ -1,14 +1,14 @@
-import type { Product, Products } from "@stores/features/products";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { Operation } from "@app-types/DbQuantity";
-import { UpdateQuantityGenericService } from "@services/shared";
-import { formatProducts } from "@utils/formatData/formatProducts";
+import { formatProducts } from "@mappers/formatData/formatProducts";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  FetchProductsService,
-  UpdateProductService,
-  DeleteProductService,
-  CreateProductService,
+    CreateProductService,
+    DeleteProductService,
+    FetchProductsService,
+    UpdateProductService,
 } from "@services/products";
+import { UpdateQuantityGenericService } from "@services/shared";
+import type { Product, Products } from "@stores/features/products";
 
 export const fetchProductsThunk = createAsyncThunk<Products, void>(
   "products/fetchProducts",

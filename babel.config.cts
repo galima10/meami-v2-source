@@ -26,6 +26,8 @@ module.exports = function (api: any): TransformOptions {
             "@utils": "./utils",
             "@modules": "./modules",
             "@helpers": "./helpers",
+            "@core": "./core",
+            "@mappers": "./mappers",
           },
         },
       ],

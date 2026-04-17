@@ -4,11 +4,17 @@ import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
 import { enDays } from "@constants/mappings/traductors/daysTraductor";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import { getScreenWidth } from "@helpers/getScreenDimensions";
+import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
+import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
+import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
+import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
+import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import { AppText } from "@modules/shared/components/primitives/AppText";
-import type { MomentUi } from "@utils/dataToUi/weeklyMenuToUi";
+import { FlashList } from "@shopify/flash-list";
+import { IngredientMenu } from "@stores/features/weeklyMenu";
 import { toCapitalize } from "@utils/toCapitalize";
+import { getScreenWidth } from "@core/getScreenDimensions";
 import React, { Dispatch, SetStateAction } from "react";
 import {
   ImageBackground,
@@ -16,16 +22,10 @@ import {
   View,
   type ViewStyle,
 } from "react-native";
-import MomentBand from "../../molecules/MomentBand";
-import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
-import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
-import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
-import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
+import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MenuIngredientCard from "../../molecules/MenuIngredientCard";
-import { IngredientMenu } from "@stores/features/weeklyMenu";
-import { FlashList } from "@shopify/flash-list";
+import MomentBand from "../../molecules/MomentBand";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";

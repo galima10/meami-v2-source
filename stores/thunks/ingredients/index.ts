@@ -1,17 +1,17 @@
-import type { Ingredient, Ingredients } from "@stores/features/ingredients";
+import type { Operation } from "@app-types/DbQuantity";
+import { formatIngredients } from "@mappers/formatData/formatIngredients";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  FetchIngredientsService,
-  UpdateIngredientService,
-  UpdateStockService,
-  UpdateStorageLocationsService,
-  CreateIngredientService,
-  DeleteIngredientService,
-  SetQuantifiableService,
+    CreateIngredientService,
+    DeleteIngredientService,
+    FetchIngredientsService,
+    SetQuantifiableService,
+    UpdateIngredientService,
+    UpdateStockService,
+    UpdateStorageLocationsService,
 } from "@services/ingredients";
-import { formatIngredients } from "@utils/formatData/formatIngredients";
 import { UpdateQuantityGenericService } from "@services/shared";
-import type { Operation } from "@app-types/DbQuantity";
+import type { Ingredient, Ingredients } from "@stores/features/ingredients";
 
 export const fetchIngredientsThunk = createAsyncThunk<Ingredients, void>(
   "ingredients/fetchIngredients",
@@ -114,4 +114,3 @@ export const setIngredientStockQuantityThunk = createAsyncThunk<
 function selectIngredient(ingredientId: number) {
   // dispatch ingredientsSlice.selectedId ingredientId ingredientIdSelected et clearIngredientIdSelected avant à faire
 }
-

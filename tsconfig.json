@@ -17,7 +17,9 @@
       "@app-types/*": ["./types/*"],
       "@utils/*": ["./utils/*"],
       "@modules/*": ["./modules/*"],
-      "@helpers/*": ["./helpers/*"]
+      "@helpers/*": ["./helpers/*"],
+      "@core/*": ["./core/*"],
+      "@mappers/*": ["./mappers/*"]
     }
   },
   "include": [

@@ -1,5 +1,5 @@
+import { AppTextStyleType } from "@app-types/AppTextStyleType";
 import { useWaveText } from "@modules/shared/hooks/atoms/animated/useWaveText";
-import { AppTextStyleType } from "@utils/appElements/AppTextStyleType";
 import React from "react";
 import { StyleSheet, TextProps, View } from "react-native";
 import { AnimatedAppText } from "../../../primitives/AppText";

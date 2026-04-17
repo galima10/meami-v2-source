@@ -1,13 +1,12 @@
-import type { Unit, Units } from "@stores/features/units";
+import { formatUnits } from "@mappers/formatData/formatUnits";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  FetchUnitsService,
-  CreateUnitService,
-  DeleteUnitService,
-  UpdateUnitService,
+    CreateUnitService,
+    DeleteUnitService,
+    FetchUnitsService,
+    UpdateUnitService,
 } from "@services/units";
-import type { WithRequiredId } from "@app-types/NameId";
-import { formatUnits } from "@utils/formatData/formatUnits";
+import type { Unit, Units } from "@stores/features/units";
 
 export const fetchUnitsThunk = createAsyncThunk<Units, void>(
   "units/fetchUnits",

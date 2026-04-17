@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { weeklyMenuToUi } from "@utils/dataToUi/weeklyMenuToUi";
+import { weeklyMenuToUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import { useAppSelector } from "@modules/shared/hooks/redux";
+import { useMemo } from "react";
 import { useDate } from "../../useDate";
 
 export function useMenuListScreen() {

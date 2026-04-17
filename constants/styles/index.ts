@@ -1,6 +1,4 @@
 import { typeScale } from "@utils/typeScale";
-import { StyleSheet } from "react-native";
-import theme from "@constants/themes";
 
 // Échelle typographique
 export const typography = {

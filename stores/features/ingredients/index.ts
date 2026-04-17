@@ -1,16 +1,16 @@
+import type { Operation } from "@app-types/DbQuantity";
+import { applyOperation } from "@helpers/applyOperation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  fetchIngredientsThunk,
-  createIngredientThunk,
-  updateIngredientThunk,
-  updateStockThunk,
-  updateStorageLocationsThunk,
-  setQuantifiableThunk,
-  deleteIngredientThunk,
-  setIngredientStockQuantityThunk,
+    createIngredientThunk,
+    deleteIngredientThunk,
+    fetchIngredientsThunk,
+    setIngredientStockQuantityThunk,
+    setQuantifiableThunk,
+    updateIngredientThunk,
+    updateStockThunk,
+    updateStorageLocationsThunk,
 } from "@stores/thunks/ingredients";
-import type { Operation } from "@app-types/DbQuantity";
-import { applyOperation } from "@utils/applyOperation";
 
 export interface Ingredient {
   name: string;

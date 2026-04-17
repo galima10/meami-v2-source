@@ -1,6 +1,5 @@
-import type { RecipeCategories } from "@stores/features/recipeCategories";
 import type { RecipeCategoryRaw } from "@services/recipeCategories";
-import type { WithRequiredId } from "@app-types/NameId";
+import type { RecipeCategories } from "@stores/features/recipeCategories";
 
 export function formatRecipeCategories(
   rawData: RecipeCategoryRaw[],

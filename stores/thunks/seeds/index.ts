@@ -1,12 +1,12 @@
+import { formatSeeds } from "@mappers/formatData/formatSeeds";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  FetchDaysService,
-  FetchMenuCategoriesService,
-  FetchMomentsService,
-  FetchStorageLocationsService,
+    FetchDaysService,
+    FetchMenuCategoriesService,
+    FetchMomentsService,
+    FetchStorageLocationsService,
 } from "@services/seeds";
 import { SeedsInitialState } from "@stores/features/seeds";
-import { formatSeeds } from "@utils/formatData/formatSeeds";
 
 export const fetchInitialDataThunk = createAsyncThunk<
   Omit<SeedsInitialState, "loading" | "error">,

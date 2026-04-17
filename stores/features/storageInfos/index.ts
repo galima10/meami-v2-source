@@ -1,10 +1,10 @@
+import { WithRequiredId } from "@app-types/WithRequiredId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  fetchStorageInfosThunk,
-  setStorageInfoThunk,
-  removeStorageInfoThunk,
+    fetchStorageInfosThunk,
+    removeStorageInfoThunk,
+    setStorageInfoThunk,
 } from "@stores/thunks/storageInfos";
-import { WithRequiredId } from "@app-types/NameId";
 
 export interface StorageInfo {
   id?: number;

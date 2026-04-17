@@ -1,10 +1,10 @@
+import type { WithRequiredId } from "@app-types/WithRequiredId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  setCookingInfoThunk,
-  fetchCookingInfosThunk,
-  removeCookingInfoThunk,
+    fetchCookingInfosThunk,
+    removeCookingInfoThunk,
+    setCookingInfoThunk,
 } from "@stores/thunks/cookingInfos";
-import type { WithRequiredId } from "@app-types/NameId";
 
 export interface CookingInfo {
   id?: number;

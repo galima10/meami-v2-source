@@ -1,4 +1,4 @@
-import { getDayMoment } from "@utils/getDateInfo";
+import { getDayMoment } from "@core/getDateInfo";
 import { useDate } from "../useDate";
 
 export function useDayMoment(hour?: number) {

@@ -1,12 +1,12 @@
-import { ManualAdjustementItems } from "@stores/features/manualAdjustements";
-import { formatManualAdjustements } from "@utils/formatData/formatManualAdjustements";
+import { formatManualAdjustements } from "@mappers/formatData/formatManualAdjustements";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  FetchShoppingManualChecksService,
-  FetchStockManualChecksService,
-  SetIngredientShoppingCheckService,
-  SetIngredientStockCheckService,
+    FetchShoppingManualChecksService,
+    FetchStockManualChecksService,
+    SetIngredientShoppingCheckService,
+    SetIngredientStockCheckService,
 } from "@services/manualAdjustements";
+import { ManualAdjustementItems } from "@stores/features/manualAdjustements";
 
 export const fetchShoppingManualChecksThunk = createAsyncThunk<
   ManualAdjustementItems,

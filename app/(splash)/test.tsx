@@ -2,76 +2,43 @@ import { useAppDispatch, useAppSelector } from "modules/shared/hooks/redux";
 import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import {
+    clearIngredientIdSelected,
+    selectIngredientId,
+} from "@stores/features/ingredients";
 import { fetchIngredientCategoriesThunk } from "@stores/thunks/ingredientCategories";
 import {
-  fetchProductsThunk,
-  setProductStockQuantityThunk,
+    fetchProductsThunk
 } from "@stores/thunks/products";
 import { fetchRecipeCategoriesThunk } from "@stores/thunks/recipeCategories";
 import {
-  createRecipeThunk,
-  deleteRecipeThunk,
-  fetchRecipesThunk,
-  updateRecipeThunk,
+    fetchRecipesThunk
 } from "@stores/thunks/recipes";
-import {
-  fetchAllMenusThunk,
-  fetchWeeklyMenuThunk,
-  addIngredientToMenuThunk,
-  setIngredientMenuQuantityThunk,
-} from "@stores/thunks/weeklyMenu";
 import { fetchStorageInfosThunk } from "@stores/thunks/storageInfos";
 import { fetchUnitsThunk } from "@stores/thunks/units";
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import {
-  selectIngredientId,
-  clearIngredientIdSelected,
-} from "@stores/features/ingredients";
+    fetchAllMenusThunk,
+    fetchWeeklyMenuThunk
+} from "@stores/thunks/weeklyMenu";
 
+import {
+    weeklyMenuToUi
+} from "@mappers/dataToUi/weeklyMenuToUi";
+import {
+    LoadStockManualChecksService
+} from "@services/manualAdjustements";
 import { fetchCookingInfosThunk } from "@stores/thunks/cookingInfos";
 import { fetchCookingUstensilsThunk } from "@stores/thunks/cookingUstensils";
 import {
-  fetchIngredientsThunk,
-  updateStockThunk,
-  setIngredientStockQuantityThunk,
+    fetchIngredientsThunk
 } from "@stores/thunks/ingredients";
 import {
-  LoadShoppingListService,
-  ResetShoppingListService,
-} from "@services/shoppingList";
-import {
-  fetchShoppingListThunk,
-  addItemToShoppingThunk,
-  removeItemToShoppingThunk,
-  setItemShoppingQuantityThunk,
-} from "@stores/thunks/shoppingList";
-import {
-  weeklyMenuToUi,
-  MomentUi,
-  MenuUi,
-} from "@utils/dataToUi/weeklyMenuToUi";
-import {
-  fetchShoppingManualChecksThunk,
-  fetchStockManualChecksThunk,
-  setIngredientCheckThunk,
+    fetchShoppingManualChecksThunk,
+    fetchStockManualChecksThunk
 } from "@stores/thunks/manualAdjustements";
 import {
-  LoadShoppingManualChecksService,
-  LoadStockManualChecksService,
-  ResetShoppingManualChecksService,
-  ResetStockManualChecksService,
-} from "@services/manualAdjustements";
-import {
-  resetShoppingAdjustements,
-  resetStockAdjustements,
-  ManualAdjustementItem,
-} from "@stores/features/manualAdjustements";
-import type {
-  ShoppingListIngredient,
-  ShoppingListProduct,
-} from "@stores/features/shoppingList";
-import { resetShoppingList } from "@stores/features/shoppingList";
-import type { Product } from "@stores/features/products";
+    fetchShoppingListThunk
+} from "@stores/thunks/shoppingList";
 
 export default function Splash() {
   const dispatch = useAppDispatch();

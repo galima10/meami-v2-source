@@ -1,9 +1,9 @@
+import type { AppTextStyleType } from "@app-types/AppTextStyleType";
+import { typography } from "@constants/styles";
+import theme from "@constants/themes";
 import React from "react";
 import { Text, TextProps } from "react-native";
 import Animated from "react-native-reanimated";
-import theme from "@constants/themes";
-import type { AppTextStyleType } from "@utils/appElements/AppTextStyleType";
-import { typography } from "@constants/styles";
 
 const defaultStyle = {
   fontFamily: theme.properties.fontFamily,

@@ -1,16 +1,15 @@
-import type {
-  IngredientCategory,
-  IngredientCategories,
-} from "@stores/features/ingredientCategories";
+import { formatIngredientCategories } from "@mappers/formatData/formatIngredientCategories";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { formatIngredientCategories } from "@utils/formatData/formatIngredientCategories";
+import type {
+    IngredientCategories,
+    IngredientCategory,
+} from "@stores/features/ingredientCategories";
 
 import {
-  FetchIngredientCategoriesService,
-  CreateIngredientCategoryService,
-  DeleteIngredientCategoryService,
+    CreateIngredientCategoryService,
+    DeleteIngredientCategoryService,
+    FetchIngredientCategoriesService,
 } from "@services/ingredientCategories";
-import type { WithRequiredId } from "@app-types/NameId";
 
 export const fetchIngredientCategoriesThunk = createAsyncThunk<
   IngredientCategories,

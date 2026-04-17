@@ -1,14 +1,14 @@
-import { View, Pressable, StyleSheet } from "react-native";
-import { getScreenWidth, getScreenHeight } from "@helpers/getScreenDimensions";
-import { AppText } from "@modules/shared/components/primitives/AppText";
 import { FONT_BASE } from "@constants/general";
-import theme from "@constants/themes";
-import { getFlexWidth } from "@helpers/getFlexWidth";
-import AnimatedAppView from "@modules/shared/components/primitives/AnimatedAppView";
-import { useMenuCalendarOtherOverlay } from "@modules/menuTab/hooks/molecules/useMenuCalendarOtherOverlay";
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import { typography } from "@constants/styles";
+import theme from "@constants/themes";
+import { useMenuCalendarOtherOverlay } from "@modules/menuTab/hooks/molecules/useMenuCalendarOtherOverlay";
+import AnimatedAppView from "@modules/shared/components/primitives/AnimatedAppView";
+import { AppText } from "@modules/shared/components/primitives/AppText";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import { getFlexWidth } from "@utils/getFlexWidth";
+import { getScreenHeight, getScreenWidth } from "@core/getScreenDimensions";
 import React from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 
 interface MenuCalendarOtherOverlayProps {
   isOverlayOpen: boolean;

@@ -1,12 +1,12 @@
+import type { Operation, QuantityField } from "@app-types/DbQuantity";
+import { applyOperation } from "@helpers/applyOperation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  fetchShoppingListThunk,
-  addItemToShoppingThunk,
-  removeItemToShoppingThunk,
-  setItemShoppingQuantityThunk,
+    addItemToShoppingThunk,
+    fetchShoppingListThunk,
+    removeItemToShoppingThunk,
+    setItemShoppingQuantityThunk,
 } from "@stores/thunks/shoppingList";
-import type { Operation, QuantityField } from "@app-types/DbQuantity";
-import { applyOperation } from "@utils/applyOperation";
 
 export interface ShoppingListIngredient {
   quantityNeeded: number;
