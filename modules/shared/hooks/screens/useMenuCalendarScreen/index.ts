@@ -38,6 +38,9 @@ export function useMenuCalendarScreen() {
     useCallback(() => {
       if (todayIndex === -1) return;
       goToSlideDay(todayIndex);
+      return () => {
+        setIsOverlayOpen(false);
+      }
     }, [
       scrollRef,
       setCurrentIndex,
