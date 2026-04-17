@@ -22,6 +22,7 @@ export default function MenuModifyScreen() {
     isOverlayOpen,
     handleCloseOverlay,
   } = useMenuCalendarScreen(false);
+  
   return (
     <View style={styles.container}>
       <View style={styles.container}>
@@ -30,11 +31,28 @@ export default function MenuModifyScreen() {
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           ref={scrollRef}
+          directionalLockEnabled
+          decelerationRate="fast"
           onMomentumScrollEnd={(e) => {
             const offsetX = e.nativeEvent.contentOffset.x;
-            const newIndex = Math.round(offsetX / getScreenWidth());
+            const currentOffset = currentIndex * getScreenWidth();
+            const diff = offsetX - currentOffset;
+
+            const threshold = getScreenWidth() * 0.9;
+
+            let newIndex = currentIndex;
+
+            if (Math.abs(diff) > threshold) {
+              newIndex = diff > 0 ? currentIndex + 1 : currentIndex - 1;
+            }
+
             setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
             setSelectedMoment("matin");
+
+            scrollRef.current?.scrollTo({
+              x: newIndex * getScreenWidth(),
+              animated: true,
+            });
           }}
         >
           {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(

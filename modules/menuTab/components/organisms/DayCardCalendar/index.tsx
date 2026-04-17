@@ -109,6 +109,7 @@ export default function DayCardCalendar({
             </View>
           ) : (
             <FlashList
+              nestedScrollEnabled
               data={categories}
               contentContainerStyle={modifyStyles.menuContent}
               keyExtractor={([menuCategoryId]) => menuCategoryId}
