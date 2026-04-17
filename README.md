@@ -46,7 +46,7 @@ Une application où l'utilisateur peut :
 - TypeScript
 
 **State global**
-- React Redux
+- React Redux Toolkit
 
 **Base de données**
 - Expo SQLite
@@ -54,12 +54,9 @@ Une application où l'utilisateur peut :
 **APIs externes**
 - API Unsplash
 
-**Tests unitaires**
-- Jest
-
 **Outils**
 - Github / Github Actions
-- EAS CLI
+- EAS CLI (déploiement)
 
 **MCD/MLD**
 - Looping
@@ -74,15 +71,17 @@ Une application où l'utilisateur peut :
 **Outils en ligne**
 - SVGRepo : Pour des icônes SVG libres de droits (PD License et CC0 License)
 - Pexels & Unsplash : Pour des images libres de droits
+- SVGOMG : Compression de balises SVG
+- SVG to React Native : Conversion de balises SVG web en composants SVG compatibles avec React Native
+- Squoosh.app : Compression des fichiers images JPG
+- TinyPNG : Compression des fichiers images PNG
+- Transfonter : Compression des fichiers typographiques en TTF compatibles React Native
 
 
 
 ## Historique des versions
 
-### Version 2.x.x
-[2.0.0] - (xx/xx/2026) <br />
-
-### Version 1.x.x
+### Version 1.x.x (anciennes versions)
 [1.4.0] - (12/09/2025) <br />
 [1.3.0] - (05/09/2025) <br />
 [1.2.0] - (29/08/2025) <br />
