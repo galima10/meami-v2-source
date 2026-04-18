@@ -7,7 +7,8 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import { useDayMoment } from "../../useDayMoment";
 
-export function useMenuCalendarScreen(getDate: boolean = true) {
+export function useMenuCalendarScreen(isModify: boolean = false) {
+  
   const { todayIndex, rawDateInfo, refreshDateInfo } = useDate();
   const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
   const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
@@ -31,17 +32,14 @@ export function useMenuCalendarScreen(getDate: boolean = true) {
       animated: true,
     });
 
-    if (getDate) setSelectedMoment(actualDayMoment);
+    if (!isModify) setSelectedMoment(actualDayMoment);
   }
 
   useFocusEffect(
     useCallback(() => {
-      if (getDate) {
+      if (!isModify) {
         if (todayIndex === -1) return;
         goToSlideDay(todayIndex);
-        return () => {
-          setIsOverlayOpen(false);
-        };
       }
     }, [todayIndex]),
   );

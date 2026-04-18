@@ -95,7 +95,7 @@ export default function DayCardCalendar({
                   type="outline"
                   action={handleRemoveMenu}
                 />
-                <AppIconButton icon="recipeIcon" type="green" />
+                <AppIconButton icon="recipeIcon" type="green" action={openPanel} />
               </View>
             )}
           </View>
@@ -196,9 +196,8 @@ const styles = StyleSheet.create({
   },
   menuContent: {
     alignItems: "center",
-    paddingTop: FONT_BASE * 3.5,
+    paddingTop: FONT_BASE * 2,
     paddingHorizontal: FONT_BASE * 2.5,
-    position: "relative",
   },
   checkbox: { paddingTop: FONT_BASE / 2 },
 });

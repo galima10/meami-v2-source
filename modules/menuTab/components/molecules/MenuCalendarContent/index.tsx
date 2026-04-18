@@ -76,7 +76,7 @@ export default function MenuCalendarContent({
           },
         )
       ) : (
-        <AppText style={styles.emptyText}>Non renseingé</AppText>
+        <AppText style={styles.emptyText}>Non renseigné</AppText>
       )}
     </>
   );
@@ -84,7 +84,7 @@ export default function MenuCalendarContent({
 
 const styles = StyleSheet.create({
   menuCategories: {
-    marginBottom: 2,
+    marginVertical: 1,
     alignItems: "center",
     gap: FONT_BASE * 0.5,
     width: "100%",
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: typography.h6,
     marginTop: FONT_BASE * 4,
-    fontWeight: theme.properties.semibold,
+    fontWeight: theme.properties.medium,
   },
 });

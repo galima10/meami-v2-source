@@ -23,7 +23,7 @@ export default function MenuModifyScreen() {
     currentIndex,
     isOverlayOpen,
     handleCloseOverlay,
-  } = useMenuCalendarScreen(false);
+  } = useMenuCalendarScreen(true);
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
 
   return (
