@@ -7,6 +7,9 @@ import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalend
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { ScrollView, StyleSheet, View } from "react-native";
+import ListContainer from "@modules/shared/components/organims/ListContainer";
+import { useState } from "react";
+import ListContainerOverlay from "@modules/shared/components/organims/ListContainerOverlay";
 
 export default function MenuModifyScreen() {
   const {
@@ -21,67 +24,71 @@ export default function MenuModifyScreen() {
     isOverlayOpen,
     handleCloseOverlay,
   } = useMenuCalendarScreen(false);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
 
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          ref={scrollRef}
-          directionalLockEnabled
-          decelerationRate="fast"
-          onMomentumScrollEnd={(e) => {
-            const offsetX = e.nativeEvent.contentOffset.x;
-            const currentOffset = currentIndex * getScreenWidth();
-            const diff = offsetX - currentOffset;
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        ref={scrollRef}
+        directionalLockEnabled
+        decelerationRate="fast"
+        onMomentumScrollEnd={(e) => {
+          const offsetX = e.nativeEvent.contentOffset.x;
+          const currentOffset = currentIndex * getScreenWidth();
+          const diff = offsetX - currentOffset;
 
-            const threshold = getScreenWidth() * 0.9;
+          const threshold = getScreenWidth() * 0.9;
 
-            let newIndex = currentIndex;
+          let newIndex = currentIndex;
 
-            if (Math.abs(diff) > threshold) {
-              newIndex = diff > 0 ? currentIndex + 1 : currentIndex - 1;
-            }
+          if (Math.abs(diff) > threshold) {
+            newIndex = diff > 0 ? currentIndex + 1 : currentIndex - 1;
+          }
 
-            if (newIndex === currentIndex) return;
+          if (newIndex === currentIndex) return;
 
-            setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
-            setSelectedMoment("matin");
+          setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
+          setSelectedMoment("matin");
 
-            scrollRef.current?.scrollTo({
-              x: newIndex * getScreenWidth(),
-              animated: true,
-            });
-          }}
-        >
-          {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
-            ([day, moments]) => {
-              return (
-                <DayCardCalendar
-                  key={day}
-                  moment={selectedMoment}
-                  day={day.toLowerCase()}
-                  setSelectedMoment={setSelectedMoment}
-                  selectedMoment={selectedMoment}
-                  moments={moments}
-                  isOverlayOpen={isOverlayOpen}
-                  modify
-                />
-              );
-            },
-          )}
-        </ScrollView>
-        <View style={styles.dotsContainer}>
-          <DayNavigationDots
-            days={Object.keys(weeklyMenuUi)}
-            currentIndex={currentIndex}
-            action={goToSlideDay}
-            handleCloseOverlay={handleCloseOverlay}
-          />
-        </View>
+          scrollRef.current?.scrollTo({
+            x: newIndex * getScreenWidth(),
+            animated: true,
+          });
+        }}
+      >
+        {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
+          ([day, moments]) => {
+            return (
+              <DayCardCalendar
+                key={day}
+                moment={selectedMoment}
+                day={day.toLowerCase()}
+                setSelectedMoment={setSelectedMoment}
+                selectedMoment={selectedMoment}
+                moments={moments}
+                isOverlayOpen={isOverlayOpen}
+                modify
+                openPanel={() => setIsPanelOpen(true)}
+              />
+            );
+          },
+        )}
+      </ScrollView>
+      <View style={styles.dotsContainer}>
+        <DayNavigationDots
+          days={Object.keys(weeklyMenuUi)}
+          currentIndex={currentIndex}
+          action={goToSlideDay}
+          handleCloseOverlay={handleCloseOverlay}
+        />
       </View>
+      <ListContainerOverlay
+        visible={isPanelOpen}
+        closeAction={() => setIsPanelOpen(false)}
+      />
     </View>
   );
 }

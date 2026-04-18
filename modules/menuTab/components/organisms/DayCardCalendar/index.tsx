@@ -36,6 +36,7 @@ interface DayCardCalendarProps {
   isOverlayOpen: boolean;
   handleCloseOverlay?: (bool: boolean) => void;
   modify?: boolean;
+  openPanel?: () => void;
 }
 
 export default function DayCardCalendar({
@@ -47,6 +48,7 @@ export default function DayCardCalendar({
   isOverlayOpen,
   handleCloseOverlay,
   modify = false,
+  openPanel,
 }: DayCardCalendarProps) {
   const {
     ingredients,
@@ -122,22 +124,23 @@ export default function DayCardCalendar({
                     <AppText style={modifyStyles.categoryTitle}>
                       {toCapitalize(name)}
                     </AppText>
-
-                    <View style={modifyStyles.menuIngredients}>
-                      {menuIngredients.map((ingredient) => (
-                        <MenuIngredientCard
-                          key={ingredient.ingredientId}
-                          ingredient={ingredient}
-                          ingredients={ingredients}
-                          menuId={menu?.id}
-                        />
-                      ))}
-                    </View>
-
+                    {menuIngredients.length !== 0 && (
+                      <View style={modifyStyles.menuIngredients}>
+                        {menuIngredients.map((ingredient) => (
+                          <MenuIngredientCard
+                            key={ingredient.ingredientId}
+                            ingredient={ingredient}
+                            ingredients={ingredients}
+                            menuId={menu?.id}
+                          />
+                        ))}
+                      </View>
+                    )}
                     <AppButton
                       label="Ajouter un ingrédient +"
                       type="primary"
                       color="green"
+                      action={openPanel}
                     />
                   </View>
                 );

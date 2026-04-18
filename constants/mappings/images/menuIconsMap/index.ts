@@ -1,4 +1,6 @@
-export const menuIconsMap: Record<string, any> = {
+import type { ImageSource } from "react-native";
+
+export const menuIconsMap: Record<string, ImageSource> = {
   monday_icons: require("@assets/images/requires/icons/monday_icons_3x.png"),
 
   tuesday_icons: require("@assets/images/requires/icons/tuesday_icons_3x.png"),

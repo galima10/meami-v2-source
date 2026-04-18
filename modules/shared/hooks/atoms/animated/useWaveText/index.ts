@@ -5,6 +5,7 @@ import {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import { useEffect } from "react";
 
 export const useWaveText = (
   index: number,
@@ -13,15 +14,16 @@ export const useWaveText = (
   const progress = useSharedValue(0);
   const waveLength = 5;
 
-  // 👉 direct assignment (important)
-  progress.value = withRepeat(
-    withTiming(2 * Math.PI, {
-      duration: speed,
-      easing: Easing.linear,
-    }),
-    -1,
-    false,
-  );
+  useEffect(() => {
+    progress.value = withRepeat(
+      withTiming(2 * Math.PI, {
+        duration: speed,
+        easing: Easing.linear,
+      }),
+      -1,
+      false,
+    );
+  }, [speed]);
 
   return useAnimatedStyle(() => {
     const offset = index / waveLength;

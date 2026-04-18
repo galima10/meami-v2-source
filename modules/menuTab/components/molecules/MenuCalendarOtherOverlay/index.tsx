@@ -23,13 +23,16 @@ export default function MenuCalendarOtherOverlay({
   othersIngredients,
   checked,
 }: MenuCalendarOtherOverlayProps) {
-  const { toggleOverlay, animatedStyle, ingredients, units } =
-    useMenuCalendarOtherOverlay(isOverlayOpen, handleCloseOverlay);
+  const { animatedStyle, ingredients, units } =
+    useMenuCalendarOtherOverlay(isOverlayOpen);
   if (!othersIngredients || othersIngredients.length === 0) return null;
   return (
     <View style={styles.container}>
       {isOverlayOpen && (
-        <Pressable style={styles.hitbox} onPress={toggleOverlay} />
+        <Pressable
+          style={styles.hitbox}
+          onPress={() => handleCloseOverlay?.(false)}
+        />
       )}
       <AnimatedAppView style={[styles.overlay, animatedStyle]}>
         <Pressable
@@ -39,7 +42,7 @@ export default function MenuCalendarOtherOverlay({
               ? pressed && styles.buttonActive
               : { pointerEvents: "none", opacity: 0.5 },
           ]}
-          onPress={toggleOverlay}
+          onPress={() => handleCloseOverlay?.(!isOverlayOpen)}
         >
           <AppText style={styles.textButton}>Autres</AppText>
         </Pressable>

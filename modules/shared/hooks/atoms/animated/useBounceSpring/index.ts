@@ -37,7 +37,7 @@ export const useBounceSpring = (
       -1,
       false,
     );
-  }, [scaleFactor, durationFirst, durationSecond, delay]);
+  }, []);
 
   return useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],

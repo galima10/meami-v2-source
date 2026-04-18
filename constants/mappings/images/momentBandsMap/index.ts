@@ -1,4 +1,6 @@
-export const momentBandsMap: Record<string, any> = {
+import type { ImageSource } from "react-native";
+
+export const momentBandsMap: Record<string, ImageSource> = {
   monday_morning: require("@assets/images/requires/bands/menu_monday_morning_3x.jpg"),
   monday_noon: require("@assets/images/requires/bands/menu_monday_noon_3x.jpg"),
   monday_evening: require("@assets/images/requires/bands/menu_monday_evening_3x.jpg"),

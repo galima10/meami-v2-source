@@ -42,6 +42,8 @@ const theme = {
     transparentBrown: "#491b1e80",
     border: "#491b1e40",
 
+    darkerBackground: "rgba(0, 0, 0, 0.5)",
+
     beigeBorder: "#D1BFB4",
     greenBorder: "#807D59",
     redBorder: "#98354C",
@@ -116,6 +118,7 @@ export interface ThemeType {
   littleShadow: string;
   bigShadow: string;
   yellowDarker: string;
+  darkerBackground: string;
 }
 
 type FontWeightType =

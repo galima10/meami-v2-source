@@ -2,17 +2,14 @@ import { FONT_BASE } from "@constants/general";
 import { useAppSelector } from "@modules/shared/hooks/redux";
 import { getFlexWidth } from "@utils/getFlexWidth";
 import { getScreenWidth } from "@core/getScreenDimensions";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import {
   useAnimatedStyle,
-  useSharedValue,
   withTiming,
+  useDerivedValue,
 } from "react-native-reanimated";
 
-export function useMenuCalendarOtherOverlay(
-  isOverlayOpen: boolean,
-  handleCloseOverlay?: (bool: boolean) => void,
-) {
+export function useMenuCalendarOtherOverlay(isOverlayOpen: boolean) {
   const { units } = useAppSelector((state) => state.unit);
   const { ingredients } = useAppSelector((state) => state.ingredient);
   const SCREEN_WIDTH = useMemo(() => getScreenWidth(), []);
@@ -23,29 +20,16 @@ export function useMenuCalendarOtherOverlay(
 
   const hiddenX = useMemo(() => overlayWidth - FONT_BASE * 2, [overlayWidth]);
 
-  const translateX = useSharedValue(hiddenX);
-  function toggleOverlay() {
-    const toValue = isOverlayOpen ? hiddenX : 0;
-
-    translateX.value = withTiming(toValue, {
+  const translateX = useDerivedValue(() => {
+    return withTiming(isOverlayOpen ? 0 : hiddenX, {
       duration: 250,
     });
-
-    handleCloseOverlay?.(!isOverlayOpen);
-  }
-
-  useEffect(() => {
-    if (!isOverlayOpen && translateX.value === 0) {
-      translateX.value = withTiming(hiddenX, {
-        duration: 250,
-      });
-    }
-  }, [isOverlayOpen]);
+  });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: translateX.value }],
     };
   });
-  return { toggleOverlay, animatedStyle, units, ingredients };
+  return { animatedStyle, units, ingredients };
 }

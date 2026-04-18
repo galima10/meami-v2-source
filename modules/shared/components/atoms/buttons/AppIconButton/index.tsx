@@ -12,7 +12,7 @@ import type { IconName } from "@modules/shared/hooks/primitives/useAppIcon";
 import { useState } from "react";
 
 interface AppIconButtonProps {
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle> | object;
   icon?: IconName;
   type?: "green" | "red" | "outline" | "today";
   action?: () => void;
@@ -47,7 +47,7 @@ export default function AppIconButton({
             width: FONT_BASE * 2,
             height: FONT_BASE * 2,
           },
-        style as object,
+        style,
       ]}
     >
       {type === "today" ? (
