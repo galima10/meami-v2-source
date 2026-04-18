@@ -7,9 +7,15 @@ import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalend
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { useState } from "react";
 import ListContainerOverlay from "@modules/shared/components/organims/ListContainerOverlay";
-import { useAppSelector } from "@modules/shared/hooks/redux";
+import { AppText } from "@modules/shared/components/primitives/AppText";
+import type { Ingredient } from "@stores/features/ingredients";
+import { useMenuModifyScreen } from "@modules/shared/hooks/screens/useMenuModifyScreen";
+import type { Recipe } from "@stores/features/recipes";
+
+type ListItem =
+  | { id: string; type: "ingredient"; ingredient: Ingredient }
+  | { id: string; type: "recipe"; recipe: Recipe };
 
 export default function MenuModifyScreen() {
   const {
@@ -25,7 +31,8 @@ export default function MenuModifyScreen() {
     handleCloseOverlay,
     ingredients,
   } = useMenuCalendarScreen(true);
-  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const { setIsPanelOpen, isPanelOpen, setActualElements, filteredElements } =
+    useMenuModifyScreen(ingredients, selectedMoment);
 
   return (
     <View style={styles.container}>
@@ -74,6 +81,7 @@ export default function MenuModifyScreen() {
                 modify
                 openPanel={() => setIsPanelOpen(true)}
                 ingredients={ingredients}
+                setActualElements={setActualElements}
               />
             );
           },
@@ -89,7 +97,15 @@ export default function MenuModifyScreen() {
       </View>
       <ListContainerOverlay
         visible={isPanelOpen}
-        closeAction={() => setIsPanelOpen(false)}
+        closeAction={() => {
+          setIsPanelOpen(false);
+        }}
+        data={filteredElements}
+        renderItem={({ item }: { item: ListItem }) => {
+          if (item.type === "ingredient")
+            return <AppText>{item.ingredient.name}</AppText>;
+          else return <AppText>{item.recipe.name}</AppText>;
+        }}
       />
     </View>
   );

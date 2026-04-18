@@ -6,16 +6,21 @@ import theme from "@constants/themes";
 import { backgroundMap } from "@constants/mappings/images/backgroundMap";
 import AnimatedAppView from "../../primitives/AnimatedAppView";
 import { withTiming, useDerivedValue } from "react-native-reanimated";
+import type { ListRenderItem } from "@shopify/flash-list";
 
-interface ListContainerOverlayProps {
+interface ListContainerOverlayProps<T> {
   closeAction?: () => void;
   visible?: boolean;
+  data: T[] | null;
+  renderItem: ListRenderItem<T>;
 }
 
-export default function ListContainerOverlay({
+export default function ListContainerOverlay<T>({
   closeAction,
   visible,
-}: ListContainerOverlayProps) {
+  data,
+  renderItem,
+}: ListContainerOverlayProps<T>) {
   const opacity = useDerivedValue(() => {
     return withTiming(visible ? 1 : 0, { duration: 250 });
   });
@@ -35,6 +40,8 @@ export default function ListContainerOverlay({
       <ListContainer
         style={styles.listContainer}
         backgroundSrc={backgroundMap.overlay}
+        data={data}
+        renderItem={renderItem}
       />
     </AnimatedAppView>
   );

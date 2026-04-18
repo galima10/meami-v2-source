@@ -39,6 +39,12 @@ interface DayCardCalendarProps {
   modify?: boolean;
   openPanel?: () => void;
   ingredients: Ingredients;
+  setActualElements?: Dispatch<
+    SetStateAction<{
+      type: "recipes" | "ingredients" | null;
+      categoryId?: number;
+    }>
+  >;
 }
 
 export default function DayCardCalendar({
@@ -52,6 +58,7 @@ export default function DayCardCalendar({
   modify = false,
   openPanel,
   ingredients,
+  setActualElements,
 }: DayCardCalendarProps) {
   const {
     menu,
@@ -100,7 +107,12 @@ export default function DayCardCalendar({
                 <AppIconButton
                   icon="recipeIcon"
                   type="green"
-                  action={openPanel}
+                  action={() => {
+                    openPanel?.();
+                    setActualElements?.({
+                      type: "recipes",
+                    });
+                  }}
                 />
               </View>
             )}
@@ -146,7 +158,13 @@ export default function DayCardCalendar({
                       label="Ajouter un ingrédient +"
                       type="primary"
                       color="green"
-                      action={openPanel}
+                      action={() => {
+                        openPanel?.();
+                        setActualElements?.({
+                          type: "ingredients",
+                          categoryId: Number(menuCategoryId),
+                        });
+                      }}
                     />
                   </View>
                 );
