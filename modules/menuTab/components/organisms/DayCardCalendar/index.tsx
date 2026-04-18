@@ -101,7 +101,7 @@ export default function DayCardCalendar({
               <View style={modifyStyles.modifyButtons}>
                 <AppIconButton
                   icon="binIcon"
-                  type="outline"
+                  type="outlineRed"
                   action={handleRemoveMenu}
                 />
                 <AppIconButton

@@ -14,9 +14,9 @@ import { useState } from "react";
 interface AppIconButtonProps {
   style?: StyleProp<ViewStyle> | object;
   icon?: IconName;
-  type?: "green" | "red" | "outline" | "today";
+  type?: "green" | "red" | "outlineRed" | "outlineGreen" | "today";
   action?: () => void;
-  smallBin?: boolean;
+  size?: number;
 }
 
 export default function AppIconButton({
@@ -24,7 +24,7 @@ export default function AppIconButton({
   icon,
   type,
   action,
-  smallBin,
+  size,
 }: AppIconButtonProps) {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   return (
@@ -42,11 +42,11 @@ export default function AppIconButton({
           (type === "green"
             ? styles.greenActive
             : (type === "red" || type === "today") && styles.redActive),
-        type === "outline" &&
-          smallBin && {
-            width: FONT_BASE * 2,
-            height: FONT_BASE * 2,
-          },
+        {
+          width: !size ? FONT_BASE * 3 : size,
+          height: !size ? FONT_BASE * 3 : size,
+        },
+
         style,
       ]}
     >
@@ -57,18 +57,22 @@ export default function AppIconButton({
           <AppIcon
             name={icon}
             color={
-              type !== "outline"
+              type !== "outlineRed" && type !== "outlineGreen"
                 ? theme.properties.beige
                 : isPressed
-                  ? theme.properties.lightRed
-                  : theme.properties.darkRed
+                  ? type === "outlineRed"
+                    ? theme.properties.lightRed
+                    : theme.properties.lightGreen
+                  : type === "outlineRed"
+                    ? theme.properties.darkRed
+                    : theme.properties.darkGreen
             }
             size={
-              type === "outline"
-                ? smallBin
-                  ? FONT_BASE * 1.75
-                  : FONT_BASE * 2.75
-                : FONT_BASE * 1.75
+              !size
+                ? type === "outlineRed"
+                  ? FONT_BASE * 2.75
+                  : FONT_BASE * 1.75
+                : size - FONT_BASE * 0.25
             }
           />
         )
@@ -79,8 +83,6 @@ export default function AppIconButton({
 
 const styles = StyleSheet.create({
   button: {
-    width: FONT_BASE * 3,
-    height: FONT_BASE * 3,
     alignItems: "center",
     justifyContent: "center",
   },

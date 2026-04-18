@@ -10,6 +10,7 @@ import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { Ingredients } from "@stores/features/ingredients";
 import React from "react";
 import { useMenuIngredientCard } from "@modules/menuTab/hooks/molecules/useMenuIngredientCard";
+import UnitsSelector from "@modules/shared/components/molecules/UnitsSelector";
 
 interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
@@ -41,8 +42,8 @@ function MenuIngredientCard({
       <View style={styles.elements}>
         <AppIconButton
           icon="binIcon"
-          type="outline"
-          smallBin
+          type="outlineRed"
+          size={FONT_BASE * 2.25}
           action={handleRemoveIngredientToMenu}
         />
         <View style={styles.quantityContainer}>
@@ -66,7 +67,7 @@ function MenuIngredientCard({
               addAction={() => handleIncrementDecrementQuantity(1)}
               removeAction={() => handleIncrementDecrementQuantity(-1)}
             />
-            <AppButton label="unité ↺" type="primary" color="orange" />
+            <UnitsSelector />
           </View>
         </View>
       </View>
