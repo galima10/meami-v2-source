@@ -23,6 +23,7 @@ export default function MenuCalendarScreen() {
     currentIndex,
     isOverlayOpen,
     handleCloseOverlay,
+    ingredients
   } = useMenuCalendarScreen();
 
   return (
@@ -54,6 +55,7 @@ export default function MenuCalendarScreen() {
                 moments={moments}
                 isOverlayOpen={isOverlayOpen}
                 handleCloseOverlay={handleCloseOverlay}
+                ingredients={ingredients}
               />
             );
           },

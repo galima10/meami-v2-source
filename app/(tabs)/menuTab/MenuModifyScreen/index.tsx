@@ -7,9 +7,9 @@ import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalend
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { ScrollView, StyleSheet, View } from "react-native";
-import ListContainer from "@modules/shared/components/organims/ListContainer";
 import { useState } from "react";
 import ListContainerOverlay from "@modules/shared/components/organims/ListContainerOverlay";
+import { useAppSelector } from "@modules/shared/hooks/redux";
 
 export default function MenuModifyScreen() {
   const {
@@ -23,6 +23,7 @@ export default function MenuModifyScreen() {
     currentIndex,
     isOverlayOpen,
     handleCloseOverlay,
+    ingredients,
   } = useMenuCalendarScreen(true);
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
 
@@ -72,6 +73,7 @@ export default function MenuModifyScreen() {
                 isOverlayOpen={isOverlayOpen}
                 modify
                 openPanel={() => setIsPanelOpen(true)}
+                ingredients={ingredients}
               />
             );
           },

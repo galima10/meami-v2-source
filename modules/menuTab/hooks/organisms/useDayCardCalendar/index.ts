@@ -13,7 +13,6 @@ export function useDayCardCalendar(
   moment: "matin" | "midi" | "soir",
 ) {
   const menu = moments[selectedMoment.toUpperCase()];
-  const { ingredients } = useAppSelector((state) => state.ingredient);
   const [checked, setChecked] = useState(menu?.done);
   const dispatch = useAppDispatch();
   async function handleCheckMenu() {
@@ -46,7 +45,6 @@ export function useDayCardCalendar(
   }
 
   return {
-    ingredients,
     handleCheckMenu,
     menu,
     checked,

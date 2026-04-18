@@ -1,4 +1,4 @@
-import { View, StyleSheet, Animated } from "react-native";
+import { StyleSheet } from "react-native";
 import ListContainer from "../ListContainer";
 import { FONT_BASE } from "@constants/general";
 import AppIconButton from "../../atoms/buttons/AppIconButton";

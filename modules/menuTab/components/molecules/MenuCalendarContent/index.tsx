@@ -51,11 +51,12 @@ export default function MenuCalendarContent({
                           <AppText>
                             {ingredients[ingredient.ingredientId]?.name}
                           </AppText>
-                          {ingredient?.unitId && (
+                          {ingredient?.quantity && (
                             <AppText style={styles.quantity}>
                               {" | "}
                               {ingredient?.quantity}{" "}
-                              {units[ingredient?.unitId].abbreviation}
+                              {ingredient?.unitId &&
+                                units[ingredient?.unitId].abbreviation}
                             </AppText>
                           )}
                         </View>

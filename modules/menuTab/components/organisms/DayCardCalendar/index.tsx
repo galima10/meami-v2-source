@@ -26,6 +26,7 @@ import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MenuIngredientCard from "../../molecules/MenuIngredientCard";
 import MomentBand from "../../molecules/MomentBand";
+import type { Ingredients } from "@stores/features/ingredients";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -37,6 +38,7 @@ interface DayCardCalendarProps {
   handleCloseOverlay?: (bool: boolean) => void;
   modify?: boolean;
   openPanel?: () => void;
+  ingredients: Ingredients;
 }
 
 export default function DayCardCalendar({
@@ -49,9 +51,9 @@ export default function DayCardCalendar({
   handleCloseOverlay,
   modify = false,
   openPanel,
+  ingredients,
 }: DayCardCalendarProps) {
   const {
-    ingredients,
     menu,
     handleCheckMenu,
     checked,
@@ -95,7 +97,11 @@ export default function DayCardCalendar({
                   type="outline"
                   action={handleRemoveMenu}
                 />
-                <AppIconButton icon="recipeIcon" type="green" action={openPanel} />
+                <AppIconButton
+                  icon="recipeIcon"
+                  type="green"
+                  action={openPanel}
+                />
               </View>
             )}
           </View>
