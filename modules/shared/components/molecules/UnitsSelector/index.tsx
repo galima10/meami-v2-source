@@ -5,26 +5,30 @@ import theme from "@constants/themes";
 import { FONT_BASE } from "@constants/general";
 import AppIconButton from "../../atoms/buttons/AppIconButton";
 import { AppText } from "../../primitives/AppText";
+import { useEffect } from "react";
+import { fetchUnitsThunk } from "@stores/thunks/units";
 
 export default function UnitsSelector() {
+  const { units } = useAppSelector((state) => state.unit);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (Object.keys(units).length === 0) {
+      dispatch(fetchUnitsThunk());
+    }
+  }, []);
   return (
     <View style={styles.container}>
       <AppButton label="unité ↺" type="primary" color="orange" />
       <View style={styles.units}>
-        <Pressable style={styles.unit}>
+        <Pressable
+          style={({ pressed }) => [styles.unit, pressed && styles.unitActive]}
+        >
           <AppText>Pièce</AppText>
-          <View style={styles.unitButtons}>
-            <AppIconButton
-              icon="binIcon"
-              type="outlineRed"
-              size={FONT_BASE * 2}
-            />
-            <AppIconButton
-              icon="modifyIcon"
-              type="outlineGreen"
-              size={FONT_BASE * 2}
-            />
-          </View>
+          <AppIconButton
+            icon="modifyIcon"
+            type="outlineGreen"
+            size={FONT_BASE * 2}
+          />
         </Pressable>
       </View>
     </View>
@@ -37,12 +41,15 @@ const styles = StyleSheet.create({
   },
   units: {
     position: "absolute",
-    // width: 10,
-    // height: 10,
     right: -FONT_BASE,
     minWidth: FONT_BASE * 10,
     top: "100%",
     backgroundColor: theme.properties.white,
+    borderRadius: FONT_BASE * 0.5,
+    borderWidth: 1,
+    borderColor: theme.properties.whiteBorder,
+    boxShadow: theme.properties.bigShadow,
+    overflow: "hidden",
   },
   unit: {
     padding: FONT_BASE * 0.5,
@@ -50,9 +57,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderBottomWidth: 0.5,
+    borderColor: theme.properties.whiteBorder,
   },
-  unitButtons: {
-    flexDirection: "row",
-    gap: FONT_BASE * 0.5,
+  unitActive: {
+    backgroundColor: theme.properties.beige,
   },
 });
