@@ -12,6 +12,7 @@ import { FONT_BASE } from "@constants/general";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { getFlexWidth } from "@utils/getFlexWidth";
 import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
+import MenuUnitsList from "../../molecules/MenuUnitsList";
 
 interface MenuUnitsPanelProps {
   visible: boolean;
@@ -66,35 +67,9 @@ export default function MenuUnitsPanel({
           });
         }}
       >
-        <FlatList
-          style={styles.units}
-          data={Object.entries(units) as [string, Unit][]}
-          keyExtractor={([key]) => key}
-          renderItem={({ item: [unitId, unit] }) => (
-            <Pressable
-              key={unitId}
-              style={({ pressed }) => [
-                styles.unit,
-                pressed && styles.unitActive,
-              ]}
-              onPress={() => {
-                setVisible(false);
-                handleSelectUnit(Number(unitId));
-              }}
-            >
-              <AppText>{unit.name}</AppText>
-              <AppIconButton
-                icon="modifyIcon"
-                type="outlineGreen"
-                size={FONT_BASE * 2}
-              />
-            </Pressable>
-          )}
-          ListFooterComponent={
-            <View style={styles.unitsFooter}>
-              <AppButton label="Ajouter une unité" type="secondary" big />
-            </View>
-          }
+        <MenuUnitsList
+          selectedIngredient={selectedIngredient}
+          setVisible={setVisible}
         />
       </Pressable>
     </AnimatedAppView>
