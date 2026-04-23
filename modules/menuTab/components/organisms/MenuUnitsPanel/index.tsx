@@ -1,17 +1,11 @@
 import AnimatedAppView from "@modules/shared/components/primitives/AnimatedAppView";
 import { withTiming, useDerivedValue } from "react-native-reanimated";
-import { StyleSheet, Pressable, FlatList, View } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import theme from "@constants/themes";
 import { Dispatch, SetStateAction } from "react";
-import { useAppSelector, useAppDispatch } from "@modules/shared/hooks/redux";
-import { updateUnitFromWeeklyMenuThunk } from "@stores/thunks/weeklyMenu";
-import type { Unit } from "@stores/features/units";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
 import { FONT_BASE } from "@constants/general";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { getFlexWidth } from "@utils/getFlexWidth";
-import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 import MenuUnitsList from "../../molecules/MenuUnitsList";
 
 interface MenuUnitsPanelProps {
@@ -35,21 +29,10 @@ export default function MenuUnitsPanel({
   selectedIngredient,
   setSelectedIngredient,
 }: MenuUnitsPanelProps) {
-  const dispatch = useAppDispatch();
-  const { units } = useAppSelector((state) => state.unit);
   const opacity = useDerivedValue(() => {
     return withTiming(visible ? 1 : 0, { duration: 250 });
   });
-  function handleSelectUnit(unitId: number) {
-    if (!selectedIngredient.ingredientId || !selectedIngredient.menuId) return;
-    dispatch(
-      updateUnitFromWeeklyMenuThunk({
-        newUnitId: unitId,
-        menuId: selectedIngredient.menuId,
-        ingredientId: selectedIngredient.ingredientId,
-      }),
-    );
-  }
+
   return (
     <AnimatedAppView
       style={[
