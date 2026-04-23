@@ -6,13 +6,10 @@ import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
-import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import { AppText } from "@modules/shared/components/primitives/AppText";
-import { FlashList } from "@shopify/flash-list";
-import { IngredientMenu } from "@stores/features/weeklyMenu";
 import { toCapitalize } from "@utils/toCapitalize";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import React, { Dispatch, SetStateAction } from "react";
@@ -24,9 +21,9 @@ import {
 } from "react-native";
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
-import MenuIngredientCard from "../../molecules/MenuIngredientCard";
 import MomentBand from "../../molecules/MomentBand";
 import type { Ingredients } from "@stores/features/ingredients";
+import MenuModifyContent from "../../molecules/MenuModifyContent";
 
 interface DayCardCalendarProps {
   moment: "matin" | "midi" | "soir";
@@ -38,7 +35,6 @@ interface DayCardCalendarProps {
   handleCloseOverlay?: (bool: boolean) => void;
   modify?: boolean;
   openPanel?: () => void;
-  ingredients: Ingredients;
   setActualElements?: Dispatch<
     SetStateAction<{
       type: "recipes" | "ingredients" | null;
@@ -57,7 +53,6 @@ export default function DayCardCalendar({
   handleCloseOverlay,
   modify = false,
   openPanel,
-  ingredients,
   setActualElements,
 }: DayCardCalendarProps) {
   const {
@@ -119,56 +114,14 @@ export default function DayCardCalendar({
           </View>
           {!modify ? (
             <View style={[styles.menuContent, checked && { opacity: 0.25 }]}>
-              <MenuCalendarContent
-                menu={menu}
-                setChecked={setChecked}
-                ingredients={ingredients}
-              />
+              <MenuCalendarContent menu={menu} setChecked={setChecked} />
             </View>
           ) : (
-            <FlashList
-              nestedScrollEnabled
-              data={categories}
-              contentContainerStyle={modifyStyles.menuContent}
-              keyExtractor={([menuCategoryId]) => menuCategoryId}
-              renderItem={({ item: [menuCategoryId, name] }) => {
-                const menuIngredients =
-                  (ingredientsByCategory?.[
-                    Number(menuCategoryId)
-                  ] as IngredientMenu[]) ?? [];
-
-                return (
-                  <View style={modifyStyles.menuCategory}>
-                    <AppText style={modifyStyles.categoryTitle}>
-                      {toCapitalize(name)}
-                    </AppText>
-                    {menuIngredients.length !== 0 && (
-                      <View style={modifyStyles.menuIngredients}>
-                        {menuIngredients.map((ingredient) => (
-                          <MenuIngredientCard
-                            key={ingredient.ingredientId}
-                            ingredient={ingredient}
-                            ingredients={ingredients}
-                            menuId={menu?.id}
-                          />
-                        ))}
-                      </View>
-                    )}
-                    <AppButton
-                      label="Ajouter un ingrédient +"
-                      type="primary"
-                      color="green"
-                      action={() => {
-                        openPanel?.();
-                        setActualElements?.({
-                          type: "ingredients",
-                          categoryId: Number(menuCategoryId),
-                        });
-                      }}
-                    />
-                  </View>
-                );
-              }}
+            <MenuModifyContent
+              categories={categories}
+              menu={menu}
+              setActualElements={setActualElements}
+              openPanel={openPanel}
             />
           )}
           {!modify && moment !== "matin" && (

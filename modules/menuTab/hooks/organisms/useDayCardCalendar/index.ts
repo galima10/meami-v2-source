@@ -3,7 +3,7 @@ import {
   noonEveningMenuCategoriesOrder,
 } from "@constants/mappings/orders/menuCategoriesOrder";
 import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
-import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
+import { useAppDispatch } from "@modules/shared/hooks/redux";
 import { removeMenuThunk, setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
 import { useEffect, useMemo, useState } from "react";
 

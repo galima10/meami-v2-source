@@ -55,7 +55,6 @@ export default function MenuCalendarScreen() {
                 moments={moments}
                 isOverlayOpen={isOverlayOpen}
                 handleCloseOverlay={handleCloseOverlay}
-                ingredients={ingredients}
               />
             );
           },

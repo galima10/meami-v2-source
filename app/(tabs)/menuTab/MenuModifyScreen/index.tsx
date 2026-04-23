@@ -80,7 +80,6 @@ export default function MenuModifyScreen() {
                 isOverlayOpen={isOverlayOpen}
                 modify
                 openPanel={() => setIsPanelOpen(true)}
-                ingredients={ingredients}
                 setActualElements={setActualElements}
               />
             );

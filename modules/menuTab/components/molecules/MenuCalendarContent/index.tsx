@@ -12,15 +12,14 @@ import { StyleSheet, View } from "react-native";
 interface MenuCalendarContentProps {
   menu: MenuUi;
   setChecked: Dispatch<SetStateAction<boolean>>;
-  ingredients: Ingredients;
 }
 
 export default function MenuCalendarContent({
   menu,
   setChecked,
-  ingredients,
 }: MenuCalendarContentProps) {
   const { units } = useAppSelector((state) => state.unit);
+  const { ingredients } = useAppSelector((state) => state.ingredient);
   return (
     <>
       {Object.values(menu?.ingredients).length > 0 ? (
