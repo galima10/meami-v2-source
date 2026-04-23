@@ -221,3 +221,27 @@ export async function AddRecipeToMenuService(recipeId: number, menuId: number) {
     [recipeId, menuId],
   );
 }
+
+export async function UpdateUnitFromWeeklyMenuService(
+  newUnitId: number | null,
+  menuId: number,
+  ingredientId: number,
+) {
+  const db = getDb();
+  (await db).runAsync(
+    `
+    UPDATE
+      menu_ingredient_links
+    SET
+      id_units = $newUnitId
+    WHERE
+      id_menus = $menuId
+      AND id_ingredients = $ingredientId;
+  `,
+    {
+      $newUnitId: newUnitId,
+      $menuId: menuId,
+      $ingredientId: ingredientId,
+    },
+  );
+}

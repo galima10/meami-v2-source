@@ -1,15 +1,16 @@
 import type { Operation } from "@app-types/DbQuantity";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    addIngredientToMenuThunk,
-    addRecipeToMenuThunk,
-    fetchAllMenusThunk,
-    fetchWeeklyMenuThunk,
-    removeIngredientToMenuThunk,
-    removeMenuThunk,
-    removeWeeklyMenuThunk,
-    setIngredientMenuQuantityThunk,
-    setMenuDoneThunk,
+  addIngredientToMenuThunk,
+  addRecipeToMenuThunk,
+  fetchAllMenusThunk,
+  fetchWeeklyMenuThunk,
+  removeIngredientToMenuThunk,
+  removeMenuThunk,
+  removeWeeklyMenuThunk,
+  setIngredientMenuQuantityThunk,
+  setMenuDoneThunk,
+  updateUnitFromWeeklyMenuThunk,
 } from "@stores/thunks/weeklyMenu";
 
 export interface WeeklyMenuIngredients {
@@ -315,6 +316,46 @@ export const weeklyMenuSlice = createSlice({
       .addCase(
         removeWeeklyMenuThunk.rejected,
         (state, action: ReturnType<typeof removeWeeklyMenuThunk.rejected>) => {
+          state.loading = false;
+          state.error = action.error.message ?? "Erreur inconnue";
+        },
+      );
+
+    // updateUnitFromWeeklyMenuThunk
+    builder
+      .addCase(updateUnitFromWeeklyMenuThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        updateUnitFromWeeklyMenuThunk.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            newUnitId: number | null;
+            menuId: number;
+            ingredientId: number;
+          }>,
+        ) => {
+          state.loading = false;
+
+          const { newUnitId, menuId, ingredientId } = action.payload;
+          const menu = state.weeklyMenu[menuId];
+          if (!menu) return;
+          for (const ingredientList of Object.values(menu.ingredients)) {
+            for (const ingredient of ingredientList) {
+              if (ingredient.ingredientId !== ingredientId) continue;
+              ingredient.unitId = newUnitId;
+            }
+          }
+        },
+      )
+      .addCase(
+        updateUnitFromWeeklyMenuThunk.rejected,
+        (
+          state,
+          action: ReturnType<typeof updateUnitFromWeeklyMenuThunk.rejected>,
+        ) => {
           state.loading = false;
           state.error = action.error.message ?? "Erreur inconnue";
         },

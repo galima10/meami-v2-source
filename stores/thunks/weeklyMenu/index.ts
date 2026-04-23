@@ -14,6 +14,7 @@ import {
   RemoveMenuService,
   RemoveWeeklyMenuService,
   SetMenuDoneService,
+  UpdateUnitFromWeeklyMenuService,
 } from "@services/weeklyMenu";
 import type { Recipe } from "@stores/features/recipes";
 import type {
@@ -168,5 +169,24 @@ export const setIngredientMenuQuantityThunk = createAsyncThunk<
       { condition: "id_menus", id: menuId },
     );
     return { itemId, value, operation, menuId };
+  },
+);
+
+export const updateUnitFromWeeklyMenuThunk = createAsyncThunk<
+  {
+    newUnitId: number | null;
+    menuId: number;
+    ingredientId: number;
+  },
+  {
+    newUnitId: number | null;
+    menuId: number;
+    ingredientId: number;
+  }
+>(
+  "weeklyMenu/updateUnitFromWeeklyMenu",
+  async ({ newUnitId, menuId, ingredientId }) => {
+    await UpdateUnitFromWeeklyMenuService(newUnitId, menuId, ingredientId);
+    return { newUnitId, menuId, ingredientId };
   },
 );
