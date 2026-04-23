@@ -1,6 +1,5 @@
 import {
   View,
-  TextInput,
   Pressable,
   StyleSheet,
   type StyleProp,
@@ -9,8 +8,9 @@ import {
 import { AppText } from "../../primitives/AppText";
 import theme from "@constants/themes";
 import { FONT_BASE } from "@constants/general";
-import { useState, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { typography } from "@constants/styles";
+import AppInput from "../../primitives/AppInput";
 
 interface QuantifierModuleProps {
   addAction?: () => void;
@@ -50,7 +50,7 @@ export default function QuantifierModule({
       >
         <AppText>-</AppText>
       </Pressable>
-      <TextInput
+      <AppInput
         style={styles.input}
         keyboardType="numeric"
         onChangeText={handleOnChange}
@@ -95,17 +95,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: FONT_BASE * 2,
-    backgroundColor: theme.properties.white,
-    borderWidth: 0.5,
-    borderColor: theme.properties.whiteBorder,
     height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    color: theme.properties.brown,
-    fontSize: typography.body,
-    fontFamily: "SN",
     textAlign: "center",
-    borderRadius: FONT_BASE * 0.5,
-    boxShadow: theme.properties.littleShadow,
   },
 });

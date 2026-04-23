@@ -1,12 +1,16 @@
 import AnimatedAppView from "@modules/shared/components/primitives/AnimatedAppView";
 import { withTiming, useDerivedValue } from "react-native-reanimated";
-import { StyleSheet, Pressable } from "react-native";
+import { StyleSheet, Pressable, View } from "react-native";
+import AppInput from "@modules/shared/components/primitives/AppInput";
 import theme from "@constants/themes";
 import { Dispatch, SetStateAction } from "react";
 import { FONT_BASE } from "@constants/general";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { getFlexWidth } from "@utils/getFlexWidth";
 import MenuUnitsList from "../../molecules/MenuUnitsList";
+import React, { useState } from "react";
+import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
+import MenuUnitForm from "../../molecules/MenuUnitForm";
 
 interface MenuUnitsPanelProps {
   visible: boolean;
@@ -32,6 +36,16 @@ export default function MenuUnitsPanel({
   const opacity = useDerivedValue(() => {
     return withTiming(visible ? 1 : 0, { duration: 250 });
   });
+  const [isSetted, setIsSetted] = useState<boolean>(false);
+  const [formData, setFormData] = useState<{
+    id: number | null;
+    name: string;
+    abbreviation: string;
+  }>({
+    id: null,
+    name: "",
+    abbreviation: "",
+  });
 
   return (
     <AnimatedAppView
@@ -40,21 +54,38 @@ export default function MenuUnitsPanel({
         { opacity, pointerEvents: visible ? "auto" : "none" },
       ]}
     >
+      <View style={styles.unitsContainer}>
+        {!isSetted ? (
+          <MenuUnitsList
+            selectedIngredient={selectedIngredient}
+            setVisible={setVisible}
+            setIsSetted={setIsSetted}
+            setFormData={setFormData}
+          />
+        ) : (
+          <MenuUnitForm
+            setIsSetted={setIsSetted}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        )}
+      </View>
       <Pressable
         style={styles.hitbox}
         onPress={() => {
           setVisible(false);
+          setIsSetted(false);
           setSelectedIngredient({
             ingredientId: null,
             menuId: null,
           });
+          setFormData({
+            id: null,
+            name: "",
+            abbreviation: "",
+          });
         }}
-      >
-        <MenuUnitsList
-          selectedIngredient={selectedIngredient}
-          setVisible={setVisible}
-        />
-      </Pressable>
+      ></Pressable>
     </AnimatedAppView>
   );
 }
@@ -67,33 +98,27 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
+    flexDirection: "row",
   },
   hitbox: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
   },
-  units: {
-    backgroundColor: theme.properties.white,
-    height: "100%",
+  unitsContainer: {
     width: getFlexWidth(getScreenWidth(), 4, 7),
-    boxShadow: theme.properties.bigShadow,
-    borderRightWidth: 1,
-    borderColor: theme.properties.whiteBorder,
+    height: "100%",
+    backgroundColor: theme.properties.white,
+    justifyContent: "center",
   },
-  unit: {
+  inputs: {
     paddingHorizontal: FONT_BASE,
-    paddingVertical: FONT_BASE * 0.5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 0.5,
-    borderColor: theme.properties.border,
+    gap: FONT_BASE,
   },
-  unitActive: {
-    backgroundColor: theme.properties.beige,
+  input: {
+    width: "100%",
+    height: FONT_BASE * 2.5,
+    paddingHorizontal: FONT_BASE * 0.75,
   },
-  unitsFooter: {
-    paddingVertical: FONT_BASE * 1.5,
-    paddingHorizontal: FONT_BASE,
+  setContent: {
+    gap: FONT_BASE * 3,
   },
 });

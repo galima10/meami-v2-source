@@ -6,6 +6,7 @@ import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import { useState } from "react";
 import { AppText } from "../../primitives/AppText";
+import AppInput from "../../primitives/AppInput";
 
 interface SorterSearchBarProps {}
 
@@ -19,12 +20,12 @@ export default function SorterSearchBar({}: SorterSearchBarProps) {
     <View style={styles.container}>
       {isSearchbarType ? (
         <View style={styles.searchBarContainer}>
-          <TextInput
+          <AppInput
             style={styles.searchInput}
             value={searchValue}
             onChangeText={handleOnSearchChange}
             placeholder="Rechercher..."
-            placeholderTextColor={theme.properties.transparentBrown}
+            rounded
           />
           <View style={styles.barIcon}>
             <AppIcon
@@ -90,19 +91,8 @@ const styles = StyleSheet.create({
   searchInput: {
     width: "100%",
     height: "100%",
-    backgroundColor: theme.properties.white,
-    borderRadius: FONT_BASE,
-    textAlignVertical: "center",
-    borderWidth: 0.5,
-    borderColor: theme.properties.whiteBorder,
-    boxShadow: theme.properties.littleShadow,
-    color: theme.properties.brown,
-    paddingVertical: 0,
-    lineHeight: typography.body,
     paddingLeft: FONT_BASE * 0.75,
     paddingRight: FONT_BASE * 2.25,
-    fontFamily: "SN",
-    fontSize: typography.body,
   },
   barIcon: {
     position: "absolute",

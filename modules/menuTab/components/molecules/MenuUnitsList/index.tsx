@@ -17,11 +17,21 @@ interface MenuUnitsListProps {
     menuId: number | null;
   };
   setVisible: Dispatch<SetStateAction<boolean>>;
+  setIsSetted: Dispatch<SetStateAction<boolean>>;
+  setFormData: Dispatch<
+    SetStateAction<{
+      id: number | null;
+      name: string;
+      abbreviation: string;
+    }>
+  >;
 }
 
 export default function MenuUnitsList({
   selectedIngredient,
   setVisible,
+  setIsSetted,
+  setFormData,
 }: MenuUnitsListProps) {
   const dispatch = useAppDispatch();
   const { units } = useAppSelector((state) => state.unit);
@@ -54,12 +64,25 @@ export default function MenuUnitsList({
             icon="modifyIcon"
             type="outlineGreen"
             size={FONT_BASE * 2}
+            action={() => {
+              setFormData({
+                id: Number(unitId),
+                name: unit.name,
+                abbreviation: unit.abbreviation,
+              });
+              setIsSetted(true);
+            }}
           />
         </Pressable>
       )}
       ListFooterComponent={
         <View style={styles.unitsFooter}>
-          <AppButton label="Ajouter une unité" type="secondary" big />
+          <AppButton
+            label="Ajouter une unité"
+            type="secondary"
+            big
+            action={() => setIsSetted(true)}
+          />
         </View>
       }
     />
@@ -68,9 +91,8 @@ export default function MenuUnitsList({
 
 const styles = StyleSheet.create({
   units: {
-    backgroundColor: theme.properties.white,
     height: "100%",
-    width: getFlexWidth(getScreenWidth(), 4, 7),
+    width: "100%",
     boxShadow: theme.properties.bigShadow,
     borderRightWidth: 1,
     borderColor: theme.properties.whiteBorder,

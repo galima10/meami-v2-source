@@ -1,10 +1,10 @@
 import { formatUnits } from "@mappers/formatData/formatUnits";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-    CreateUnitService,
-    DeleteUnitService,
-    FetchUnitsService,
-    UpdateUnitService,
+  CreateUnitService,
+  DeleteUnitService,
+  FetchUnitsService,
+  UpdateUnitService,
 } from "@services/units";
 import type { Unit, Units } from "@stores/features/units";
 

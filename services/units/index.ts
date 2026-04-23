@@ -12,6 +12,7 @@ export async function UpdateUnitService(newUnit: Units) {
   const [unitIdStr] = Object.keys(newUnit);
   const unitId = Number(unitIdStr);
   const [values] = Object.values(newUnit) as [Unit];
+  console.log(unitId, values);
   await db.runAsync(
     `
     UPDATE
@@ -20,7 +21,7 @@ export async function UpdateUnitService(newUnit: Units) {
       name = $newName,
       abbreviation = $newAbbreviation
     WHERE
-      name = $id;
+      id_units = $id;
   `,
     {
       $newName: values.name,
