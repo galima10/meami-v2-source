@@ -24,9 +24,7 @@ export default function DayNavigationDots({
           key={index}
           onPress={() => {
             handleCloseOverlay();
-            if (currentIndex !== index) {
-              action(index);
-            }
+            action(index);
           }}
         >
           <View style={[styles.dot, currentIndex === index && styles.active]} />

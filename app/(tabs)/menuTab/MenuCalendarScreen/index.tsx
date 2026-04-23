@@ -22,8 +22,7 @@ export default function MenuCalendarScreen() {
     handleGoToday,
     currentIndex,
     isOverlayOpen,
-    handleCloseOverlay,
-    ingredients
+    handleCloseOverlay
   } = useMenuCalendarScreen();
 
   return (

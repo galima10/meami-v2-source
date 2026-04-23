@@ -25,6 +25,7 @@ export function useMenuCalendarScreen(isModify: boolean = false) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   function goToSlideDay(index: number) {
+    if (currentIndex === index) return;
     setCurrentIndex(index);
 
     scrollRef.current?.scrollTo({
@@ -32,7 +33,8 @@ export function useMenuCalendarScreen(isModify: boolean = false) {
       animated: true,
     });
 
-    if (!isModify) setSelectedMoment(actualDayMoment);
+    if (index === todayIndex) setSelectedMoment(actualDayMoment);
+    else setSelectedMoment("matin");
   }
 
   useFocusEffect(
@@ -71,6 +73,6 @@ export function useMenuCalendarScreen(isModify: boolean = false) {
     handleGoToday,
     isOverlayOpen,
     handleCloseOverlay,
-    ingredients
+    ingredients,
   };
 }

@@ -23,6 +23,12 @@ interface MenuModifyContentProps {
     }>
   >;
   setIsUnitsPanelOpen?: Dispatch<SetStateAction<boolean>>;
+  setSelectedIngredient?: Dispatch<
+    SetStateAction<{
+      ingredientId: number | null;
+      menuId: number | null;
+    }>
+  >;
 }
 
 export default function MenuModifyContent({
@@ -31,6 +37,7 @@ export default function MenuModifyContent({
   setActualElements,
   openPanel,
   setIsUnitsPanelOpen,
+  setSelectedIngredient
 }: MenuModifyContentProps) {
   const { ingredientsByCategory, ingredients } = useMenuModifyContent(menu);
   return (
@@ -57,6 +64,7 @@ export default function MenuModifyContent({
                     ingredients={ingredients}
                     menuId={menu?.id}
                     setIsUnitsPanelOpen={setIsUnitsPanelOpen}
+                    setSelectedIngredient={setSelectedIngredient}
                   />
                 ))}
               </View>

@@ -16,6 +16,12 @@ interface MenuIngredientCardProps {
   ingredients: Ingredients;
   menuId: number;
   setIsUnitsPanelOpen?: Dispatch<SetStateAction<boolean>>;
+  setSelectedIngredient?: Dispatch<
+    SetStateAction<{
+      ingredientId: number | null;
+      menuId: number | null;
+    }>
+  >;
 }
 
 function MenuIngredientCard({
@@ -23,6 +29,7 @@ function MenuIngredientCard({
   ingredients,
   menuId,
   setIsUnitsPanelOpen,
+  setSelectedIngredient,
 }: MenuIngredientCardProps) {
   const {
     isQuantifiable,
@@ -76,7 +83,13 @@ function MenuIngredientCard({
                   : "unité ↺"
               }
               color="orange"
-              action={() => setIsUnitsPanelOpen?.(true)}
+              action={() => {
+                setIsUnitsPanelOpen?.(true);
+                setSelectedIngredient?.({
+                  ingredientId: ingredient?.ingredientId,
+                  menuId: menuId,
+                });
+              }}
             />
           </View>
         </View>

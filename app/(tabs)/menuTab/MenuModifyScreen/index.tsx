@@ -38,7 +38,9 @@ export default function MenuModifyScreen() {
     setActualElements,
     filteredElements,
     setIsUnitsPanelOpen,
-    isUnitsPanelOpen
+    isUnitsPanelOpen,
+    setSelectedIngredient,
+    selectedIngredient,
   } = useMenuModifyScreen(ingredients, selectedMoment);
 
   return (
@@ -89,6 +91,7 @@ export default function MenuModifyScreen() {
                 openPanel={() => setIsPanelOpen(true)}
                 setActualElements={setActualElements}
                 setIsUnitsPanelOpen={setIsUnitsPanelOpen}
+                setSelectedIngredient={setSelectedIngredient}
               />
             );
           },
@@ -114,7 +117,12 @@ export default function MenuModifyScreen() {
           else return <AppText>{item.recipe.name}</AppText>;
         }}
       />
-      <MenuUnitsPanel visible={isUnitsPanelOpen} setter={setIsUnitsPanelOpen} />
+      <MenuUnitsPanel
+        visible={isUnitsPanelOpen}
+        setVisible={setIsUnitsPanelOpen}
+        selectedIngredient={selectedIngredient}
+        setSelectedIngredient={setSelectedIngredient}
+      />
     </View>
   );
 }

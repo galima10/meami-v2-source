@@ -3,7 +3,8 @@ import { withTiming, useDerivedValue } from "react-native-reanimated";
 import { StyleSheet, Pressable, FlatList, View } from "react-native";
 import theme from "@constants/themes";
 import { Dispatch, SetStateAction } from "react";
-import { useAppSelector } from "@modules/shared/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@modules/shared/hooks/redux";
+import { updateUnitFromWeeklyMenuThunk } from "@stores/thunks/weeklyMenu";
 import type { Unit } from "@stores/features/units";
 import { AppText } from "@modules/shared/components/primitives/AppText";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
@@ -14,17 +15,40 @@ import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 
 interface MenuUnitsPanelProps {
   visible: boolean;
-  setter: Dispatch<SetStateAction<boolean>>;
+  setVisible: Dispatch<SetStateAction<boolean>>;
+  selectedIngredient: {
+    ingredientId: number | null;
+    menuId: number | null;
+  };
+  setSelectedIngredient: Dispatch<
+    SetStateAction<{
+      ingredientId: number | null;
+      menuId: number | null;
+    }>
+  >;
 }
 
 export default function MenuUnitsPanel({
   visible,
-  setter,
+  setVisible,
+  selectedIngredient,
+  setSelectedIngredient,
 }: MenuUnitsPanelProps) {
+  const dispatch = useAppDispatch();
   const { units } = useAppSelector((state) => state.unit);
   const opacity = useDerivedValue(() => {
     return withTiming(visible ? 1 : 0, { duration: 250 });
   });
+  function handleSelectUnit(unitId: number) {
+    if (!selectedIngredient.ingredientId || !selectedIngredient.menuId) return;
+    dispatch(
+      updateUnitFromWeeklyMenuThunk({
+        newUnitId: unitId,
+        menuId: selectedIngredient.menuId,
+        ingredientId: selectedIngredient.ingredientId,
+      }),
+    );
+  }
   return (
     <AnimatedAppView
       style={[
@@ -32,7 +56,16 @@ export default function MenuUnitsPanel({
         { opacity, pointerEvents: visible ? "auto" : "none" },
       ]}
     >
-      <Pressable style={styles.hitbox} onPress={() => setter(false)}>
+      <Pressable
+        style={styles.hitbox}
+        onPress={() => {
+          setVisible(false);
+          setSelectedIngredient({
+            ingredientId: null,
+            menuId: null,
+          });
+        }}
+      >
         <FlatList
           style={styles.units}
           data={Object.entries(units) as [string, Unit][]}
@@ -44,6 +77,10 @@ export default function MenuUnitsPanel({
                 styles.unit,
                 pressed && styles.unitActive,
               ]}
+              onPress={() => {
+                setVisible(false);
+                handleSelectUnit(Number(unitId));
+              }}
             >
               <AppText>{unit.name}</AppText>
               <AppIconButton
