@@ -11,7 +11,7 @@ import {
 export interface ShoppingListIngredient {
   quantityNeeded: number;
   quantityBuyed: number;
-  unitId: number;
+  unitId: number | null;
   categoryId: number;
 }
 

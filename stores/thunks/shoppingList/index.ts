@@ -3,13 +3,13 @@ import { formatShoppingList } from "@mappers/formatData/formatShoppingList";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UpdateQuantityGenericService } from "@services/shared";
 import {
-    AddItemToShoppingService,
-    FetchShoppingListService,
-    RemoveItemToShoppingService,
+  AddItemToShoppingService,
+  FetchShoppingListService,
+  RemoveItemToShoppingService,
 } from "@services/shoppingList";
 import type {
-    ShoppingListIngredients,
-    ShoppingListProducts,
+  ShoppingListIngredients,
+  ShoppingListProducts,
 } from "@stores/features/shoppingList";
 import type { RootState } from "@stores/index";
 
@@ -45,7 +45,7 @@ export const addItemToShoppingThunk = createAsyncThunk<
         [newItemId]: {
           quantityBuyed: 0,
           quantityNeeded: quantityNeeded,
-          unitId: ingredients[newItemId]?.unitId,
+          unitId: ingredients[newItemId]?.unitId ?? null,
           categoryId: ingredients[newItemId]?.categoryId,
         },
       };

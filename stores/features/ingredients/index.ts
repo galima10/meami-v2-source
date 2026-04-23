@@ -2,21 +2,21 @@ import type { Operation } from "@app-types/DbQuantity";
 import { applyOperation } from "@helpers/applyOperation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    createIngredientThunk,
-    deleteIngredientThunk,
-    fetchIngredientsThunk,
-    setIngredientStockQuantityThunk,
-    setQuantifiableThunk,
-    updateIngredientThunk,
-    updateStockThunk,
-    updateStorageLocationsThunk,
+  createIngredientThunk,
+  deleteIngredientThunk,
+  fetchIngredientsThunk,
+  setIngredientStockQuantityThunk,
+  setQuantifiableThunk,
+  updateIngredientThunk,
+  updateStockThunk,
+  updateStorageLocationsThunk,
 } from "@stores/thunks/ingredients";
 
 export interface Ingredient {
   name: string;
   categoryId: number;
   stockQuantity: number;
-  unitId: number;
+  unitId: number | null;
   menuCategoryIds: number[];
   quantifiable: boolean;
   storageLocationIds: number[] | null;
@@ -43,6 +43,16 @@ export const ingredientSlice = createSlice({
     },
     clearIngredientIdSelected: (state) => {
       state.selectedIngredientId = null;
+    },
+    deleteIngredientsUnitsByUnitId: (state, action: PayloadAction<number>) => {
+      for (const ingredient of Object.values(
+        state.ingredients,
+      ) as Ingredient[]) {
+        if (ingredient.unitId === action.payload) {
+          ingredient.quantifiable = false;
+          ingredient.unitId = null;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
@@ -280,5 +290,6 @@ export const {
   selectIngredientId,
   clearIngredientIdSelected,
   resetIngredients,
+  deleteIngredientsUnitsByUnitId
 } = ingredientSlice.actions;
 export default ingredientSlice.reducer;

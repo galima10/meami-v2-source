@@ -49,6 +49,10 @@ export const weeklyMenuSlice = createSlice({
   initialState,
   reducers: {
     resetWeeklyMenu: () => initialState,
+    setNullIngredientMenuUnitsByUnitId: (
+      state,
+      action: PayloadAction<number>,
+    ) => {},
   },
   extraReducers: (builder) => {
     // fetchAllMenusThunk
@@ -425,5 +429,6 @@ export const weeklyMenuSlice = createSlice({
   },
 });
 
-export const { resetWeeklyMenu } = weeklyMenuSlice.actions;
+export const { resetWeeklyMenu, setNullIngredientMenuUnitsByUnitId } =
+  weeklyMenuSlice.actions;
 export default weeklyMenuSlice.reducer;
