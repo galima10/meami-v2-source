@@ -7,7 +7,7 @@ import theme from "@constants/themes";
 import QuantifierModule from "@modules/shared/components/molecules/QuantifierModule";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { Ingredients } from "@stores/features/ingredients";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useMenuIngredientCard } from "@modules/menuTab/hooks/molecules/useMenuIngredientCard";
 import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 
@@ -15,12 +15,14 @@ interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
   ingredients: Ingredients;
   menuId: number;
+  setIsUnitsPanelOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 function MenuIngredientCard({
   ingredient,
   ingredients,
   menuId,
+  setIsUnitsPanelOpen,
 }: MenuIngredientCardProps) {
   const {
     isQuantifiable,
@@ -74,6 +76,7 @@ function MenuIngredientCard({
                   : "unité ↺"
               }
               color="orange"
+              action={() => setIsUnitsPanelOpen?.(true)}
             />
           </View>
         </View>

@@ -12,6 +12,7 @@ import { AppText } from "@modules/shared/components/primitives/AppText";
 import type { Ingredient } from "@stores/features/ingredients";
 import { useMenuModifyScreen } from "@modules/shared/hooks/screens/useMenuModifyScreen";
 import type { Recipe } from "@stores/features/recipes";
+import MenuUnitsPanel from "@modules/menuTab/components/organisms/MenuUnitsPanel";
 
 type ListItem =
   | { id: string; type: "ingredient"; ingredient: Ingredient }
@@ -36,6 +37,8 @@ export default function MenuModifyScreen() {
     isPanelOpen,
     setActualElements,
     filteredElements,
+    setIsUnitsPanelOpen,
+    isUnitsPanelOpen
   } = useMenuModifyScreen(ingredients, selectedMoment);
 
   return (
@@ -85,6 +88,7 @@ export default function MenuModifyScreen() {
                 modify
                 openPanel={() => setIsPanelOpen(true)}
                 setActualElements={setActualElements}
+                setIsUnitsPanelOpen={setIsUnitsPanelOpen}
               />
             );
           },
@@ -110,6 +114,7 @@ export default function MenuModifyScreen() {
           else return <AppText>{item.recipe.name}</AppText>;
         }}
       />
+      <MenuUnitsPanel visible={isUnitsPanelOpen} setter={setIsUnitsPanelOpen} />
     </View>
   );
 }

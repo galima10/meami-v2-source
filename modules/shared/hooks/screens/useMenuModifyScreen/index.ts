@@ -15,6 +15,7 @@ export function useMenuModifyScreen(
   const [unitSelected, setUnitSelected] = useState<number | null>(null);
   const isMorning = selectedMoment === "matin" ? true : false;
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const [isUnitsPanelOpen, setIsUnitsPanelOpen] = useState<boolean>(false);
   const { recipes } = useAppSelector((state) => state.recipe);
   const dispatch = useAppDispatch();
   const [actualElements, setActualElements] = useState<{
@@ -57,5 +58,7 @@ export function useMenuModifyScreen(
     filteredElements,
     unitSelected,
     setUnitSelected,
+    isUnitsPanelOpen,
+    setIsUnitsPanelOpen
   };
 }

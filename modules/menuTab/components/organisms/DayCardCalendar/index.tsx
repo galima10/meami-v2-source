@@ -40,6 +40,7 @@ interface DayCardCalendarProps {
       categoryId?: number;
     }>
   >;
+  setIsUnitsPanelOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function DayCardCalendar({
@@ -53,6 +54,7 @@ export default function DayCardCalendar({
   modify = false,
   openPanel,
   setActualElements,
+  setIsUnitsPanelOpen
 }: DayCardCalendarProps) {
   const {
     menu,
@@ -120,6 +122,7 @@ export default function DayCardCalendar({
               menu={menu}
               setActualElements={setActualElements}
               openPanel={openPanel}
+              setIsUnitsPanelOpen={setIsUnitsPanelOpen}
             />
           )}
           {!modify && moment !== "matin" && (
