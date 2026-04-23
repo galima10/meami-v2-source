@@ -4,8 +4,6 @@ import { useAppSelector } from "@modules/shared/hooks/redux";
 
 export function useMenuModifyContent(
   menu: MenuUi,
-  setUnitSelected: Dispatch<SetStateAction<number | null>> | undefined,
-  unitSelected: number | null | undefined,
 ) {
   const { ingredients } = useAppSelector((state) => state.ingredient);
 
@@ -13,13 +11,8 @@ export function useMenuModifyContent(
     return menu?.ingredients ?? {};
   }, [menu]);
 
-  function toggleUnitSelector(id: number) {
-    if (unitSelected !== id) setUnitSelected?.(id);
-    else setUnitSelected?.(null);
-  }
   return {
     ingredientsByCategory,
     ingredients,
-    toggleUnitSelector,
   };
 }

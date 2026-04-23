@@ -9,22 +9,18 @@ import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import type { Ingredients } from "@stores/features/ingredients";
 import React from "react";
 import { useMenuIngredientCard } from "@modules/menuTab/hooks/molecules/useMenuIngredientCard";
-import UnitsSelector from "@modules/shared/components/molecules/UnitsSelector";
+import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 
 interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
   ingredients: Ingredients;
   menuId: number;
-  unitSelected?: number | null;
-  toggleUnitSelector: (id: number) => void;
 }
 
 function MenuIngredientCard({
   ingredient,
   ingredients,
   menuId,
-  unitSelected,
-  toggleUnitSelector,
 }: MenuIngredientCardProps) {
   const {
     isQuantifiable,
@@ -36,6 +32,7 @@ function MenuIngredientCard({
     setQuantityState,
     handleIncrementDecrementQuantity,
     handleRemoveIngredientToMenu,
+    units,
   } = useMenuIngredientCard(ingredient, menuId);
   return (
     <View style={styles.container}>
@@ -70,10 +67,13 @@ function MenuIngredientCard({
               addAction={() => handleIncrementDecrementQuantity(1)}
               removeAction={() => handleIncrementDecrementQuantity(-1)}
             />
-            <UnitsSelector
-              toggleUnitSelector={toggleUnitSelector}
-              unitSelected={unitSelected}
-              id={ingredient?.ingredientId}
+            <AppButton
+              label={
+                ingredient?.unitId
+                  ? units[ingredient?.unitId].abbreviation + " ↺"
+                  : "unité ↺"
+              }
+              color="orange"
             />
           </View>
         </View>

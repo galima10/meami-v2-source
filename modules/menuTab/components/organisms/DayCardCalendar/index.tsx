@@ -40,8 +40,6 @@ interface DayCardCalendarProps {
       categoryId?: number;
     }>
   >;
-  unitSelected?: number | null;
-  setUnitSelected?: Dispatch<SetStateAction<number | null>>;
 }
 
 export default function DayCardCalendar({
@@ -55,8 +53,6 @@ export default function DayCardCalendar({
   modify = false,
   openPanel,
   setActualElements,
-  unitSelected,
-  setUnitSelected,
 }: DayCardCalendarProps) {
   const {
     menu,
@@ -124,8 +120,6 @@ export default function DayCardCalendar({
               menu={menu}
               setActualElements={setActualElements}
               openPanel={openPanel}
-              unitSelected={unitSelected}
-              setUnitSelected={setUnitSelected}
             />
           )}
           {!modify && moment !== "matin" && (
@@ -143,7 +137,6 @@ export default function DayCardCalendar({
         day={day}
         setSelectedMoment={setSelectedMoment}
         selectedMoment={selectedMoment}
-        setUnitSelected={setUnitSelected}
       />
     </View>
   );

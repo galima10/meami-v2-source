@@ -36,8 +36,6 @@ export default function MenuModifyScreen() {
     isPanelOpen,
     setActualElements,
     filteredElements,
-    unitSelected,
-    setUnitSelected,
   } = useMenuModifyScreen(ingredients, selectedMoment);
 
   return (
@@ -87,8 +85,6 @@ export default function MenuModifyScreen() {
                 modify
                 openPanel={() => setIsPanelOpen(true)}
                 setActualElements={setActualElements}
-                unitSelected={unitSelected}
-                setUnitSelected={setUnitSelected}
               />
             );
           },
@@ -100,7 +96,6 @@ export default function MenuModifyScreen() {
           currentIndex={currentIndex}
           action={goToSlideDay}
           handleCloseOverlay={handleCloseOverlay}
-          setUnitSelected={setUnitSelected}
         />
       </View>
       <ListContainerOverlay

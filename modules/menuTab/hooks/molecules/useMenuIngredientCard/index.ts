@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import { useAppDispatch } from "@modules/shared/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
 import {
   setIngredientMenuQuantityThunk,
   removeIngredientToMenuThunk,
@@ -11,6 +11,8 @@ export function useMenuIngredientCard(
   menuId: number,
 ) {
   const dispatch = useAppDispatch();
+
+  const { units } = useAppSelector((state) => state.unit);
 
   const [isQuantifiable, setIsQuantifiable] = useState<boolean>(
     !!ingredient?.quantity,
@@ -108,5 +110,6 @@ export function useMenuIngredientCard(
     setQuantityState,
     handleIncrementDecrementQuantity,
     handleRemoveIngredientToMenu,
+    units
   };
 }
