@@ -31,8 +31,14 @@ export default function MenuModifyScreen() {
     handleCloseOverlay,
     ingredients,
   } = useMenuCalendarScreen(true);
-  const { setIsPanelOpen, isPanelOpen, setActualElements, filteredElements } =
-    useMenuModifyScreen(ingredients, selectedMoment);
+  const {
+    setIsPanelOpen,
+    isPanelOpen,
+    setActualElements,
+    filteredElements,
+    unitSelected,
+    setUnitSelected,
+  } = useMenuModifyScreen(ingredients, selectedMoment);
 
   return (
     <View style={styles.container}>
@@ -81,6 +87,8 @@ export default function MenuModifyScreen() {
                 modify
                 openPanel={() => setIsPanelOpen(true)}
                 setActualElements={setActualElements}
+                unitSelected={unitSelected}
+                setUnitSelected={setUnitSelected}
               />
             );
           },
@@ -92,6 +100,7 @@ export default function MenuModifyScreen() {
           currentIndex={currentIndex}
           action={goToSlideDay}
           handleCloseOverlay={handleCloseOverlay}
+          setUnitSelected={setUnitSelected}
         />
       </View>
       <ListContainerOverlay

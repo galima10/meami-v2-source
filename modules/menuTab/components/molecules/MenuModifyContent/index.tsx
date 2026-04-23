@@ -22,6 +22,8 @@ interface MenuModifyContentProps {
       categoryId?: number;
     }>
   >;
+  unitSelected?: number | null;
+  setUnitSelected?: Dispatch<SetStateAction<number | null>>;
 }
 
 export default function MenuModifyContent({
@@ -29,8 +31,11 @@ export default function MenuModifyContent({
   menu,
   setActualElements,
   openPanel,
+  unitSelected,
+  setUnitSelected,
 }: MenuModifyContentProps) {
-  const { ingredientsByCategory, ingredients } = useMenuModifyContent(menu);
+  const { ingredientsByCategory, ingredients, toggleUnitSelector } =
+    useMenuModifyContent(menu, setUnitSelected, unitSelected);
   return (
     <FlashList
       nestedScrollEnabled
@@ -54,6 +59,8 @@ export default function MenuModifyContent({
                     ingredient={ingredient}
                     ingredients={ingredients}
                     menuId={menu?.id}
+                    unitSelected={unitSelected}
+                    toggleUnitSelector={toggleUnitSelector}
                   />
                 ))}
               </View>

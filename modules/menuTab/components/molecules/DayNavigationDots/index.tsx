@@ -1,12 +1,14 @@
 import { View, Pressable, StyleSheet } from "react-native";
 import { FONT_BASE } from "@constants/general";
 import theme from "@constants/themes";
+import { Dispatch, SetStateAction } from "react";
 
 interface DayNavigationDotsProps {
   days: string[];
   currentIndex: number;
   action: (index: number) => void;
   handleCloseOverlay: () => void;
+  setUnitSelected?: Dispatch<SetStateAction<number | null>>;
 }
 
 export default function DayNavigationDots({
@@ -14,14 +16,16 @@ export default function DayNavigationDots({
   currentIndex,
   action,
   handleCloseOverlay,
+  setUnitSelected,
 }: DayNavigationDotsProps) {
   return (
     <View style={styles.container}>
-      {days?.map((days, index) => (
+      {days?.map((_, index) => (
         <Pressable
           style={[styles.dotButton]}
           key={index}
           onPress={() => {
+            setUnitSelected?.(null);
             handleCloseOverlay();
             if (currentIndex !== index) {
               action(index);

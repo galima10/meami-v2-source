@@ -1,5 +1,4 @@
 import { View, StyleSheet } from "react-native";
-import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import { AppText } from "@modules/shared/components/primitives/AppText";
@@ -16,12 +15,16 @@ interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
   ingredients: Ingredients;
   menuId: number;
+  unitSelected?: number | null;
+  toggleUnitSelector: (id: number) => void;
 }
 
 function MenuIngredientCard({
   ingredient,
   ingredients,
   menuId,
+  unitSelected,
+  toggleUnitSelector,
 }: MenuIngredientCardProps) {
   const {
     isQuantifiable,
@@ -67,7 +70,11 @@ function MenuIngredientCard({
               addAction={() => handleIncrementDecrementQuantity(1)}
               removeAction={() => handleIncrementDecrementQuantity(-1)}
             />
-            <UnitsSelector />
+            <UnitsSelector
+              toggleUnitSelector={toggleUnitSelector}
+              unitSelected={unitSelected}
+              id={ingredient?.ingredientId}
+            />
           </View>
         </View>
       </View>

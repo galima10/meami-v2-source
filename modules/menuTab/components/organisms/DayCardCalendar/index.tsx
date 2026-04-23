@@ -22,7 +22,6 @@ import {
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MomentBand from "../../molecules/MomentBand";
-import type { Ingredients } from "@stores/features/ingredients";
 import MenuModifyContent from "../../molecules/MenuModifyContent";
 
 interface DayCardCalendarProps {
@@ -41,6 +40,8 @@ interface DayCardCalendarProps {
       categoryId?: number;
     }>
   >;
+  unitSelected?: number | null;
+  setUnitSelected?: Dispatch<SetStateAction<number | null>>;
 }
 
 export default function DayCardCalendar({
@@ -54,6 +55,8 @@ export default function DayCardCalendar({
   modify = false,
   openPanel,
   setActualElements,
+  unitSelected,
+  setUnitSelected,
 }: DayCardCalendarProps) {
   const {
     menu,
@@ -62,7 +65,6 @@ export default function DayCardCalendar({
     setChecked,
     ready,
     categories,
-    ingredientsByCategory,
     handleRemoveMenu,
   } = useDayCardCalendar(selectedMoment, moments, moment);
 
@@ -122,6 +124,8 @@ export default function DayCardCalendar({
               menu={menu}
               setActualElements={setActualElements}
               openPanel={openPanel}
+              unitSelected={unitSelected}
+              setUnitSelected={setUnitSelected}
             />
           )}
           {!modify && moment !== "matin" && (
@@ -139,6 +143,7 @@ export default function DayCardCalendar({
         day={day}
         setSelectedMoment={setSelectedMoment}
         selectedMoment={selectedMoment}
+        setUnitSelected={setUnitSelected}
       />
     </View>
   );

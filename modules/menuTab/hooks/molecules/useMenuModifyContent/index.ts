@@ -1,11 +1,25 @@
-import { useMemo } from "react";
+import { useMemo, SetStateAction, Dispatch } from "react";
 import type { MenuUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import { useAppSelector } from "@modules/shared/hooks/redux";
 
-export function useMenuModifyContent(menu: MenuUi) {
+export function useMenuModifyContent(
+  menu: MenuUi,
+  setUnitSelected: Dispatch<SetStateAction<number | null>> | undefined,
+  unitSelected: number | null | undefined,
+) {
   const { ingredients } = useAppSelector((state) => state.ingredient);
+
   const ingredientsByCategory = useMemo(() => {
-      return menu?.ingredients ?? {};
-    }, [menu]);
-  return { ingredientsByCategory, ingredients };
-};
+    return menu?.ingredients ?? {};
+  }, [menu]);
+
+  function toggleUnitSelector(id: number) {
+    if (unitSelected !== id) setUnitSelected?.(id);
+    else setUnitSelected?.(null);
+  }
+  return {
+    ingredientsByCategory,
+    ingredients,
+    toggleUnitSelector,
+  };
+}

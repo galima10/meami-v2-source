@@ -8,7 +8,17 @@ import { AppText } from "../../primitives/AppText";
 import { useEffect } from "react";
 import { fetchUnitsThunk } from "@stores/thunks/units";
 
-export default function UnitsSelector() {
+interface UnitsSelectorProps {
+  unitSelected?: number | null;
+  toggleUnitSelector: (id: number) => void;
+  id: number;
+}
+
+export default function UnitsSelector({
+  toggleUnitSelector,
+  unitSelected,
+  id,
+}: UnitsSelectorProps) {
   const { units } = useAppSelector((state) => state.unit);
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -18,19 +28,26 @@ export default function UnitsSelector() {
   }, []);
   return (
     <View style={styles.container}>
-      <AppButton label="unité ↺" type="primary" color="orange" />
-      <View style={styles.units}>
-        <Pressable
-          style={({ pressed }) => [styles.unit, pressed && styles.unitActive]}
-        >
-          <AppText>Pièce</AppText>
-          <AppIconButton
-            icon="modifyIcon"
-            type="outlineGreen"
-            size={FONT_BASE * 2}
-          />
-        </Pressable>
-      </View>
+      <AppButton
+        label="unité ↺"
+        type="primary"
+        color="orange"
+        action={() => toggleUnitSelector(id)}
+      />
+      {unitSelected === id && (
+        <View style={styles.units}>
+          <Pressable
+            style={({ pressed }) => [styles.unit, pressed && styles.unitActive]}
+          >
+            <AppText>Pièce</AppText>
+            <AppIconButton
+              icon="modifyIcon"
+              type="outlineGreen"
+              size={FONT_BASE * 2}
+            />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }

@@ -14,6 +14,7 @@ interface MomentBandProps {
   day: string;
   setSelectedMoment: Dispatch<SetStateAction<"matin" | "midi" | "soir">>;
   selectedMoment: "matin" | "midi" | "soir";
+  setUnitSelected?: Dispatch<SetStateAction<number | null>>;
 }
 
 export default function MomentBand({
@@ -21,8 +22,13 @@ export default function MomentBand({
   day,
   selectedMoment,
   setSelectedMoment,
+  setUnitSelected,
 }: MomentBandProps) {
   const imgSrc = `${enDays[day]}_${enMoments[moment]}`;
+  function handleSelectMoment(moment: "matin" | "midi" | "soir") {
+    setSelectedMoment(moment);
+    setUnitSelected?.(null);
+  }
   return (
     <ImageBackground
       resizeMode="cover"
@@ -37,17 +43,17 @@ export default function MomentBand({
           <MomentButton
             moment="morning"
             isActive={selectedMoment === "matin"}
-            setSelectedMoment={setSelectedMoment}
+            handleSelectMoment={handleSelectMoment}
           />
           <MomentButton
             moment="noon"
             isActive={selectedMoment === "midi"}
-            setSelectedMoment={setSelectedMoment}
+            handleSelectMoment={handleSelectMoment}
           />
           <MomentButton
             moment="evening"
             isActive={selectedMoment === "soir"}
-            setSelectedMoment={setSelectedMoment}
+            handleSelectMoment={handleSelectMoment}
           />
         </View>
       </View>

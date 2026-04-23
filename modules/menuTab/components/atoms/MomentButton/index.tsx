@@ -3,24 +3,23 @@ import { momentIconsMap } from "@constants/mappings/icons/momentIconsMap";
 import { frMoments } from "@constants/mappings/traductors/momentsTraductor";
 import theme from "@constants/themes";
 import AppIcon from "@modules/shared/components/primitives/AppIcon";
-import { Dispatch, SetStateAction } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 interface MomentButtonProps {
   moment: "morning" | "noon" | "evening";
   isActive: boolean;
-  setSelectedMoment: Dispatch<SetStateAction<"matin" | "midi" | "soir">>;
+  handleSelectMoment: (moment: "matin" | "midi" | "soir") => void;
 }
 
 export default function MomentButton({
   moment,
   isActive = false,
-  setSelectedMoment,
+  handleSelectMoment,
 }: MomentButtonProps) {
   return (
     <Pressable
       style={[styles.button, isActive && styles.active]}
-      onPress={() => setSelectedMoment(frMoments[moment])}
+      onPress={() => handleSelectMoment(frMoments[moment])}
     >
       <View style={styles.icon}>
         <AppIcon name={momentIconsMap[moment]} size={FONT_BASE * 2.5} />

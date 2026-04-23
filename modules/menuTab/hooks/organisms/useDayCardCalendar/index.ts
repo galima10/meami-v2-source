@@ -5,18 +5,20 @@ import {
 import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import { useAppDispatch } from "@modules/shared/hooks/redux";
 import { removeMenuThunk, setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useDayCardCalendar(
   selectedMoment: "matin" | "midi" | "soir",
   moments: MomentUi,
   moment: "matin" | "midi" | "soir",
 ) {
+  const [unitSelected, setUnitSelected] = useState<number | null>(null);
   const menu = moments[selectedMoment.toUpperCase()];
   const [checked, setChecked] = useState(menu?.done);
   const dispatch = useAppDispatch();
   async function handleCheckMenu() {
     const newValue = !checked;
+    setUnitSelected(null);
     setChecked(newValue);
     await dispatch(setMenuDoneThunk({ menuId: menu?.id, done: newValue }));
   }
@@ -26,9 +28,6 @@ export function useDayCardCalendar(
       ? morningMenuCategoriesOrder
       : noonEveningMenuCategoriesOrder,
   ) as [string, string][];
-  const ingredientsByCategory = useMemo(() => {
-    return menu?.ingredients ?? {};
-  }, [menu]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,8 @@ export function useDayCardCalendar(
     setChecked,
     ready,
     categories,
-    ingredientsByCategory,
     handleRemoveMenu,
+    unitSelected,
+    setUnitSelected,
   };
 }
