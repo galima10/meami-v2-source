@@ -10,10 +10,9 @@ import { useDayMoment } from "../../useDayMoment";
 export function useMenuCalendarScreen(isModify: boolean = false) {
   const { todayIndex, rawDateInfo, refreshDateInfo } = useDate();
   const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
-  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const { moments, days } = useAppSelector((state) => state.seed);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const { ingredients } = useAppSelector((state) => state.ingredient);
+  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
   const weeklyMenuUi = useMemo(
     () => weeklyMenuToUi(weeklyMenu, days, moments),
     [weeklyMenu, days, moments],
@@ -73,6 +72,5 @@ export function useMenuCalendarScreen(isModify: boolean = false) {
     handleGoToday,
     isOverlayOpen,
     handleCloseOverlay,
-    ingredients,
   };
 }

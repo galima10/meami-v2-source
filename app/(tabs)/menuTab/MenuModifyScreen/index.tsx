@@ -30,7 +30,6 @@ export default function MenuModifyScreen() {
     currentIndex,
     isOverlayOpen,
     handleCloseOverlay,
-    ingredients,
   } = useMenuCalendarScreen(true);
   const {
     setIsPanelOpen,
@@ -41,7 +40,7 @@ export default function MenuModifyScreen() {
     isUnitsPanelOpen,
     setSelectedIngredient,
     selectedIngredient,
-  } = useMenuModifyScreen(ingredients, selectedMoment);
+  } = useMenuModifyScreen(selectedMoment);
 
   return (
     <View style={styles.container}>

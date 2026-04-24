@@ -9,7 +9,6 @@ type ListItem =
   | { id: string; type: "recipe"; recipe: Recipe };
 
 export function useMenuModifyScreen(
-  ingredients: Ingredients,
   selectedMoment: "matin" | "midi" | "soir",
 ) {
   const [unitSelected, setUnitSelected] = useState<number | null>(null);
@@ -23,6 +22,7 @@ export function useMenuModifyScreen(
     ingredientId: null,
     menuId: null,
   });
+  const { ingredients } = useAppSelector((state) => state.ingredient);
   const { recipes } = useAppSelector((state) => state.recipe);
   const dispatch = useAppDispatch();
   const [actualElements, setActualElements] = useState<{

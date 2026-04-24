@@ -10,29 +10,36 @@ import { fetchIngredientsThunk } from "@stores/thunks/ingredients";
 import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
 import { useEffect } from "react";
 import { fetchUnitsThunk } from "@stores/thunks/units";
+import type { AppDispatch } from "@stores/index";
+
+async function fetchMenus(dispatch: AppDispatch) {
+  await dispatch(fetchAllMenusThunk());
+  await dispatch(fetchWeeklyMenuThunk());
+}
 
 export default function MenuTabLayout() {
   const MENU_ROUTES = ROUTES.menu;
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
-  const { ingredients } = useAppSelector((state) => state.ingredient);
-  const { units } = useAppSelector((state) => state.unit);
+  const weeklyMenuLoaded = useAppSelector(
+    (state) => state.weeklyMenu.hasLoaded,
+  );
+  const ingredientsLoaded = useAppSelector(
+    (state) => state.ingredient.hasLoaded,
+  );
+  const unitsLoaded = useAppSelector((state) => state.unit.hasLoaded);
+
   useEffect(() => {
-    async function fetchMenus() {
-      await dispatch(fetchAllMenusThunk());
-      await dispatch(fetchWeeklyMenuThunk());
+    if (!weeklyMenuLoaded) {
+      fetchMenus(dispatch);
     }
-    if (Object.keys(weeklyMenu).length === 0) {
-      fetchMenus();
-    }
-    if (Object.keys(ingredients).length === 0) {
+    if (!ingredientsLoaded) {
       dispatch(fetchIngredientsThunk());
     }
-    if (Object.keys(units).length === 0) {
+    if (!unitsLoaded) {
       dispatch(fetchUnitsThunk());
     }
-  }, []);
+  }, [weeklyMenuLoaded, ingredientsLoaded, unitsLoaded]);
   return (
     <Stack
       screenOptions={{
