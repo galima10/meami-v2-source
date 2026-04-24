@@ -22,14 +22,8 @@ export interface CookingDuration {
   temperature: number | null;
 }
 
-interface InitialState {
-  cookingInfos: WithRequiredId<CookingInfo>[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: InitialState = {
-  cookingInfos: [],
+const initialState = {
+  cookingInfos: [] as WithRequiredId<CookingInfo>[],
   loading: false,
   error: null as string | null,
 };
