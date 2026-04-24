@@ -49,9 +49,7 @@ export const productSlice = createSlice({
         fetchProductsThunk.fulfilled,
         (state, action: PayloadAction<Products>) => {
           state.loading = false;
-          if (Object.keys(state.products).length === 0) {
-            state.products = action.payload;
-          }
+          state.products = action.payload;
           state.hasLoaded = true;
         },
       )

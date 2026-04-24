@@ -60,12 +60,8 @@ export const shoppingListSlice = createSlice({
         ) => {
           state.loading = false;
           const { ingredients, products } = action.payload;
-          if (Object.keys(state.ingredientsShopping).length === 0) {
-            state.ingredientsShopping = ingredients;
-          }
-          if (Object.keys(state.productsShopping).length === 0) {
-            state.productsShopping = products;
-          }
+          state.ingredientsShopping = ingredients;
+          state.productsShopping = products;
           state.hasLoaded = true;
         },
       )

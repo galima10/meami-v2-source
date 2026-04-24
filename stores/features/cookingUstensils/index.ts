@@ -37,9 +37,7 @@ export const cookingUstensilSlice = createSlice({
         fetchCookingUstensilsThunk.fulfilled,
         (state, action: PayloadAction<CookingUstensils>) => {
           state.loading = false;
-          if (Object.keys(state.cookingUstensils).length === 0) {
-            state.cookingUstensils = action.payload;
-          }
+          state.cookingUstensils = action.payload;
           state.hasLoaded = true;
         },
       )

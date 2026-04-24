@@ -37,9 +37,7 @@ export const unitSlice = createSlice({
         fetchUnitsThunk.fulfilled,
         (state, action: PayloadAction<Units>) => {
           state.loading = false;
-          if (Object.keys(state.units).length === 0) {
-            state.units = action.payload;
-          }
+          state.units = action.payload;
           state.hasLoaded = true;
         },
       )

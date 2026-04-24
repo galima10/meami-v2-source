@@ -12,6 +12,7 @@ import {
   setMenuDoneThunk,
   updateUnitFromWeeklyMenuThunk,
 } from "@stores/thunks/weeklyMenu";
+import { buildMenuSchedule } from "@mappers/buildMenuSchedule";
 
 export interface WeeklyMenuIngredients {
   [menuId: number]: MenuIngredients;
@@ -38,8 +39,15 @@ export interface IngredientMenu {
   unitId: number | null;
 }
 
+export interface MenuSchedule {
+  [dayId: number]: {
+    [momentId: number]: number;
+  };
+}
+
 const initialState = {
   weeklyMenu: {} as WeeklyMenu,
+  menuSchedule: {} as MenuSchedule,
   loading: false,
   error: null as string | null,
   hasLoaded: false,
@@ -63,9 +71,9 @@ export const weeklyMenuSlice = createSlice({
         (state, action: PayloadAction<WeeklyMenu>) => {
           state.loading = false;
 
-          if (Object.values(state.weeklyMenu).length === 0) {
-            state.weeklyMenu = action.payload;
-          }
+          state.weeklyMenu = action.payload;
+
+          state.menuSchedule = buildMenuSchedule(action.payload);
           state.hasLoaded = true;
         },
       )

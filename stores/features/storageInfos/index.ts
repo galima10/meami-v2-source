@@ -50,9 +50,7 @@ export const storageInfoSlice = createSlice({
         fetchStorageInfosThunk.fulfilled,
         (state, action: PayloadAction<WithRequiredId<StorageInfo>[]>) => {
           state.loading = false;
-          if (state.storageInfos.length === 0) {
-            state.storageInfos = action.payload;
-          }
+          state.storageInfos = action.payload;
           state.hasLoaded = true;
         },
       )

@@ -41,18 +41,10 @@ export const seedSlice = createSlice({
           state.loading = false;
           const { storageLocations, days, menuCategories, moments } =
             action.payload;
-          if (Object.keys(state.menuCategories).length === 0) {
-            state.menuCategories = menuCategories;
-          }
-          if (Object.keys(state.storageLocations).length === 0) {
-            state.storageLocations = storageLocations;
-          }
-          if (Object.keys(state.days).length === 0) {
-            state.days = days;
-          }
-          if (Object.keys(state.moments).length === 0) {
-            state.moments = moments;
-          }
+          state.menuCategories = menuCategories;
+          state.storageLocations = storageLocations;
+          state.days = days;
+          state.moments = moments;
           state.hasLoaded = true;
         },
       )

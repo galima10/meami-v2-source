@@ -45,9 +45,7 @@ export const manualAdjustementSlice = createSlice({
         fetchShoppingManualChecksThunk.fulfilled,
         (state, action: PayloadAction<ManualAdjustementItems>) => {
           state.loading = false;
-          if (Object.keys(state.shoppingChecks).length === 0) {
-            state.shoppingChecks = action.payload;
-          }
+          state.shoppingChecks = action.payload;
           state.hasLoaded = true;
         },
       )

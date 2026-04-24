@@ -35,9 +35,7 @@ export const recipeCategorySlice = createSlice({
         fetchRecipeCategoriesThunk.fulfilled,
         (state, action: PayloadAction<RecipeCategories>) => {
           state.loading = false;
-          if (Object.keys(state.recipeCategories).length === 0) {
-            state.recipeCategories = action.payload;
-          }
+          state.recipeCategories = action.payload;
           state.hasLoaded = true;
         },
       )

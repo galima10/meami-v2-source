@@ -66,9 +66,7 @@ export const recipeSlice = createSlice({
         fetchRecipesThunk.fulfilled,
         (state, action: PayloadAction<Recipes>) => {
           state.loading = false;
-          if (Object.keys(state.recipes).length === 0) {
-            state.recipes = action.payload;
-          }
+          state.recipes = action.payload;
           state.hasLoaded = true;
         },
       )
