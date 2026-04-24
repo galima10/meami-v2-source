@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    createUstensilThunk,
-    deleteUstensilThunk,
-    fetchCookingUstensilsThunk,
+  createUstensilThunk,
+  deleteUstensilThunk,
+  fetchCookingUstensilsThunk,
 } from "@stores/thunks/cookingUstensils";
 
 export interface CookingUstensil {
@@ -17,6 +17,7 @@ const initialState = {
   cookingUstensils: {} as CookingUstensils,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const cookingUstensilSlice = createSlice({
@@ -39,6 +40,7 @@ export const cookingUstensilSlice = createSlice({
           if (Object.keys(state.cookingUstensils).length === 0) {
             state.cookingUstensils = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

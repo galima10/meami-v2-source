@@ -2,11 +2,11 @@ import type { Operation } from "@app-types/DbQuantity";
 import { applyOperation } from "@helpers/applyOperation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    createProductThunk,
-    deleteProductThunk,
-    fetchProductsThunk,
-    setProductStockQuantityThunk,
-    updateProductThunk,
+  createProductThunk,
+  deleteProductThunk,
+  fetchProductsThunk,
+  setProductStockQuantityThunk,
+  updateProductThunk,
 } from "@stores/thunks/products";
 
 export interface Product {
@@ -23,6 +23,7 @@ const initialState = {
   selectedProductId: null as number | null,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const productSlice = createSlice({
@@ -51,6 +52,7 @@ export const productSlice = createSlice({
           if (Object.keys(state.products).length === 0) {
             state.products = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

@@ -6,10 +6,10 @@ import {
     FetchMomentsService,
     FetchStorageLocationsService,
 } from "@services/seeds";
-import { SeedsInitialState } from "@stores/features/seeds";
+import { Seeds } from "@stores/features/seeds";
 
 export const fetchInitialDataThunk = createAsyncThunk<
-  Omit<SeedsInitialState, "loading" | "error">,
+  Seeds,
   void
 >("seeds/fetchInitialData", async () => {
   const storageLocations = await FetchStorageLocationsService();

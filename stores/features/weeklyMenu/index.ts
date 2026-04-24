@@ -42,6 +42,7 @@ const initialState = {
   weeklyMenu: {} as WeeklyMenu,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const weeklyMenuSlice = createSlice({
@@ -65,6 +66,7 @@ export const weeklyMenuSlice = createSlice({
           if (Object.values(state.weeklyMenu).length === 0) {
             state.weeklyMenu = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

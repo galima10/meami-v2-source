@@ -7,22 +7,21 @@ export interface SeedRow {
   };
 }
 
-export interface SeedsInitialState {
+export interface Seeds {
   storageLocations: SeedRow;
   menuCategories: SeedRow;
   days: SeedRow;
   moments: SeedRow;
-  loading: boolean;
-  error: string | null;
 }
 
-const initialState: SeedsInitialState = {
-  storageLocations: [],
-  menuCategories: [],
-  days: [],
-  moments: [],
+const initialState = {
+  storageLocations: {} as SeedRow,
+  menuCategories: {} as SeedRow,
+  days: {} as SeedRow,
+  moments: {} as SeedRow,
   loading: false,
-  error: null,
+  error: null as string | null,
+  hasLoaded: false,
 };
 
 export const seedSlice = createSlice({
@@ -38,10 +37,7 @@ export const seedSlice = createSlice({
       })
       .addCase(
         fetchInitialDataThunk.fulfilled,
-        (
-          state,
-          action: PayloadAction<Omit<SeedsInitialState, "loading" | "error">>,
-        ) => {
+        (state, action: PayloadAction<Seeds>) => {
           state.loading = false;
           const { storageLocations, days, menuCategories, moments } =
             action.payload;
@@ -57,6 +53,7 @@ export const seedSlice = createSlice({
           if (Object.keys(state.moments).length === 0) {
             state.moments = moments;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

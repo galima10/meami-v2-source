@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    createRecipeThunk,
-    deleteRecipeThunk,
-    fetchRecipesThunk,
-    updateRecipeThunk,
+  createRecipeThunk,
+  deleteRecipeThunk,
+  fetchRecipesThunk,
+  updateRecipeThunk,
 } from "@stores/thunks/recipes";
 
 export interface Recipe {
@@ -40,6 +40,7 @@ const initialState = {
   selectedRecipeId: null as number | null,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const recipeSlice = createSlice({
@@ -68,6 +69,7 @@ export const recipeSlice = createSlice({
           if (Object.keys(state.recipes).length === 0) {
             state.recipes = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

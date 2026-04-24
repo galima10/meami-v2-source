@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    createUnitThunk,
-    deleteUnitThunk,
-    fetchUnitsThunk,
-    updateUnitThunk,
+  createUnitThunk,
+  deleteUnitThunk,
+  fetchUnitsThunk,
+  updateUnitThunk,
 } from "@stores/thunks/units";
 
 export interface Unit {
@@ -19,6 +19,7 @@ const initialState = {
   units: {} as Units,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const unitSlice = createSlice({
@@ -39,6 +40,7 @@ export const unitSlice = createSlice({
           if (Object.keys(state.units).length === 0) {
             state.units = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

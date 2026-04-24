@@ -19,6 +19,7 @@ const initialState = {
   stockChecks: {} as ManualAdjustementItems,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const manualAdjustementSlice = createSlice({
@@ -47,6 +48,7 @@ export const manualAdjustementSlice = createSlice({
           if (Object.keys(state.shoppingChecks).length === 0) {
             state.shoppingChecks = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

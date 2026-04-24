@@ -1,9 +1,9 @@
 import type { WithRequiredId } from "@app-types/WithRequiredId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    fetchCookingInfosThunk,
-    removeCookingInfoThunk,
-    setCookingInfoThunk,
+  fetchCookingInfosThunk,
+  removeCookingInfoThunk,
+  setCookingInfoThunk,
 } from "@stores/thunks/cookingInfos";
 
 export interface CookingInfo {
@@ -26,6 +26,7 @@ const initialState = {
   cookingInfos: [] as WithRequiredId<CookingInfo>[],
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const cookingInfoSlice = createSlice({
@@ -48,6 +49,7 @@ export const cookingInfoSlice = createSlice({
           if (state.cookingInfos.length === 0) {
             state.cookingInfos = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

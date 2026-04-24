@@ -1,9 +1,9 @@
 import { WithRequiredId } from "@app-types/WithRequiredId";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    fetchStorageInfosThunk,
-    removeStorageInfoThunk,
-    setStorageInfoThunk,
+  fetchStorageInfosThunk,
+  removeStorageInfoThunk,
+  setStorageInfoThunk,
 } from "@stores/thunks/storageInfos";
 
 export interface StorageInfo {
@@ -32,6 +32,7 @@ const initialState = {
   storageInfos: [] as WithRequiredId<StorageInfo>[],
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const storageInfoSlice = createSlice({
@@ -52,6 +53,7 @@ export const storageInfoSlice = createSlice({
           if (state.storageInfos.length === 0) {
             state.storageInfos = action.payload;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(

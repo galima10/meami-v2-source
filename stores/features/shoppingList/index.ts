@@ -2,10 +2,10 @@ import type { Operation, QuantityField } from "@app-types/DbQuantity";
 import { applyOperation } from "@helpers/applyOperation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-    addItemToShoppingThunk,
-    fetchShoppingListThunk,
-    removeItemToShoppingThunk,
-    setItemShoppingQuantityThunk,
+  addItemToShoppingThunk,
+  fetchShoppingListThunk,
+  removeItemToShoppingThunk,
+  setItemShoppingQuantityThunk,
 } from "@stores/thunks/shoppingList";
 
 export interface ShoppingListIngredient {
@@ -33,6 +33,7 @@ const initialState = {
   productsShopping: {} as ShoppingListProducts,
   loading: false,
   error: null as string | null,
+  hasLoaded: false,
 };
 
 export const shoppingListSlice = createSlice({
@@ -65,6 +66,7 @@ export const shoppingListSlice = createSlice({
           if (Object.keys(state.productsShopping).length === 0) {
             state.productsShopping = products;
           }
+          state.hasLoaded = true;
         },
       )
       .addCase(
