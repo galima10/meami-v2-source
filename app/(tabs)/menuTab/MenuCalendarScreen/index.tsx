@@ -8,10 +8,10 @@ import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButto
 import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { ScrollView, StyleSheet, View } from "react-native";
+import type { MomentSchedule } from "@stores/features/weeklyMenu";
 
 export default function MenuCalendarScreen() {
   const {
-    weeklyMenuUi,
     selectedMoment,
     setSelectedMoment,
     goToSlideDay,
@@ -22,7 +22,8 @@ export default function MenuCalendarScreen() {
     handleGoToday,
     currentIndex,
     isOverlayOpen,
-    handleCloseOverlay
+    handleCloseOverlay,
+    menuSchedule
   } = useMenuCalendarScreen();
 
   return (
@@ -42,16 +43,15 @@ export default function MenuCalendarScreen() {
           else setSelectedMoment("matin");
         }}
       >
-        {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
-          ([day, moments]) => {
+        {(Object.entries(menuSchedule) as [string, MomentSchedule][]).map(
+          ([dayId, moment]) => {
             return (
               <DayCardCalendar
-                key={day}
-                moment={selectedMoment}
-                day={day.toLowerCase()}
+                key={dayId}
+                moment={moment}
+                dayId={Number(dayId)}
                 setSelectedMoment={setSelectedMoment}
                 selectedMoment={selectedMoment}
-                moments={moments}
                 isOverlayOpen={isOverlayOpen}
                 handleCloseOverlay={handleCloseOverlay}
               />
@@ -66,7 +66,7 @@ export default function MenuCalendarScreen() {
       />
       <View style={styles.dotsContainer}>
         <DayNavigationDots
-          days={Object.keys(weeklyMenuUi)}
+          days={Object.keys(menuSchedule)}
           currentIndex={currentIndex}
           action={goToSlideDay}
           handleCloseOverlay={handleCloseOverlay}

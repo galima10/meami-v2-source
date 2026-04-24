@@ -23,13 +23,13 @@ import MenuCalendarContent from "../../molecules/MenuCalendarContent";
 import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MomentBand from "../../molecules/MomentBand";
 import MenuModifyContent from "../../molecules/MenuModifyContent";
+import type { MomentSchedule } from "@stores/features/weeklyMenu";
 
 interface DayCardCalendarProps {
-  moment: "matin" | "midi" | "soir";
-  day: string;
+  moment: MomentSchedule;
+  dayId: number;
   setSelectedMoment: Dispatch<SetStateAction<"matin" | "midi" | "soir">>;
   selectedMoment: "matin" | "midi" | "soir";
-  moments: MomentUi;
   isOverlayOpen: boolean;
   handleCloseOverlay?: (bool: boolean) => void;
   modify?: boolean;
@@ -51,10 +51,9 @@ interface DayCardCalendarProps {
 
 export default function DayCardCalendar({
   moment,
-  day,
+  dayId,
   setSelectedMoment,
   selectedMoment,
-  moments,
   isOverlayOpen,
   handleCloseOverlay,
   modify = false,

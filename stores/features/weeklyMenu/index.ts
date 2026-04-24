@@ -39,10 +39,12 @@ export interface IngredientMenu {
   unitId: number | null;
 }
 
+export interface MomentSchedule {
+  [momentId: number]: number;
+}
+
 export interface MenuSchedule {
-  [dayId: number]: {
-    [momentId: number]: number;
-  };
+  [dayId: number]: MomentSchedule;
 }
 
 const initialState = {

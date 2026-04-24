@@ -12,11 +12,7 @@ export function useMenuCalendarScreen(isModify: boolean = false) {
   const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
   const { moments, days } = useAppSelector((state) => state.seed);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const { weeklyMenu } = useAppSelector((state) => state.weeklyMenu);
-  const weeklyMenuUi = useMemo(
-    () => weeklyMenuToUi(weeklyMenu, days, moments),
-    [weeklyMenu, days, moments],
-  );
+  const { menuSchedule } = useAppSelector((state) => state.weeklyMenu);
   const [selectedMoment, setSelectedMoment] = useState<
     "matin" | "midi" | "soir"
   >("matin");
@@ -60,7 +56,7 @@ export function useMenuCalendarScreen(isModify: boolean = false) {
   }
 
   return {
-    weeklyMenuUi,
+    menuSchedule,
     selectedMoment,
     setSelectedMoment,
     scrollRef,
