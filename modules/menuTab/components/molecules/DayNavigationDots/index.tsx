@@ -2,32 +2,31 @@ import { View, Pressable, StyleSheet } from "react-native";
 import { FONT_BASE } from "@constants/general";
 import theme from "@constants/themes";
 import { Dispatch, SetStateAction } from "react";
+import { DAYS } from "@constants/mappings/orders/daysOrder";
 
 interface DayNavigationDotsProps {
-  days: string[];
   currentIndex: number;
   action: (index: number) => void;
-  handleCloseOverlay: () => void;
+  handleCloseOverlay?: () => void;
 }
 
 export default function DayNavigationDots({
-  days,
   currentIndex,
   action,
   handleCloseOverlay,
 }: DayNavigationDotsProps) {
   return (
     <View style={styles.container}>
-      {days?.map((_, index) => (
+      {DAYS.map((dayId) => (
         <Pressable
           style={[styles.dotButton]}
-          key={index}
+          key={dayId}
           onPress={() => {
-            handleCloseOverlay();
-            action(index);
+            handleCloseOverlay?.();
+            action(dayId);
           }}
         >
-          <View style={[styles.dot, currentIndex === index && styles.active]} />
+          <View style={[styles.dot, currentIndex === dayId && styles.active]} />
         </Pressable>
       ))}
     </View>

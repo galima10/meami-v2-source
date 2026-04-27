@@ -7,27 +7,7 @@ import { useAppDispatch } from "@modules/shared/hooks/redux";
 import { removeMenuThunk, setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
 import { useEffect, useState } from "react";
 
-export function useDayCardCalendar(
-  selectedMoment: "matin" | "midi" | "soir",
-  moments: MomentUi,
-  moment: "matin" | "midi" | "soir",
-) {
-  const [unitSelected, setUnitSelected] = useState<number | null>(null);
-  const menu = moments[selectedMoment.toUpperCase()];
-  const [checked, setChecked] = useState(menu?.done);
-  const dispatch = useAppDispatch();
-  async function handleCheckMenu() {
-    const newValue = !checked;
-    setUnitSelected(null);
-    setChecked(newValue);
-    await dispatch(setMenuDoneThunk({ menuId: menu?.id, done: newValue }));
-  }
-
-  const categories = Object.entries(
-    moment === "matin"
-      ? morningMenuCategoriesOrder
-      : noonEveningMenuCategoriesOrder,
-  ) as [string, string][];
+export function useDayCardCalendar() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -38,20 +18,7 @@ export function useDayCardCalendar(
     return () => cancelAnimationFrame(id);
   }, []);
 
-  function handleRemoveMenu() {
-    if (Object.values(menu?.ingredients).length === 0) return;
-    dispatch(removeMenuThunk(menu?.id));
-  }
-
   return {
-    handleCheckMenu,
-    menu,
-    checked,
-    setChecked,
     ready,
-    categories,
-    handleRemoveMenu,
-    unitSelected,
-    setUnitSelected,
   };
 }

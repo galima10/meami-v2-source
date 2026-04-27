@@ -1,9 +1,9 @@
 import { FONT_BASE } from "@constants/general";
+import { backgroundMap } from "@constants/mappings/images/backgroundMap";
 import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import DayCardList from "@modules/menuTab/components/atoms/DayCardList";
-import { useMenuListScreen } from "@modules/shared/hooks/screens/useMenuListScreen";
+import { useMenuListScreen } from "@modules/shared/hooks/screens/menuTab/useMenuListScreen";
 import { ImageBackground, ScrollView, StyleSheet } from "react-native";
-import { backgroundMap } from "@constants/mappings/images/backgroundMap";
 
 export default function MenuListScreen() {
   const { weeklyMenuUi, today } = useMenuListScreen();

@@ -1,18 +1,30 @@
-import type { Ingredients, Ingredient } from "@stores/features/ingredients";
-import { useState, useMemo, useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../redux";
-import { fetchRecipesThunk } from "@stores/thunks/recipes";
+import type { Ingredient } from "@stores/features/ingredients";
 import type { Recipe } from "@stores/features/recipes";
+import { fetchRecipesThunk } from "@stores/thunks/recipes";
+import { useEffect, useMemo, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux";
+import { useMenuScreen } from "../useMenuScreen";
 
 type ListItem =
   | { id: string; type: "ingredient"; ingredient: Ingredient }
   | { id: string; type: "recipe"; recipe: Recipe };
 
-export function useMenuModifyScreen(
-  selectedMoment: "matin" | "midi" | "soir",
-) {
+export function useMenuModifyScreen() {
+  const {
+    currentIndex,
+    setCurrentIndex,
+    scrollRef,
+    goToSlideDay,
+    actualDayMoment,
+    todayIndex,
+    refreshDateInfo,
+    selectedMoment,
+    setSelectedMoment,
+    menuSchedule,
+    getActualMenu,
+  } = useMenuScreen();
   const [unitSelected, setUnitSelected] = useState<number | null>(null);
-  const isMorning = selectedMoment === "matin" ? true : false;
+  const isMorning = selectedMoment === 1 ? true : false;
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const [isUnitsPanelOpen, setIsUnitsPanelOpen] = useState<boolean>(false);
   const [selectedIngredient, setSelectedIngredient] = useState<{
@@ -69,5 +81,15 @@ export function useMenuModifyScreen(
     setIsUnitsPanelOpen,
     selectedIngredient,
     setSelectedIngredient,
+    selectedMoment,
+    setSelectedMoment,
+    scrollRef,
+    currentIndex,
+    setCurrentIndex,
+    todayIndex,
+    menuSchedule,
+    getActualMenu,
+    goToSlideDay,
+    actualDayMoment
   };
 }

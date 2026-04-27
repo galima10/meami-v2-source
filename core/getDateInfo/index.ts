@@ -19,8 +19,8 @@ export function getDateInfo() {
   };
 }
 
-export function getDayMoment(hour: number): "matin" | "midi" | "soir" {
-  if (hour >= 0 && hour < 12) return "matin";
-  if (hour >= 12 && hour < 18) return "midi";
-  return "soir";
+export function getDayMoment(hour: number): 1 | 2 | 3 {
+  if (hour >= 0 && hour < 12) return 1;
+  if (hour >= 12 && hour < 18) return 2;
+  return 3;
 }

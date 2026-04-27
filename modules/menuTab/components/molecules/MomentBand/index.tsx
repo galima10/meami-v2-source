@@ -8,23 +8,24 @@ import { AppText } from "@modules/shared/components/primitives/AppText";
 import { Dispatch, SetStateAction } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import MomentButton from "../../atoms/MomentButton";
+import { getDayById, getMomentById } from "@helpers/getSeedById";
 
 interface MomentBandProps {
-  moment: string;
-  day: string;
-  setSelectedMoment: Dispatch<SetStateAction<"matin" | "midi" | "soir">>;
-  selectedMoment: "matin" | "midi" | "soir";
+  dayId: number;
+  setSelectedMoment: Dispatch<SetStateAction<1 | 2 | 3>>;
+  selectedMoment: 1 | 2 | 3;
 }
 
 export default function MomentBand({
-  moment,
-  day,
+  dayId,
   selectedMoment,
   setSelectedMoment,
 }: MomentBandProps) {
-  const imgSrc = `${enDays[day]}_${enMoments[moment]}`;
-  function handleSelectMoment(moment: "matin" | "midi" | "soir") {
+  const day = getDayById(dayId);
+  const imgSrc = `${enDays[day?.name]}_${enMoments[getMomentById(selectedMoment).name]}`;
+  function handleSelectMoment(moment: 1 | 2 | 3) {
     setSelectedMoment(moment);
+    console.log(enDays[day?.name ?? 0])
   }
   return (
     <ImageBackground
@@ -33,23 +34,25 @@ export default function MomentBand({
       style={styles.container}
     >
       <View style={styles.topSlot}>
-        <AppText style={styles.dayMomentText}>{moment}</AppText>
+        <AppText style={styles.dayMomentText}>
+          {getMomentById(selectedMoment).name}
+        </AppText>
       </View>
       <View style={styles.bottomSlot}>
         <View style={styles.buttons}>
           <MomentButton
-            moment="morning"
-            isActive={selectedMoment === "matin"}
+            moment={1}
+            isActive={selectedMoment === 1}
             handleSelectMoment={handleSelectMoment}
           />
           <MomentButton
-            moment="noon"
-            isActive={selectedMoment === "midi"}
+            moment={2}
+            isActive={selectedMoment === 2}
             handleSelectMoment={handleSelectMoment}
           />
           <MomentButton
-            moment="evening"
-            isActive={selectedMoment === "soir"}
+            moment={3}
+            isActive={selectedMoment === 3}
             handleSelectMoment={handleSelectMoment}
           />
         </View>

@@ -1,14 +1,14 @@
 import { FONT_BASE } from "@constants/general";
+import { DAYS } from "@constants/mappings/orders/daysOrder";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
-import DayNavigationDots from "@modules/menuTab/components/molecules/DayNavigationDots";
-import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalendar";
-import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@core/getScreenDimensions";
+import DayNavigationDots from "@modules/menuTab/components/molecules/DayNavigationDots";
+import MenuCalendarContent from "@modules/menuTab/components/molecules/MenuCalendarContent";
+import DayCardCalendarRead from "@modules/menuTab/components/organisms/DayCardCalendarRead";
+import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
+import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/menuTab/useMenuCalendarScreen";
 import { ScrollView, StyleSheet, View } from "react-native";
-import type { MomentSchedule } from "@stores/features/weeklyMenu";
 
 export default function MenuCalendarScreen() {
   const {
@@ -23,7 +23,8 @@ export default function MenuCalendarScreen() {
     currentIndex,
     isOverlayOpen,
     handleCloseOverlay,
-    menuSchedule
+    menuSchedule,
+    getActualMenu,
   } = useMenuCalendarScreen();
 
   return (
@@ -40,24 +41,23 @@ export default function MenuCalendarScreen() {
           setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
           handleCloseOverlay();
           if (newIndex === todayIndex) setSelectedMoment(actualDayMoment);
-          else setSelectedMoment("matin");
+          else setSelectedMoment(1);
         }}
       >
-        {(Object.entries(menuSchedule) as [string, MomentSchedule][]).map(
-          ([dayId, moment]) => {
-            return (
-              <DayCardCalendar
-                key={dayId}
-                moment={moment}
-                dayId={Number(dayId)}
-                setSelectedMoment={setSelectedMoment}
-                selectedMoment={selectedMoment}
-                isOverlayOpen={isOverlayOpen}
-                handleCloseOverlay={handleCloseOverlay}
-              />
-            );
-          },
-        )}
+        {DAYS.map((dayId) => {
+          return (
+            <DayCardCalendarRead
+              key={dayId}
+              dayId={dayId}
+              setSelectedMoment={setSelectedMoment}
+              selectedMoment={selectedMoment}
+              actualDayMoment={actualDayMoment}
+              handleCloseOverlay={handleCloseOverlay}
+              isOverlayOpen={isOverlayOpen}
+              menuSchedule={menuSchedule}
+            />
+          );
+        })}
       </ScrollView>
       <AppIconButton
         type="today"
@@ -66,7 +66,6 @@ export default function MenuCalendarScreen() {
       />
       <View style={styles.dotsContainer}>
         <DayNavigationDots
-          days={Object.keys(menuSchedule)}
           currentIndex={currentIndex}
           action={goToSlideDay}
           handleCloseOverlay={handleCloseOverlay}

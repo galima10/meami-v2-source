@@ -1,7 +1,7 @@
 import { weeklyMenuToUi } from "@mappers/dataToUi/weeklyMenuToUi";
 import { useAppSelector } from "@modules/shared/hooks/redux";
 import { useMemo } from "react";
-import { useDate } from "../../useDate";
+import { useDate } from "../../../useDate";
 
 export function useMenuListScreen() {
   const { todayIndex, dayOfWeek } = useDate();

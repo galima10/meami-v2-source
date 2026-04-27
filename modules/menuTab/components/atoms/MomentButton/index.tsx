@@ -4,11 +4,12 @@ import { frMoments } from "@constants/mappings/traductors/momentsTraductor";
 import theme from "@constants/themes";
 import AppIcon from "@modules/shared/components/primitives/AppIcon";
 import { Pressable, StyleSheet, View } from "react-native";
+import { getMomentById } from "@helpers/getSeedById";
 
 interface MomentButtonProps {
-  moment: "morning" | "noon" | "evening";
+  moment: 1 | 2 | 3;
   isActive: boolean;
-  handleSelectMoment: (moment: "matin" | "midi" | "soir") => void;
+  handleSelectMoment: (moment: 1 | 2 | 3) => void;
 }
 
 export default function MomentButton({
@@ -19,7 +20,7 @@ export default function MomentButton({
   return (
     <Pressable
       style={[styles.button, isActive && styles.active]}
-      onPress={() => handleSelectMoment(frMoments[moment])}
+      onPress={() => handleSelectMoment(moment)}
     >
       <View style={styles.icon}>
         <AppIcon name={momentIconsMap[moment]} size={FONT_BASE * 2.5} />

@@ -1,3 +1,4 @@
-export function toCapitalize(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+export function toCapitalize(str?: string) {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }

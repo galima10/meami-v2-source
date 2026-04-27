@@ -1,36 +1,24 @@
 import { FONT_BASE } from "@constants/general";
+import { DAYS } from "@constants/mappings/orders/daysOrder";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
-import DayNavigationDots from "@modules/menuTab/components/molecules/DayNavigationDots";
-import DayCardCalendar from "@modules/menuTab/components/organisms/DayCardCalendar";
-import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/useMenuCalendarScreen";
 import { getScreenWidth } from "@core/getScreenDimensions";
-import { ScrollView, StyleSheet, View } from "react-native";
+import DayNavigationDots from "@modules/menuTab/components/molecules/DayNavigationDots";
+import MenuModifyContent from "@modules/menuTab/components/molecules/MenuModifyContent";
+import DayCardCalendarEdit from "@modules/menuTab/components/organisms/DayCardCalendarEdit";
+import MenuUnitsPanel from "@modules/menuTab/components/organisms/MenuUnitsPanel";
 import ListContainerOverlay from "@modules/shared/components/organims/ListContainerOverlay";
 import { AppText } from "@modules/shared/components/primitives/AppText";
+import { useMenuModifyScreen } from "@modules/shared/hooks/screens/menuTab/useMenuModifyScreen";
 import type { Ingredient } from "@stores/features/ingredients";
-import { useMenuModifyScreen } from "@modules/shared/hooks/screens/useMenuModifyScreen";
 import type { Recipe } from "@stores/features/recipes";
-import MenuUnitsPanel from "@modules/menuTab/components/organisms/MenuUnitsPanel";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 type ListItem =
   | { id: string; type: "ingredient"; ingredient: Ingredient }
   | { id: string; type: "recipe"; recipe: Recipe };
 
 export default function MenuModifyScreen() {
-  const {
-    weeklyMenuUi,
-    selectedMoment,
-    setSelectedMoment,
-    goToSlideDay,
-    todayIndex,
-    setCurrentIndex,
-    scrollRef,
-    currentIndex,
-    isOverlayOpen,
-    handleCloseOverlay,
-  } = useMenuCalendarScreen(true);
   const {
     setIsPanelOpen,
     isPanelOpen,
@@ -40,7 +28,17 @@ export default function MenuModifyScreen() {
     isUnitsPanelOpen,
     setSelectedIngredient,
     selectedIngredient,
-  } = useMenuModifyScreen(selectedMoment);
+    selectedMoment,
+    setSelectedMoment,
+    scrollRef,
+    currentIndex,
+    todayIndex,
+    setCurrentIndex,
+    menuSchedule,
+    getActualMenu,
+    goToSlideDay,
+    actualDayMoment,
+  } = useMenuModifyScreen();
 
   return (
     <View style={styles.container}>
@@ -67,7 +65,7 @@ export default function MenuModifyScreen() {
           if (newIndex === currentIndex) return;
 
           setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
-          setSelectedMoment("matin");
+          setSelectedMoment(1);
 
           scrollRef.current?.scrollTo({
             x: newIndex * getScreenWidth(),
@@ -75,34 +73,25 @@ export default function MenuModifyScreen() {
           });
         }}
       >
-        {(Object.entries(weeklyMenuUi) as [string, MomentUi][]).map(
-          ([day, moments]) => {
-            return (
-              <DayCardCalendar
-                key={day}
-                moment={selectedMoment}
-                day={day.toLowerCase()}
-                setSelectedMoment={setSelectedMoment}
-                selectedMoment={selectedMoment}
-                moments={moments}
-                isOverlayOpen={isOverlayOpen}
-                modify
-                openPanel={() => setIsPanelOpen(true)}
-                setActualElements={setActualElements}
-                setIsUnitsPanelOpen={setIsUnitsPanelOpen}
-                setSelectedIngredient={setSelectedIngredient}
-              />
-            );
-          },
-        )}
+        {DAYS.map((dayId) => {
+          return (
+            <DayCardCalendarEdit
+              key={dayId}
+              dayId={dayId}
+              setSelectedMoment={setSelectedMoment}
+              selectedMoment={selectedMoment}
+              actualDayMoment={actualDayMoment}
+              setActualElements={setActualElements}
+              setIsPanelOpen={setIsPanelOpen}
+              setIsUnitsPanelOpen={setIsUnitsPanelOpen}
+              setSelectedIngredient={setSelectedIngredient}
+              menuSchedule={menuSchedule}
+            />
+          );
+        })}
       </ScrollView>
       <View style={styles.dotsContainer}>
-        <DayNavigationDots
-          days={Object.keys(weeklyMenuUi)}
-          currentIndex={currentIndex}
-          action={goToSlideDay}
-          handleCloseOverlay={handleCloseOverlay}
-        />
+        <DayNavigationDots currentIndex={currentIndex} action={goToSlideDay} />
       </View>
       <ListContainerOverlay
         visible={isPanelOpen}
