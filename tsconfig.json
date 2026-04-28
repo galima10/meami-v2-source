@@ -19,7 +19,8 @@
       "@modules/*": ["./modules/*"],
       "@helpers/*": ["./helpers/*"],
       "@core/*": ["./core/*"],
-      "@mappers/*": ["./mappers/*"]
+      "@mappers/*": ["./mappers/*"],
+      "@temporary/*": ["./temporary/*"]
     }
   },
   "include": [

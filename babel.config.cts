@@ -28,6 +28,7 @@ module.exports = function (api: any): TransformOptions {
             "@helpers": "./helpers",
             "@core": "./core",
             "@mappers": "./mappers",
+            "@temporary": "./temporary",
           },
         },
       ],

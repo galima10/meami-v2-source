@@ -4,29 +4,19 @@ import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
 import { enDays } from "@constants/mappings/traductors/daysTraductor";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import type { MomentUi } from "@mappers/dataToUi/weeklyMenuToUi";
-import { useDayCardCalendar } from "@modules/menuTab/hooks/organisms/useDayCardCalendar";
-import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
-import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import { toCapitalize } from "@utils/toCapitalize";
 import { getScreenWidth } from "@core/getScreenDimensions";
+import { getDayById } from "@helpers/getSeedById";
+import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
+import type { MenuSchedule } from "@stores/features/weeklyMenu";
 import React, { Dispatch, SetStateAction } from "react";
 import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  type ViewStyle,
+    ImageBackground,
+    StyleSheet,
+    View,
+    type ViewStyle,
 } from "react-native";
 import MenuCalendarContent from "../../molecules/MenuCalendarContent";
-import MenuCalendarOtherOverlay from "../../molecules/MenuCalendarOtherOverlay";
 import MomentBand from "../../molecules/MomentBand";
-import MenuModifyContent from "../../molecules/MenuModifyContent";
-import type { MomentSchedule } from "@stores/features/weeklyMenu";
-import type { PropsWithChildren } from "react";
-import { getDayById } from "@helpers/getSeedById";
-import type { MenuSchedule } from "@stores/features/weeklyMenu";
 
 interface DayCardCalendarReadProps {
   dayId: number;

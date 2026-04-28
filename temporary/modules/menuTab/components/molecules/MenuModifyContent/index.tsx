@@ -1,26 +1,21 @@
-import { FlashList } from "@shopify/flash-list";
-import { View, StyleSheet } from "react-native";
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import { AppText } from "@modules/shared/components/primitives/AppText";
-import MenuIngredientCard from "../MenuIngredientCard";
-import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
-import { useMenuModifyContent } from "@modules/menuTab/hooks/molecules/useMenuModifyContent";
-import { toCapitalize } from "@utils/toCapitalize";
 import { FONT_BASE } from "@constants/general";
+import {
+    morningMenuCategoriesOrder,
+    noonEveningMenuCategoriesOrder,
+} from "@constants/mappings/orders/menuCategoriesOrder";
 import { typography } from "@constants/styles";
 import theme from "@constants/themes";
-import type { MenuUi } from "@mappers/dataToUi/weeklyMenuToUi";
-import { SetStateAction, Dispatch, useState, useMemo } from "react";
-import type { Menu } from "@stores/features/weeklyMenu";
+import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import {
-  morningMenuCategoriesOrder,
-  noonEveningMenuCategoriesOrder,
-} from "@constants/mappings/orders/menuCategoriesOrder";
+import { AppText } from "@modules/shared/components/primitives/AppText";
 import { useAppDispatch, useAppSelector } from "@modules/shared/hooks/redux";
+import { FlashList } from "@shopify/flash-list";
+import type { IngredientMenu, MenuSchedule } from "@stores/features/weeklyMenu";
 import { removeMenuThunk } from "@stores/thunks/weeklyMenu";
-import { getDayById } from "@helpers/getSeedById";
-import type { MenuSchedule } from "@stores/features/weeklyMenu";
+import { toCapitalize } from "@utils/toCapitalize";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import { StyleSheet, View } from "react-native";
+import MenuIngredientCard from "../MenuIngredientCard";
 
 interface MenuModifyContentProps {
   selectedMoment: number;
@@ -51,7 +46,7 @@ export default function MenuModifyContent({
   setSelectedIngredient,
   dayId,
   setIsUnitsPanelOpen,
-  menuSchedule
+  menuSchedule,
 }: MenuModifyContentProps) {
   const dispatch = useAppDispatch();
   // const { ingredientsByCategory, ingredients } = useMenuModifyContent(menu);

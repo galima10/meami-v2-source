@@ -1,15 +1,15 @@
-import { View, StyleSheet } from "react-native";
-import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
-import { AppText } from "@modules/shared/components/primitives/AppText";
 import { FONT_BASE } from "@constants/general";
 import theme from "@constants/themes";
-import QuantifierModule from "@modules/shared/components/molecules/QuantifierModule";
-import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import type { Ingredients } from "@stores/features/ingredients";
-import React, { Dispatch, SetStateAction } from "react";
-import { useMenuIngredientCard } from "@modules/menuTab/hooks/molecules/useMenuIngredientCard";
 import AppButton from "@modules/shared/components/atoms/buttons/AppButton";
+import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
+import QuantifierModule from "@modules/shared/components/molecules/QuantifierModule";
+import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
+import { AppText } from "@modules/shared/components/primitives/AppText";
+import type { Ingredients } from "@stores/features/ingredients";
+import type { IngredientMenu } from "@stores/features/weeklyMenu";
+import { useMenuIngredientCard } from "@temporary/modules/menuTab/hooks/molecules/useMenuIngredientCard";
+import React, { Dispatch, SetStateAction } from "react";
+import { StyleSheet, View } from "react-native";
 
 interface MenuIngredientCardProps {
   ingredient: IngredientMenu;
