@@ -1,6 +1,6 @@
 import { useState } from "react";
 
 export function useMenuCalendarScreen() {
-  const [selectedMoment, setSelectedMoment] = useState<number>(1);
-  return { selectedMoment, setSelectedMoment };
+  const [selectedMomentId, setSelectedMomentId] = useState<number>(1);
+  return { selectedMomentId, setSelectedMomentId };
 }

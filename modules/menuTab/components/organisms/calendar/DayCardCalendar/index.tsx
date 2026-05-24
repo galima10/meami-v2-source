@@ -17,14 +17,16 @@ import { daysOrder } from "@constants/mappings/orders/daysOrder";
 
 interface DayCardCalendarProps {
   dayId: number;
+  momentId: number;
 }
 
 export default function DayCardCalendar({
-  dayId
+  dayId,
+  momentId,
 }: DayCardCalendarProps) {
-  const backgroundIcons =
-    menuIconsMap[`${enDays[daysOrder[dayId].toLowerCase()]}_icons`];
-  const backgroundColor = dayColors[enDays[daysOrder[dayId].toLowerCase()]];
+  const enDayName = enDays[daysOrder[dayId]];
+  const backgroundIcons = menuIconsMap[`${enDayName}_icons`];
+  const backgroundColor = dayColors[enDayName];
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -40,7 +42,7 @@ export default function DayCardCalendar({
           <MenuCalendarContent dayId={dayId} />
         </AppLinearGradient>
       </ImageBackground>
-      <MomentBand />
+      <MomentBand momentId={momentId} dayName={enDayName} />
     </View>
   );
 }
