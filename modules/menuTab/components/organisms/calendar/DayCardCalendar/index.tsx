@@ -1,4 +1,9 @@
-import { View, StyleSheet, ImageBackground } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  type ViewStyle,
+} from "react-native";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import { AppText } from "@modules/shared/components/primitives/AppText";
 import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
@@ -6,18 +11,34 @@ import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
 import { dayColors } from "@constants/mappings/colors/dayColors";
 import MomentBand from "@modules/menuTab/components/molecules/MomentBand";
 import theme from "@constants/themes";
+import { enDays } from "@constants/mappings/traductors/daysTraductor";
+import MenuCalendarContent from "@modules/menuTab/components/molecules/calendar/MenuCalendarContent";
+import { daysOrder } from "@constants/mappings/orders/daysOrder";
 
 interface DayCardCalendarProps {
   dayId: number;
-  dayName: string
 }
 
-export default function DayCardCalendar({ dayId, dayName }: DayCardCalendarProps) {
+export default function DayCardCalendar({
+  dayId
+}: DayCardCalendarProps) {
+  const backgroundIcons =
+    menuIconsMap[`${enDays[daysOrder[dayId].toLowerCase()]}_icons`];
+  const backgroundColor = dayColors[enDays[daysOrder[dayId].toLowerCase()]];
   return (
     <View style={styles.container}>
-      <ImageBackground style={styles.menuContainer}>
-        {/* <AppLinearGradient></AppLinearGradient> */}
-        <AppText>{dayName}</AppText>
+      <ImageBackground
+        resizeMode="contain"
+        source={backgroundIcons}
+        style={styles.menuContainer}
+      >
+        <AppLinearGradient
+          colors={["transparent", backgroundColor]}
+          locations={[0.5, 1]}
+          style={{ flex: 1 } as ViewStyle}
+        >
+          <MenuCalendarContent dayId={dayId} />
+        </AppLinearGradient>
       </ImageBackground>
       <MomentBand />
     </View>

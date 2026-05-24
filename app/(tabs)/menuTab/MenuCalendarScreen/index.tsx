@@ -12,8 +12,8 @@ export default function MenuCalendarScreen() {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
       >
-        {daysOrder.map((day, index) => {
-          return <DayCardCalendar key={index} dayId={index} dayName={day} />;
+        {daysOrder.map((_, index) => {
+          return <DayCardCalendar key={index} dayId={index} />;
         })}
       </ScrollView>
     </View>
