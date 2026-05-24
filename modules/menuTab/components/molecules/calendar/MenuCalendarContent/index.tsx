@@ -6,10 +6,12 @@ import { daysOrder } from "@constants/mappings/orders/daysOrder";
 import { toCapitalize } from "@utils/toCapitalize";
 import { typography } from "@constants/styles";
 import { menuSchedule } from "@constants/mappings/orders/menuSchedule";
-import { useAppSelector } from "@modules/shared/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@modules/shared/hooks/redux";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import React from "react";
+import React, { useState } from "react";
 import IngredientCalendarItem from "@modules/menuTab/components/atoms/IngredientCalendarItem";
+import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
+import { setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
 
 interface MenuCalendarContentProps {
   dayId: number;
@@ -20,16 +22,26 @@ export default function MenuCalendarContent({
   dayId,
   momentId,
 }: MenuCalendarContentProps) {
+  const dispatch = useAppDispatch();
   const menuId = menuSchedule[dayId + 1][momentId + 1];
   const menu = useAppSelector((state) => state.weeklyMenu.weeklyMenu[menuId]);
+  function handleCheckMenu(menuId: number) {
+    const newValue = !menu?.done;
+    dispatch(setMenuDoneThunk({ menuId: menuId, done: newValue }));
+  }
   return (
     <>
       <View style={styles.titleContainer}>
         <AppText style={styles.dayTitle}>
           {toCapitalize(daysOrder[dayId])}
         </AppText>
+        <AppCheckBox
+          style={styles.checkbox}
+          checked={menu?.done}
+          action={() => handleCheckMenu(menuId)}
+        />
       </View>
-      <View style={styles.menuContent}>
+      <View style={[styles.menuContent, menu?.done && { opacity: 0.25 }]}>
         {Object.values(menu?.ingredients ?? {}).length > 0 ? (
           (
             Object.entries(menu?.ingredients ?? {}) as [
@@ -95,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: typography.h4,
     fontWeight: theme.properties.bold,
   },
+  checkbox: { paddingTop: FONT_BASE / 2 },
   menuContent: {
     alignItems: "center",
     paddingTop: FONT_BASE * 2,
