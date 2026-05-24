@@ -7,6 +7,7 @@ import { useMenuCalendarScreen } from "@modules/menuTab/hooks/screens/useMenuCal
 import { getScreenWidth } from "@core/getScreenDimensions";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
 import { FONT_BASE } from "@constants/general";
+import DayNavigationDots from "@modules/menuTab/components/molecules/DayNavigationDots";
 
 export default function MenuCalendarScreen() {
   const {
@@ -20,6 +21,7 @@ export default function MenuCalendarScreen() {
     scrollRef,
     isOtherOverlayOpen,
     setIsOtherOverlayOpen,
+    handleNavigateToDay,
   } = useMenuCalendarScreen();
   return (
     <View style={styles.container}>
@@ -57,13 +59,15 @@ export default function MenuCalendarScreen() {
         style={styles.todayButton}
         action={handleGoToday}
       />
-      {/* <View style={styles.dotsContainer}>
+      <View style={styles.dotsContainer}>
         <DayNavigationDots
           currentIndex={currentIndex}
-          action={goToSlideDay}
-          handleCloseOverlay={handleCloseOverlay}
+          action={(index: number) => {
+            handleNavigateToDay(index);
+            setIsOtherOverlayOpen(false);
+          }}
         />
-      </View> */}
+      </View>
     </View>
   );
 }
@@ -83,5 +87,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: FONT_BASE * 3,
     left: FONT_BASE * 1.15,
+  },
+  dotsContainer: {
+    position: "absolute",
+    bottom: FONT_BASE,
+    width: "100%",
+    alignItems: "center",
   },
 });

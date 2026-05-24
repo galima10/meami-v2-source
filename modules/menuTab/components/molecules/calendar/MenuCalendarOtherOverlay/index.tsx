@@ -9,7 +9,7 @@ import { getFlexWidth } from "@utils/getFlexWidth";
 import React, { type Dispatch, type SetStateAction } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useMenuCalendarOtherOverlay } from "@modules/menuTab/hooks/molecules/calendar/useMenuCalendarOtherOverlay";
-import { useIdSelectors } from "@modules/shared/hooks/useIdSelectors";
+import IngredientOtherItem from "@modules/menuTab/components/atoms/calendar/IngredientOtherItem";
 
 interface MenuCalendarOtherOverlayProps {
   isOtherOverlayOpen: boolean;
@@ -24,7 +24,6 @@ export default function MenuCalendarOtherOverlay({
   othersIngredients,
   checked,
 }: MenuCalendarOtherOverlayProps) {
-  const { getUnitAbbrById, getIngredientNameById } = useIdSelectors();
   const { animatedStyle } = useMenuCalendarOtherOverlay(isOtherOverlayOpen);
   if (!othersIngredients || othersIngredients.length === 0) return null;
   return (
@@ -51,19 +50,7 @@ export default function MenuCalendarOtherOverlay({
           {othersIngredients?.map((ingredient, index, array) => {
             const isLast = index === array.length - 1;
             return (
-              <React.Fragment key={index}>
-                <AppText key={index} style={styles.text}>
-                  {getIngredientNameById(ingredient?.ingredientId)}
-                </AppText>
-                {ingredient?.quantity && (
-                  <AppText style={[styles.text, styles.quantity]}>
-                    {" | "}
-                    {ingredient?.quantity && ingredient?.quantity}{" "}
-                    {getUnitAbbrById(ingredient?.unitId)}
-                  </AppText>
-                )}
-                <AppText style={styles.text}>{!isLast && " • "}</AppText>
-              </React.Fragment>
+              <IngredientOtherItem ingredient={ingredient} isLast={isLast} />
             );
           })}
         </View>

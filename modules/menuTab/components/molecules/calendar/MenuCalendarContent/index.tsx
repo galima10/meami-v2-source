@@ -9,7 +9,7 @@ import { menuSchedule } from "@constants/mappings/orders/menuSchedule";
 import { useAppSelector, useAppDispatch } from "@modules/shared/hooks/redux";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
 import React, { type Dispatch, type SetStateAction } from "react";
-import IngredientCalendarItem from "@modules/menuTab/components/atoms/IngredientCalendarItem";
+import IngredientCalendarItem from "@modules/menuTab/components/atoms/calendar/IngredientCalendarItem";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import { setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
 import MenuCalendarOtherOverlay from "../MenuCalendarOtherOverlay";
@@ -34,6 +34,7 @@ export default function MenuCalendarContent({
     const newValue = !menu?.done;
     dispatch(setMenuDoneThunk({ menuId: menuId, done: newValue }));
   }
+
   return (
     <>
       <View style={styles.titleContainer}>

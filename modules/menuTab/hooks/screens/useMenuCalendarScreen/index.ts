@@ -32,6 +32,15 @@ export function useMenuCalendarScreen() {
     navigateToDay(todayIndex);
   }
 
+  function handleNavigateToDay(index: number) {
+    if (currentIndex === index) return;
+    setCurrentIndex(index);
+    if (index === todayIndex)
+      setSelectedMomentId(actualDayMoment - 1);
+    else setSelectedMomentId(0);
+    navigateToDay(index);
+  }
+
   return {
     selectedMomentId,
     handleSelectMomentId,
@@ -43,6 +52,7 @@ export function useMenuCalendarScreen() {
     setCurrentIndex,
     handleGoToday,
     isOtherOverlayOpen,
-    setIsOtherOverlayOpen
+    setIsOtherOverlayOpen,
+    handleNavigateToDay,
   };
 }
