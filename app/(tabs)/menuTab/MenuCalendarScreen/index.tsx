@@ -1,12 +1,21 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import theme from "@constants/themes";
 import { typography } from "@constants/styles";
-import { AppText } from "@modules/shared/components/primitives/AppText";
+import DayCardCalendar from "@modules/menuTab/components/organisms/calendar/DayCardCalendar";
+import { DAYS } from "@constants/mappings/orders/daysOrder";
 
 export default function MenuCalendarScreen() {
   return (
     <View style={styles.container}>
-      <AppText>Menu Calendar Screen</AppText>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+      >
+        {DAYS.map((dayId) => {
+          return <DayCardCalendar key={dayId} />;
+        })}
+      </ScrollView>
     </View>
   );
 }
