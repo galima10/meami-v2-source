@@ -10,6 +10,8 @@ export function useMenuCalendarScreen() {
   const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const scrollRef = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const [isOtherOverlayOpen, setIsOtherOverlayOpen] = useState(false);
+
   function handleSelectMomentId(id: number) {
     setSelectedMomentId(id);
   }
@@ -39,6 +41,8 @@ export function useMenuCalendarScreen() {
     actualDayMoment,
     currentIndex,
     setCurrentIndex,
-    handleGoToday
+    handleGoToday,
+    isOtherOverlayOpen,
+    setIsOtherOverlayOpen
   };
 }

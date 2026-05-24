@@ -18,6 +18,8 @@ export default function MenuCalendarScreen() {
     actualDayMoment,
     handleGoToday,
     scrollRef,
+    isOtherOverlayOpen,
+    setIsOtherOverlayOpen,
   } = useMenuCalendarScreen();
   return (
     <View style={styles.container}>
@@ -31,7 +33,7 @@ export default function MenuCalendarScreen() {
           const newIndex = Math.round(offsetX / getScreenWidth());
           if (newIndex === currentIndex) return;
           setCurrentIndex(newIndex !== todayIndex ? newIndex : todayIndex);
-          // handleCloseOverlay();
+          setIsOtherOverlayOpen(false);
           if (newIndex === todayIndex)
             handleSelectMomentId(actualDayMoment - 1);
           else handleSelectMomentId(0);
@@ -44,6 +46,8 @@ export default function MenuCalendarScreen() {
               dayId={index}
               momentId={selectedMomentId}
               handleSelectMomentId={handleSelectMomentId}
+              isOtherOverlayOpen={isOtherOverlayOpen}
+              setIsOtherOverlayOpen={setIsOtherOverlayOpen}
             />
           );
         })}

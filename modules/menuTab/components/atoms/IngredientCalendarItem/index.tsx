@@ -2,35 +2,27 @@ import { View, StyleSheet } from "react-native";
 import { AppText } from "@modules/shared/components/primitives/AppText";
 import theme from "@constants/themes";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import { useAppSelector } from "@modules/shared/hooks/redux";
+import { useIdSelectors } from "@modules/shared/hooks/useIdSelectors";
 
 interface IngredientCalendarItemProps {
-  ingredientMenu: IngredientMenu;
+  ingredient: IngredientMenu;
 }
 
 export default function IngredientCalendarItem({
-  ingredientMenu,
+  ingredient,
 }: IngredientCalendarItemProps) {
-  const ingredientName = useAppSelector(
-    (state) => state.ingredient.ingredients[ingredientMenu.ingredientId]?.name,
-  );
-  const unitAbbr = useAppSelector((state) =>
-    ingredientMenu.unitId
-      ? state.unit.units[ingredientMenu.unitId]?.abbreviation
-      : null,
-  );
+  const { getIngredientNameById, getUnitAbbrById } = useIdSelectors();
   return (
     <View style={styles.ingredientContainer}>
-      <AppText>{ingredientName}</AppText>
-      {ingredientMenu?.quantity && (
+      <AppText>{getIngredientNameById(ingredient?.ingredientId)}</AppText>
+      {ingredient?.quantity && (
         <AppText
           style={{
             color: theme.properties.transparentBrown,
           }}
         >
           {" | "}
-          {ingredientMenu?.quantity}{" "}
-          {unitAbbr}
+          {ingredient?.quantity} {getUnitAbbrById(ingredient?.unitId)}
         </AppText>
       )}
     </View>

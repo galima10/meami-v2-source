@@ -8,19 +8,24 @@ import { typography } from "@constants/styles";
 import { menuSchedule } from "@constants/mappings/orders/menuSchedule";
 import { useAppSelector, useAppDispatch } from "@modules/shared/hooks/redux";
 import type { IngredientMenu } from "@stores/features/weeklyMenu";
-import React, { useState } from "react";
+import React, { type Dispatch, type SetStateAction } from "react";
 import IngredientCalendarItem from "@modules/menuTab/components/atoms/IngredientCalendarItem";
 import AppCheckBox from "@modules/shared/components/primitives/AppCheckBox";
 import { setMenuDoneThunk } from "@stores/thunks/weeklyMenu";
+import MenuCalendarOtherOverlay from "../MenuCalendarOtherOverlay";
 
 interface MenuCalendarContentProps {
   dayId: number;
   momentId: number;
+  isOtherOverlayOpen: boolean;
+  setIsOtherOverlayOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function MenuCalendarContent({
   dayId,
   momentId,
+  isOtherOverlayOpen,
+  setIsOtherOverlayOpen,
 }: MenuCalendarContentProps) {
   const dispatch = useAppDispatch();
   const menuId = menuSchedule[dayId + 1][momentId + 1];
@@ -68,7 +73,7 @@ export default function MenuCalendarContent({
                       return (
                         <IngredientCalendarItem
                           key={`ingredient-${index}`}
-                          ingredientMenu={ingredient}
+                          ingredient={ingredient}
                         />
                       );
                     })}
@@ -89,6 +94,14 @@ export default function MenuCalendarContent({
           <AppText style={styles.emptyText}>Non renseigné</AppText>
         )}
       </View>
+      {momentId !== 0 && (
+        <MenuCalendarOtherOverlay
+          isOtherOverlayOpen={isOtherOverlayOpen}
+          setIsOtherOverlayOpen={setIsOtherOverlayOpen}
+          othersIngredients={menu?.ingredients?.[8] ?? []}
+          checked={menu?.done}
+        />
+      )}
     </>
   );
 }

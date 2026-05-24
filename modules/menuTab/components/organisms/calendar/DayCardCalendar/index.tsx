@@ -5,7 +5,6 @@ import {
   type ViewStyle,
 } from "react-native";
 import { getScreenWidth } from "@core/getScreenDimensions";
-import { AppText } from "@modules/shared/components/primitives/AppText";
 import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
 import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
 import { dayColors } from "@constants/mappings/colors/dayColors";
@@ -14,17 +13,22 @@ import theme from "@constants/themes";
 import { enDays } from "@constants/mappings/traductors/daysTraductor";
 import MenuCalendarContent from "@modules/menuTab/components/molecules/calendar/MenuCalendarContent";
 import { daysOrder } from "@constants/mappings/orders/daysOrder";
+import type { Dispatch, SetStateAction } from "react";
 
 interface DayCardCalendarProps {
   dayId: number;
   momentId: number;
   handleSelectMomentId: (id: number) => void;
+  isOtherOverlayOpen: boolean;
+  setIsOtherOverlayOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function DayCardCalendar({
   dayId,
   momentId,
   handleSelectMomentId,
+  setIsOtherOverlayOpen,
+  isOtherOverlayOpen,
 }: DayCardCalendarProps) {
   const enDayName = enDays[daysOrder[dayId]];
   const backgroundIcons = menuIconsMap[`${enDayName}_icons`];
@@ -41,10 +45,19 @@ export default function DayCardCalendar({
           locations={[0.5, 1]}
           style={{ flex: 1 } as ViewStyle}
         >
-          <MenuCalendarContent dayId={dayId} momentId={momentId} />
+          <MenuCalendarContent
+            dayId={dayId}
+            momentId={momentId}
+            isOtherOverlayOpen={isOtherOverlayOpen}
+            setIsOtherOverlayOpen={setIsOtherOverlayOpen}
+          />
         </AppLinearGradient>
       </ImageBackground>
-      <MomentBand momentId={momentId} dayName={enDayName} handleSelectMomentId={handleSelectMomentId} />
+      <MomentBand
+        momentId={momentId}
+        dayName={enDayName}
+        handleSelectMomentId={handleSelectMomentId}
+      />
     </View>
   );
 }
