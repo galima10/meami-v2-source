@@ -58,18 +58,7 @@ export default function MenuCalendarContent({
             if (Number(menuCategoryId) !== 8 && menuIngredients.length !== 0) {
               return (
                 <React.Fragment key={`group-${menuId}-${menuCategoryId}`}>
-                  <View
-                    key={menuCategoryId}
-                    style={[
-                      styles.menuCategories,
-                      Number(menuCategoryId) === 5 && {
-                        paddingBottom: FONT_BASE * 0.75,
-                      },
-                      Number(menuCategoryId) === 6 && {
-                        paddingTop: FONT_BASE * 0.75,
-                      },
-                    ]}
-                  >
+                  <View key={menuCategoryId} style={styles.menuCategories}>
                     {menuIngredients?.map((ingredient, index) => {
                       return (
                         <IngredientCalendarItem
@@ -79,8 +68,7 @@ export default function MenuCalendarContent({
                       );
                     })}
                   </View>
-                  {Number(menuCategoryId) !== 5 &&
-                    Number(menuCategoryId) !== 3 &&
+                  {Number(menuCategoryId) !== 3 &&
                     Number(menuCategoryId) !== 7 && (
                       <View
                         key={`separator-${menuCategoryId}`}
@@ -124,15 +112,16 @@ const styles = StyleSheet.create({
   checkbox: { paddingTop: FONT_BASE / 2 },
   menuContent: {
     alignItems: "center",
-    paddingTop: FONT_BASE * 2,
+    paddingTop: FONT_BASE * 2.5,
     paddingHorizontal: FONT_BASE * 2.5,
   },
   menuCategories: {
-    marginVertical: 1,
+    // marginVertical: 1,
     alignItems: "center",
-    gap: FONT_BASE * 0.5,
+    gap: FONT_BASE * 0.25,
     width: "100%",
-    paddingVertical: FONT_BASE * 2,
+    // paddingVertical: FONT_BASE * 2,
+    paddingBottom: FONT_BASE * 1,
   },
   emptyText: {
     fontSize: typography.h6,
@@ -143,5 +132,6 @@ const styles = StyleSheet.create({
     width: "65%",
     height: 1,
     backgroundColor: theme.properties.brown,
+    marginBottom: FONT_BASE * 1.5,
   },
 });

@@ -50,7 +50,7 @@ export default function MenuCalendarOtherOverlay({
           {othersIngredients?.map((ingredient, index, array) => {
             const isLast = index === array.length - 1;
             return (
-              <IngredientOtherItem ingredient={ingredient} isLast={isLast} />
+              <IngredientOtherItem key={index} ingredient={ingredient} isLast={isLast} />
             );
           })}
         </View>
