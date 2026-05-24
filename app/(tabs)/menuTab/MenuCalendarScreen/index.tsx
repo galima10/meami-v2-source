@@ -6,7 +6,7 @@ import { daysOrder } from "@constants/mappings/orders/daysOrder";
 import { useMenuCalendarScreen } from "@modules/menuTab/hooks/screens/useMenuCalendarScreen";
 
 export default function MenuCalendarScreen() {
-  const { selectedMomentId, setSelectedMomentId } = useMenuCalendarScreen();
+  const { selectedMomentId, handleSelectMomentId } = useMenuCalendarScreen();
   return (
     <View style={styles.container}>
       <ScrollView
@@ -15,7 +15,7 @@ export default function MenuCalendarScreen() {
         pagingEnabled
       >
         {daysOrder.map((_, index) => {
-          return <DayCardCalendar key={index} dayId={index} momentId={selectedMomentId} />;
+          return <DayCardCalendar key={index} dayId={index} momentId={selectedMomentId} handleSelectMomentId={handleSelectMomentId} />;
         })}
       </ScrollView>
     </View>

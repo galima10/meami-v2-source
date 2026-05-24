@@ -18,11 +18,13 @@ import { daysOrder } from "@constants/mappings/orders/daysOrder";
 interface DayCardCalendarProps {
   dayId: number;
   momentId: number;
+  handleSelectMomentId: (id: number) => void;
 }
 
 export default function DayCardCalendar({
   dayId,
   momentId,
+  handleSelectMomentId,
 }: DayCardCalendarProps) {
   const enDayName = enDays[daysOrder[dayId]];
   const backgroundIcons = menuIconsMap[`${enDayName}_icons`];
@@ -42,7 +44,7 @@ export default function DayCardCalendar({
           <MenuCalendarContent dayId={dayId} />
         </AppLinearGradient>
       </ImageBackground>
-      <MomentBand momentId={momentId} dayName={enDayName} />
+      <MomentBand momentId={momentId} dayName={enDayName} handleSelectMomentId={handleSelectMomentId} />
     </View>
   );
 }
