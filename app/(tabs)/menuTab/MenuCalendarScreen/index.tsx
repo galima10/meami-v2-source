@@ -3,6 +3,7 @@ import theme from "@constants/themes";
 import { typography } from "@constants/styles";
 import DayCardCalendar from "@modules/menuTab/components/organisms/calendar/DayCardCalendar";
 import { daysOrder } from "@constants/mappings/orders/daysOrder";
+import { useMenuCalendarScreen } from "@modules/menuTab/hooks/screens/useMenuCalendarScreen";
 
 export default function MenuCalendarScreen() {
   return (

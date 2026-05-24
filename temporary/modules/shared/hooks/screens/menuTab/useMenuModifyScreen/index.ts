@@ -2,7 +2,10 @@ import type { Ingredient } from "@stores/features/ingredients";
 import type { Recipe } from "@stores/features/recipes";
 import { fetchRecipesThunk } from "@stores/thunks/recipes";
 import { useEffect, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../redux";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "../../../../../../../modules/shared/hooks/redux";
 import { useMenuScreen } from "../useMenuScreen";
 
 type ListItem =
@@ -90,6 +93,6 @@ export function useMenuModifyScreen() {
     menuSchedule,
     getActualMenu,
     goToSlideDay,
-    actualDayMoment
+    actualDayMoment,
   };
 }

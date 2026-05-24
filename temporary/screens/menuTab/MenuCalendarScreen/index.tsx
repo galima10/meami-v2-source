@@ -4,9 +4,9 @@ import { typography } from "@constants/styles";
 import theme from "@constants/themes";
 import { getScreenWidth } from "@core/getScreenDimensions";
 import AppIconButton from "@modules/shared/components/atoms/buttons/AppIconButton";
-import { useMenuCalendarScreen } from "@modules/shared/hooks/screens/menuTab/useMenuCalendarScreen";
 import DayNavigationDots from "@temporary/modules/menuTab/components/molecules/DayNavigationDots";
 import DayCardCalendarRead from "@temporary/modules/menuTab/components/organisms/DayCardCalendarRead";
+import { useMenuCalendarScreen } from "@temporary/modules/shared/hooks/screens/menuTab/useMenuCalendarScreen";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 export default function MenuCalendarScreen() {

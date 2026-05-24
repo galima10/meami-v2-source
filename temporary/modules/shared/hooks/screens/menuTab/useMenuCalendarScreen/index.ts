@@ -1,16 +1,11 @@
-import { getScreenWidth } from "@core/getScreenDimensions";
-import { useAppSelector } from "@modules/shared/hooks/redux";
-import { useDate } from "@modules/shared/hooks/useDate";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useRef, useState } from "react";
-import { ScrollView } from "react-native";
-import { useDayMoment } from "../../../useDayMoment";
-import { useMenuScreen } from "../useMenuScreen";
+import { useCallback, useState } from "react";
+import { useMenuScreen } from "../../../../../../../modules/shared/hooks/screens/menuTab/useMenuScreen";
 
 export function useMenuCalendarScreen(isModify: boolean = false) {
   const {
     currentIndex,
-    setCurrentIndex,
+    setCurrentIndex,../useMenuScreen
     scrollRef,
     goToSlideDay,
     actualDayMoment,
