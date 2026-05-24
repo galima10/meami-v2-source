@@ -1,9 +1,44 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useDayMoment } from "@modules/shared/hooks/useDayMoment";
+import { useDate } from "@modules/shared/hooks/useDate";
+import { ScrollView } from "react-native";
+import { getScreenWidth } from "@core/getScreenDimensions";
 
 export function useMenuCalendarScreen() {
   const [selectedMomentId, setSelectedMomentId] = useState<number>(0);
+  const { todayIndex, rawDateInfo, refreshDateInfo } = useDate();
+  const { actualDayMoment } = useDayMoment(rawDateInfo.hour);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const scrollRef = useRef<React.ComponentRef<typeof ScrollView>>(null);
   function handleSelectMomentId(id: number) {
     setSelectedMomentId(id);
   }
-  return { selectedMomentId, handleSelectMomentId };
+
+  function navigateToDay(index: number) {
+    scrollRef.current?.scrollTo({
+      x: getScreenWidth() * index,
+      animated: true,
+    });
+  }
+
+  function handleGoToday() {
+    if (currentIndex === todayIndex || selectedMomentId === actualDayMoment - 1)
+      return;
+    refreshDateInfo();
+    setCurrentIndex(todayIndex);
+    setSelectedMomentId(actualDayMoment - 1);
+    navigateToDay(todayIndex);
+  }
+
+  return {
+    selectedMomentId,
+    handleSelectMomentId,
+    scrollRef,
+    todayIndex,
+    refreshDateInfo,
+    actualDayMoment,
+    currentIndex,
+    setCurrentIndex,
+    handleGoToday
+  };
 }
