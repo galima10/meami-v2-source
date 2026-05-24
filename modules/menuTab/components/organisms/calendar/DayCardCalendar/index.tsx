@@ -41,7 +41,7 @@ export default function DayCardCalendar({
           locations={[0.5, 1]}
           style={{ flex: 1 } as ViewStyle}
         >
-          <MenuCalendarContent dayId={dayId} />
+          <MenuCalendarContent dayId={dayId} momentId={momentId} />
         </AppLinearGradient>
       </ImageBackground>
       <MomentBand momentId={momentId} dayName={enDayName} handleSelectMomentId={handleSelectMomentId} />

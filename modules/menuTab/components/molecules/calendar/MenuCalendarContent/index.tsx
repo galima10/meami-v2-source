@@ -5,14 +5,18 @@ import { AppText } from "@modules/shared/components/primitives/AppText";
 import { daysOrder } from "@constants/mappings/orders/daysOrder";
 import { toCapitalize } from "@utils/toCapitalize";
 import { typography } from "@constants/styles";
+import { menuSchedule } from "@constants/mappings/orders/menuSchedule";
 
 interface MenuCalendarContentProps {
   dayId: number;
+  momentId: number;
 }
 
 export default function MenuCalendarContent({
   dayId,
+  momentId,
 }: MenuCalendarContentProps) {
+  const menuId = menuSchedule[dayId][momentId];
   return (
     <>
       <View style={styles.titleContainer}>
