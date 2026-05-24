@@ -1,12 +1,27 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ImageBackground } from "react-native";
 import { getScreenWidth } from "@core/getScreenDimensions";
-import theme from "@constants/themes";
 import { AppText } from "@modules/shared/components/primitives/AppText";
+import AppLinearGradient from "@modules/shared/components/primitives/AppLinearGradient";
+import { menuIconsMap } from "@constants/mappings/images/menuIconsMap";
+import { dayColors } from "@constants/mappings/colors/dayColors";
+import MomentBand from "@modules/menuTab/components/molecules/MomentBand";
+import theme from "@constants/themes";
 
-export default function DayCardCalendar() {
-  return <View style={styles.container}>
-    <AppText>Test</AppText>
-  </View>;
+interface DayCardCalendarProps {
+  dayId: number;
+  dayName: string
+}
+
+export default function DayCardCalendar({ dayId, dayName }: DayCardCalendarProps) {
+  return (
+    <View style={styles.container}>
+      <ImageBackground style={styles.menuContainer}>
+        {/* <AppLinearGradient></AppLinearGradient> */}
+        <AppText>{dayName}</AppText>
+      </ImageBackground>
+      <MomentBand />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -15,6 +30,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row-reverse",
     overflow: "hidden",
-    backgroundColor: theme.properties.beige
+  },
+  menuContainer: {
+    flex: 3.5,
+    backgroundColor: theme.properties.beige,
   },
 });

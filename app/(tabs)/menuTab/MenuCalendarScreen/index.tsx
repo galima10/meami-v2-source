@@ -2,7 +2,7 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import theme from "@constants/themes";
 import { typography } from "@constants/styles";
 import DayCardCalendar from "@modules/menuTab/components/organisms/calendar/DayCardCalendar";
-import { DAYS } from "@constants/mappings/orders/daysOrder";
+import { daysOrder } from "@constants/mappings/orders/daysOrder";
 
 export default function MenuCalendarScreen() {
   return (
@@ -12,8 +12,8 @@ export default function MenuCalendarScreen() {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
       >
-        {DAYS.map((dayId) => {
-          return <DayCardCalendar key={dayId} />;
+        {daysOrder.map((day, index) => {
+          return <DayCardCalendar key={index} dayId={index} dayName={day} />;
         })}
       </ScrollView>
     </View>
